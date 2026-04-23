@@ -4,10 +4,8 @@ using UnityEngine;
 public class CombatUnit : MonoBehaviour
 {
     [SerializeField] private UnitStats stats;
-    [SerializeField] private GridCoord startingGridPosition;
 
     public UnitStats Stats => stats;
-    public GridCoord StartingGridPosition => startingGridPosition;
     public Faction OwnerFaction { get; private set; }
     public GridCoord GridPosition { get; private set; }  
     

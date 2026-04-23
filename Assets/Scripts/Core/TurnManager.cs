@@ -39,8 +39,8 @@ public class TurnManager : MonoBehaviour
         RegisterSceneUnits(enemyUnits, EnemyFaction);
 
         Debug.Log("Battle initialized");
-        Debug.Log($"Player Units: {PlayerFaction.UnitManager.GetLivingUnits().Count()}");
-        Debug.Log($"Enemy Units: {EnemyFaction.UnitManager.GetLivingUnits().Count()}");
+        //Debug.Log($"Player Units: {PlayerFaction.UnitManager.GetLivingUnits().Count()}");
+        //Debug.Log($"Enemy Units: {EnemyFaction.UnitManager.GetLivingUnits().Count()}");
     }
 
     private void RegisterSceneUnits(List<CombatUnit> sceneUnits, Faction faction)
@@ -49,21 +49,35 @@ public class TurnManager : MonoBehaviour
         {
             if (unit == null){ return; }
 
-            unit.Initialize(faction, unit.StartingGridPosition);
-            faction.RegisterUnit(unit);
-            Debug.Log(unit.ToString());
+            GridCoord sceneCoord = board.ConvertWorldToGrid(unit.transform.position);
 
-            bool placed = board.TryPlaceUnit(unit, unit.StartingGridPosition);
+            if (!board.IsInside(sceneCoord))
+            {
+                Debug.LogError( $"Unit '{unit.name}' is outside the board. " + $"World:{unit.transform.position} Grid:{sceneCoord}");
+                continue;
+            }
+
+            if (!board.HasBaseWalkable(sceneCoord))
+            {
+                Debug.LogError($"Unit '{unit.name}' was placed on a non-walkable cell {sceneCoord}.");
+                continue;
+            }
+
+
+            unit.Initialize(faction, sceneCoord);
+            faction.RegisterUnit(unit);
+            //Debug.Log(unit.ToString());
+
+            bool placed = board.TryPlaceUnit(unit, sceneCoord);
 
             if (!placed)
             {
-                Debug.LogError($"Failed to place unit '{unit.name}' at {unit.StartingGridPosition}");
+                Debug.LogError($"Failed to place unit '{unit.name}' at inferred cell {sceneCoord}. " +$"Cell may already be occupied.");
             }
-            else
-            {
-                Vector3 worldPos = board.ConvertGridToWorld(unit.StartingGridPosition);
-                unit.transform.position = worldPos;
-            }
+
+            Vector3 worldPos = board.ConvertGridToWorld(sceneCoord);
+            unit.transform.position = worldPos;
+            Debug.Log($"{unit.name} placed at inferred cell {sceneCoord}");
         }
     }
 

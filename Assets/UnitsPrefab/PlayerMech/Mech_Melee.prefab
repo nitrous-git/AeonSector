@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 8406770671977738243}
   - component: {fileID: 2153055640712815065}
   - component: {fileID: 5840180160780754455}
-  m_Layer: 0
+  - component: {fileID: 3747469592296390095}
+  m_Layer: 6
   m_Name: Mech_Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,9 +48,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: a93ac989257786b4e8afe8d0767a116b, type: 2}
-  startingGridPosition:
-    x: 0
-    y: 0
 --- !u!212 &2153055640712815065
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -88,9 +86,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: -704045751
+  m_SortingLayer: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: -1537588722, guid: e70eb3ae7394fc34d8213da66acf3cb9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -123,3 +121,38 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!70 &3747469592296390095
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2964006061927554337}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.018604875, y: 0.037209928}
+  m_Size: {x: 0.99718404, y: 1.6669627}
+  m_Direction: 0
