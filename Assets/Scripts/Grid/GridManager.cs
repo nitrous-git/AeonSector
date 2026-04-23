@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    // must cleanup this script
+
     [Header("Grid Size")]
     [SerializeField] private int width = 8;
     [SerializeField] private int height = 8;
