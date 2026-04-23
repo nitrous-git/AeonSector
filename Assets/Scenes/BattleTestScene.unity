@@ -248,13 +248,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1846960303681427315, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
-      propertyPath: m_LocalPosition.x
+    - target: {fileID: 714073103598239376, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1846960303681427315, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.983
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846960303681427315, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.279
       objectReference: {fileID: 0}
     - target: {fileID: 1846960303681427315, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -291,6 +295,10 @@ PrefabInstance:
     - target: {fileID: 2964006061927554337, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
       propertyPath: m_Name
       value: PlayerMechMelee_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 3270350616349636345, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8406770671977738243, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
       propertyPath: startingGridPosition.x
@@ -545,11 +553,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1846960303681427315, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.457
+      value: 3.502
       objectReference: {fileID: 0}
     - target: {fileID: 1846960303681427315, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.11
+      value: 1.999
       objectReference: {fileID: 0}
     - target: {fileID: 1846960303681427315, guid: 6c57bb0db6778044ca817d73deff19d6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -675,14 +683,14 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1065454327
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 3
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
 --- !u!1839735485 &964730337
@@ -838,7 +846,7 @@ TilemapRenderer:
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 3
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
 --- !u!1839735485 &1035289223
@@ -1113,14 +1121,14 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 213052967
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 3
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
 --- !u!1839735485 &2007755326
@@ -1345,14 +1353,14 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 495332365
-  m_SortingLayer: 4
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0.25, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 3
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
 --- !u!1839735485 &2137976827

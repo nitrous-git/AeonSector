@@ -43,7 +43,10 @@ public class TilemapBoardAdapter : MonoBehaviour
             return;
         }
 
+        groundTilemap.CompressBounds();
         bounds = groundTilemap.cellBounds;
+
+        Debug.Log($"size x {bounds.size.x}, size y {bounds.size.y}" );
 
         baseWalkable = new bool[bounds.size.y, bounds.size.x];
         occupancy = new CombatUnit[bounds.size.y, bounds.size.x];
@@ -295,6 +298,30 @@ public class TilemapBoardAdapter : MonoBehaviour
                     }
                 }
 
+            }
+
+            Debug.Log(line);
+        }
+    }
+
+    [ContextMenu("Debug Print baseWalkable")]
+    public void DebugPrintBaseWalkable()
+    {
+        for (int row = 0; row < Height; row++)
+        {
+            string line = "";
+
+            for (int col = 0; col < Width; col++)
+            {
+                if (baseWalkable[row, col] == false)
+                {
+                    line += "[ ]";
+
+                }
+                else
+                {
+                    line += "[X]";
+                }
             }
 
             Debug.Log(line);

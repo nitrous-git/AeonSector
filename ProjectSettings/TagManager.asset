@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 495332365
+    locked: 0
   - name: Highlight
     uniqueID: 1065454327
     locked: 0
@@ -49,9 +52,6 @@ TagManager:
     locked: 0
   - name: Units
     uniqueID: 3590921545
-    locked: 0
-  - name: Ground
-    uniqueID: 495332365
     locked: 0
   - name: Block
     uniqueID: 2778456825

@@ -36,6 +36,7 @@ public class PlayerInputController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log("Left Clicked");
             HandleLeftClick();
         }
 
@@ -83,6 +84,15 @@ public class PlayerInputController : MonoBehaviour
     private void SelectUnit(CombatUnit clickedUnit)
     {
         SelectedUnit = clickedUnit;
+
+        GridCoord inferredFromWorld = board.ConvertWorldToGrid(clickedUnit.transform.position);
+
+        Debug.Log(
+            $"Selected {clickedUnit.name} | Stored Grid:{clickedUnit.GridPosition} | " +
+            $"Inferred From World:{inferredFromWorld} | World:{clickedUnit.transform.position}"
+        );
+
+
 
         HashSet<GridCoord> reachable = reachableTileService.GetReachableTiles(board, clickedUnit.GridPosition, clickedUnit.Stats.MoveRange);
 
