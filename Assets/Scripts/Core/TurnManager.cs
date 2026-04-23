@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 public class TurnManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GridManager gridManager;
+    [SerializeField] private TilemapBoardAdapter board;
 
     [Header("Scene Unit References")]
     [SerializeField] private List<CombatUnit> playerUnits = new();
@@ -27,8 +27,8 @@ public class TurnManager : MonoBehaviour
     }
     private void InitializeBattle()
     {
-        if (gridManager == null) {
-            Debug.LogError("TurnManager requires a GridManager reference");
+        if (board == null) {
+            Debug.LogError("TurnManager requires a TilemapBoardAdapter reference");
             return;
         }
 
@@ -53,7 +53,7 @@ public class TurnManager : MonoBehaviour
             faction.RegisterUnit(unit);
             Debug.Log(unit.ToString());
 
-            bool placed = gridManager.TryPlaceUnit(unit, unit.StartingGridPosition);
+            bool placed = board.TryPlaceUnit(unit, unit.StartingGridPosition);
 
             if (!placed)
             {
@@ -61,7 +61,7 @@ public class TurnManager : MonoBehaviour
             }
             else
             {
-                Vector3 worldPos = gridManager.ConvertGridToWorld(unit.StartingGridPosition);
+                Vector3 worldPos = board.ConvertGridToWorld(unit.StartingGridPosition);
                 unit.transform.position = worldPos;
             }
         }
@@ -168,10 +168,10 @@ public class TurnManager : MonoBehaviour
     public void DebugReachableTilesForFirstPlayer()
     {
         CombatUnit firstPlayer = PlayerFaction?.UnitManager?.GetLivingUnits()?.FirstOrDefault();
-        if (firstPlayer == null || gridManager == null) { return; }
+        if (firstPlayer == null || board == null) { return; }
 
         var service = new ReachableTileService();
-        var reachable = service.GetReachableTiles(gridManager, firstPlayer.GridPosition, firstPlayer.Stats.MoveRange);
+        var reachable = service.GetReachableTiles(board, firstPlayer.GridPosition, firstPlayer.Stats.MoveRange);
 
         foreach (var coord in reachable) {
             Debug.Log($"Reachable: {coord}");

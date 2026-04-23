@@ -9,44 +9,41 @@ using UnityEngine;
  */
 public class ReachableTileService 
 {
-    public HashSet<GridCoord> GetReachableTiles(GridManager gridManager, GridCoord startCoord, int moveRange)
+    public HashSet<GridCoord> GetReachableTiles(TilemapBoardAdapter board, GridCoord startCoord, int moveRange)
     {
         HashSet<GridCoord> reachable = new();
-        HashSet<GridCoord> visited = new();
-        Queue<(GridCoord coord, int distance)> queue = new();
+        Queue<(GridCoord coord, int cost)> queue = new();
 
-        visited.Add(startCoord);
+        reachable.Add(startCoord);
         queue.Enqueue((startCoord, 0));
 
         while (queue.Count > 0)
         {
-            (GridCoord current, int distance) = queue.Dequeue();
+            var current = queue.Dequeue();
+            GridCoord currentCoord = current.coord;
+            int currentCost = current.cost;
 
-            if (distance > moveRange)
+            if (currentCost >= moveRange)
                 continue;
 
-            reachable.Add(current);
-
-            if (distance == moveRange)
-                continue;
-
-            foreach (GridCoord neighbor in gridManager.GetNeighborsList(current))
+            foreach (GridCoord neighbor in board.GetNeighborsList(currentCoord))
             {
-                if (visited.Contains(neighbor))
+                if (reachable.Contains(neighbor))
                     continue;
 
-                bool isStartTile = neighbor.x == startCoord.y && neighbor.y == startCoord.y;
-                bool canTraverse = isStartTile || gridManager.IsWalkable(neighbor);
+                bool isStartTile = neighbor.x == startCoord.x && neighbor.y == startCoord.y;
 
-                if (!canTraverse)
+                if (!board.HasBaseWalkable(neighbor))
                     continue;
 
-                visited.Add(neighbor);
-                queue.Enqueue((neighbor, distance + 1));
+                if (!isStartTile && board.IsOccupied(neighbor))
+                    continue;
+
+                reachable.Add(neighbor);
+                queue.Enqueue((neighbor, currentCost + 1));
             }
         }
 
-        reachable.Remove(startCoord);
         return reachable;
     }
 }
