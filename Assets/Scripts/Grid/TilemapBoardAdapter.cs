@@ -93,11 +93,13 @@ public class TilemapBoardAdapter : MonoBehaviour
         return occupancy[coord.y, coord.x];
     }
 
+    // Does this cell have valid ground, no blocking tile, and no unit currently on it?
     public bool IsWalkable(GridCoord coord)
     {
         return IsInside(coord) && baseWalkable[coord.y, coord.x] && occupancy[coord.y, coord.x] == null;
     }
 
+    // Does this cell have valid ground and no blocking tile?
     public bool HasBaseWalkable(GridCoord coord)
     {
         if (!IsInside(coord)) 
