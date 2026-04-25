@@ -245,7 +245,7 @@ public class TilemapBoardAdapter : MonoBehaviour
             }
 
             Vector3Int tileCell = new Vector3Int(coord.x + bounds.xMin, coord.y + bounds.yMin, 0);
-            Debug.Log($"Set highlight tile at : ({tileCell.x}, {tileCell.y})");
+            //Debug.Log($"Set highlight tile at : ({tileCell.x}, {tileCell.y})");
             highlightTilemap.SetTile(tileCell, moveHighlightTile);
         }
     }

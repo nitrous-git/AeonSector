@@ -116,6 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1846960303681427315}
   - component: {fileID: 8406770671977738243}
+  - component: {fileID: 218491206763430065}
   - component: {fileID: 3747469592296390095}
   m_Layer: 6
   m_Name: Mech_Melee
@@ -153,6 +154,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: a93ac989257786b4e8afe8d0767a116b, type: 2}
+--- !u!114 &218491206763430065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2964006061927554337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c7bbd965e2a864098fbfa25c3145fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 4
+  animator: {fileID: 4400482738752513553}
 --- !u!70 &3747469592296390095
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
