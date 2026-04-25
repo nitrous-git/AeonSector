@@ -57,10 +57,6 @@ public class PlayerInputController : MonoBehaviour
             CancelCurrentMode();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ClearSelection();
-        }
     }
 
     private void HandleLeftClick()
@@ -109,6 +105,12 @@ public class PlayerInputController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             EnterAttackMode();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            TryEndPlayerTurn();
+            return;
         }
     }
 
@@ -178,19 +180,17 @@ public class PlayerInputController : MonoBehaviour
 
         GridCoord destination = path[path.Count - 1];
 
-        UnitMover mover = selectedUnit.GetComponent<UnitMover>();
-        yield return mover.MoveAlongPath(board, path);
-
         bool moved = board.TryMoveUnit(unit, destination);
         if (!moved)
         {
-            Debug.LogWarning($"Failed to finalize move for {unit.name} to {destination}");
+            Debug.LogWarning($"Failed to reserve move for {unit.name} to {destination}");
         }
-        else
-        {
-            Debug.Log("MarkMoved for this unit.");
-            unit.MarkMoved();
-        }
+
+        UnitMover mover = selectedUnit.GetComponent<UnitMover>();
+        yield return mover.MoveAlongPath(board, path);
+
+        Debug.Log("MarkMoved for this unit.");
+        unit.MarkMoved();
 
         board.ClearHighlights();
         board.ClearPath();
@@ -223,6 +223,23 @@ public class PlayerInputController : MonoBehaviour
         board.ClearHighlights();
 
         Debug.Log($"Attack mode for {selectedUnit.name}");
+    }
+
+    // --------------------
+    // End Turn 
+    // --------------------
+    private void TryEndPlayerTurn()
+    {
+        if (!turnManager.IsPlayerTurn())
+            return;
+
+        if (isResolvingAction)
+            return;
+
+        ClearSelection();
+        commandMode = CommandMode.None;
+
+        turnManager.EndCurrentTurn();
     }
 
     // --------------------

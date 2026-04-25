@@ -47,7 +47,7 @@ public class TurnManager : MonoBehaviour
     {
         foreach (CombatUnit unit in sceneUnits)
         {
-            if (unit == null){ return; }
+            if (unit == null){ continue; }
 
             GridCoord sceneCoord = board.ConvertWorldToGrid(unit.transform.position);
 
@@ -63,21 +63,19 @@ public class TurnManager : MonoBehaviour
                 continue;
             }
 
-
-            unit.Initialize(faction, sceneCoord);
-            faction.RegisterUnit(unit);
-            //Debug.Log(unit.ToString());
-
             bool placed = board.TryPlaceUnit(unit, sceneCoord);
-
             if (!placed)
             {
                 Debug.LogError($"Failed to place unit '{unit.name}' at inferred cell {sceneCoord}. " +$"Cell may already be occupied.");
             }
 
+            // Register Unit only if placement succeed 
+            unit.Initialize(faction, sceneCoord);
+            faction.RegisterUnit(unit);
+
             Vector3 worldPos = board.ConvertGridToWorld(sceneCoord);
             unit.transform.position = worldPos;
-            Debug.Log($"{unit.name} placed at inferred cell {sceneCoord}");
+            //Debug.Log($"{unit.name} placed at inferred cell {sceneCoord}");
         }
     }
 
@@ -147,23 +145,39 @@ public class TurnManager : MonoBehaviour
         return false;
     }
 
+    public void RemoveUnitFromBattle(CombatUnit unit)
+    {
+        if (unit == null)
+            return;
+
+        board.RemoveUnit(unit);
+
+        if (unit.OwnerFaction != null)
+        {
+            unit.OwnerFaction.UnitManager.Remove(unit);
+        }
+
+        unit.gameObject.SetActive(false);
+        // Destroy(unit.gameObject);
+    }
+
     // Debug ContextMenu for Pass 1
-     
+
     [ContextMenu("Debug End Turn")]
     public void DebugEndTurn()
     {
         EndCurrentTurn();
     }
 
-    [ContextMenu("Debug Damage First Enemy")]
-    public void DebugDamageFirstEnemy()
-    {
-        CombatUnit firstEnemy = EnemyFaction?.UnitManager?.GetLivingUnits()?.FirstOrDefault();
-        if (firstEnemy != null) {
-            firstEnemy.TakeDamage(999);
-            CheckBattleEnd();
-        }
-    }
+    //[ContextMenu("Debug Damage First Enemy")]
+    //public void DebugDamageFirstEnemy()
+    //{
+    //    CombatUnit firstEnemy = EnemyFaction?.UnitManager?.GetLivingUnits()?.FirstOrDefault();
+    //    if (firstEnemy != null) {
+    //        firstEnemy.TakeDamage(999);
+    //        CheckBattleEnd();
+    //    }
+    //}
 
     [ContextMenu("Debug Print State")]
     public void DebugPrintState()
