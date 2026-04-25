@@ -271,6 +271,12 @@ public class TilemapBoardAdapter : MonoBehaviour
         }
     }
 
+    public void ShowSelected(GridCoord coord)
+    {
+        Vector3Int tileCell = new Vector3Int(coord.x + bounds.xMin, coord.y + bounds.yMin, 0);
+        highlightTilemap.SetTile(tileCell, moveHighlightTile);
+    }
+
     // Debug print
     // --------------------------------------------------
 

@@ -12,14 +12,18 @@ public class PlayerInputController : MonoBehaviour
     [Header("Selection")]
     [SerializeField] private LayerMask unitLayerMask;
  
+    // Pathfind Services
     private readonly ReachableTileService reachableTileService = new();
     private readonly AStarPathService pathService = new();
 
     private HashSet<GridCoord> reachableCells = new();
+    private GridCoord? hoveredCoord = null;
+
+    // CombatUnit Action Command
     public CombatUnit selectedUnit;
 
-    private PlayerInputMode inputMode = PlayerInputMode.None;
-    private GridCoord? hoveredCoord = null;
+    private CommandMode commandMode = CommandMode.None;
+    private bool isResolvingAction = false;
 
     private void Awake()
     {
@@ -37,9 +41,10 @@ public class PlayerInputController : MonoBehaviour
         if (!turnManager.IsPlayerTurn())
             return;
 
-        if (inputMode == PlayerInputMode.UnitMoving)
+        if (isResolvingAction)
             return;
 
+        HandleCommandHotkeys();
         HandleHoverPreview();
 
         if (Input.GetMouseButtonDown(0))
@@ -51,13 +56,18 @@ public class PlayerInputController : MonoBehaviour
         {
             CancelCurrentMode();
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ClearSelection();
+        }
     }
 
     private void HandleLeftClick()
     {
         Vector3 worldPos = GetMouseWorldPosition();
 
-        if (inputMode == PlayerInputMode.ChoosingMoveTarget && selectedUnit != null)
+        if (commandMode == CommandMode.Move && selectedUnit != null)
         {
             GridCoord clickedCoord = board.ConvertWorldToGrid(worldPos);
 
@@ -70,75 +80,86 @@ public class PlayerInputController : MonoBehaviour
 
         Collider2D hit = Physics2D.OverlapPoint(worldPos, unitLayerMask);
         if (hit == null)
-        {
-            ClearSelection();
             return;
-        }
 
         CombatUnit clickedUnit = hit.GetComponent<CombatUnit>();
         if (clickedUnit == null)
-        {
-            ClearSelection();
             return;
-        }
 
         if (clickedUnit.OwnerFaction != turnManager.PlayerFaction)
-        {
-            ClearSelection();
             return;
-        }
 
         if (!clickedUnit.IsAlive)
-        {
-            ClearSelection();
             return;
-        }
 
         //Debug.Log($"SelectedUnit : {clickedUnit.name}");
         SelectUnit(clickedUnit);
     }
 
+    private void HandleCommandHotkeys()
+    {
+        if (selectedUnit == null)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            EnterMoveMode();
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            EnterAttackMode();
+        }
+    }
+
     // ----------------------------
     // Selection
     // ----------------------------
-
     private void SelectUnit(CombatUnit clickedUnit)
     {
         selectedUnit = clickedUnit;
 
-        //GridCoord inferredFromWorld = board.ConvertWorldToGrid(clickedUnit.transform.position);
-        //Debug.Log(
-        //    $"Selected {clickedUnit.name} | Stored Grid:{clickedUnit.GridPosition} | " +
-        //    $"Inferred From World:{inferredFromWorld} | World:{clickedUnit.transform.position}"
-        //);
-
-        reachableCells = reachableTileService.GetReachableTiles(board, clickedUnit.GridPosition, clickedUnit.Stats.MoveRange);
+        commandMode = CommandMode.None;
+        reachableCells.Clear();
+        hoveredCoord = null;
 
         board.ClearHighlights();
-        board.ShowCells(reachableCells);
-        //Debug.Log($"Selected : {clickedUnit.name} at position : {clickedUnit.GridPosition}");
-
-        inputMode = clickedUnit.CanMove ? PlayerInputMode.ChoosingMoveTarget : PlayerInputMode.UnitSelected;
-
-        hoveredCoord = null; 
+        board.ShowSelected(clickedUnit.GridPosition);
+        Debug.Log($"Selected {clickedUnit.name}");
     }
-
 
     // ----------------------------
     // Move Flow
     // ----------------------------
+    private void EnterMoveMode()
+    {
+        if (selectedUnit == null)
+            return;
+
+        if (!selectedUnit.CanMove)
+        {
+            Debug.Log("Selected unit cannot move.");
+            return;
+        }
+
+        reachableCells = reachableTileService.GetReachableTiles(board, selectedUnit.GridPosition, selectedUnit.Stats.MoveRange);
+
+        commandMode = CommandMode.Move;
+        hoveredCoord = null;
+
+        board.ClearHighlights();
+        board.ShowCells(reachableCells);
+
+        Debug.Log($"Move mode for {selectedUnit.name}");
+    }
 
     private void CommitMove(GridCoord targetCoord)
     {
         if (selectedUnit == null)
-        {
             return;
-        }
 
         if (!selectedUnit.CanMove)
-        {
             return;
-        }
 
         List<GridCoord> path = pathService.FindPath(board, selectedUnit.GridPosition, targetCoord);
         if (path.Count <= 1)
@@ -146,12 +167,12 @@ public class PlayerInputController : MonoBehaviour
             return;
         }
 
-        StartCoroutine(ExecuteMove(selectedUnit, path));
+        StartCoroutine(ResolveUnitMove(selectedUnit, path));
     }
 
-    private IEnumerator ExecuteMove(CombatUnit unit, List<GridCoord> path)
+    private IEnumerator ResolveUnitMove(CombatUnit unit, List<GridCoord> path)
     {
-        inputMode = PlayerInputMode.UnitMoving;
+        isResolvingAction = true;
 
         board.ShowPath(path);
 
@@ -176,16 +197,32 @@ public class PlayerInputController : MonoBehaviour
         reachableCells.Clear();
         hoveredCoord = null;
 
-        selectedUnit = unit;
+        commandMode = CommandMode.None;
+        isResolvingAction = false;
 
-        if (unit.CanMove)
+        selectedUnit = unit;
+    }
+
+    // --------------------
+    // Attack flow
+    // --------------------
+    private void EnterAttackMode()
+    {
+        if (selectedUnit == null)
+            return;
+
+        if (!selectedUnit.CanAttack)
         {
-            SelectUnit(unit);
+            Debug.Log("Selected unit cannot attack.");
+            return;
         }
-        else
-        {
-            inputMode = PlayerInputMode.UnitSelected;
-        }
+
+        commandMode = CommandMode.Attack;
+        hoveredCoord = null;
+
+        board.ClearHighlights();
+
+        Debug.Log($"Attack mode for {selectedUnit.name}");
     }
 
     // --------------------
@@ -193,7 +230,7 @@ public class PlayerInputController : MonoBehaviour
     // --------------------
     private void HandleHoverPreview()
     {
-        if (inputMode != PlayerInputMode.ChoosingMoveTarget || selectedUnit == null)
+        if (commandMode != CommandMode.Move || selectedUnit == null)
             return;
 
         GridCoord coord = board.ConvertWorldToGrid(GetMouseWorldPosition());
@@ -219,25 +256,37 @@ public class PlayerInputController : MonoBehaviour
         }
     }
 
-
     // --------------------
     // Helpers 
     // --------------------
     private void CancelCurrentMode()
     {
-        if (inputMode == PlayerInputMode.UnitMoving)
+        if (isResolvingAction)
             return;
 
-        ClearSelection();
+        commandMode = CommandMode.None;
+        reachableCells.Clear();
+        hoveredCoord = null;
+
+        board.ClearHighlights();
+
+        Debug.Log("Command cancelled.");
     }
 
     private void ClearSelection()
     {
+        if (isResolvingAction)
+            return;
+
         selectedUnit = null;
+
+        commandMode = CommandMode.None;
         reachableCells.Clear();
         hoveredCoord = null;
-        inputMode = PlayerInputMode.None;
+
         board.ClearHighlights();
+
+        Debug.Log("Selection cleared.");
     }
 
     private Vector3 GetMouseWorldPosition()
@@ -251,6 +300,3 @@ public class PlayerInputController : MonoBehaviour
 
     // { }
 }
-
-
-
