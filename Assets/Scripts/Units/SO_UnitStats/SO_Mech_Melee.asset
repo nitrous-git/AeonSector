@@ -15,7 +15,7 @@ MonoBehaviour:
   UnitName: Mech Melee
   UnitType: 0
   MaxHP: 10
-  MoveRange: 4
+  MoveRange: 2
   AttackDamage: 3
   MinAttackRange: 1
   MaxAttackRange: 1

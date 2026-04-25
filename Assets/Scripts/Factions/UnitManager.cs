@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class UnitManager : MonoBehaviour
+public class UnitManager 
 {
     private readonly List<CombatUnit> units = new(); 
     public IReadOnlyList<CombatUnit> Units => units;

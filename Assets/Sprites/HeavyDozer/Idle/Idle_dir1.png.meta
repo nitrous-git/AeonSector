@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 128
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -145,7 +145,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c1290dd7c1f3754a8f16c375deb8fcc
+      spriteID: dc6dddc7927e7354097eeb087339bc76
       internalID: 725424192
       vertices: []
       indices: 
@@ -166,7 +166,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ecc0f850af48ae478a7d4000ab721a0
+      spriteID: a7fd625c6fb326a47b98c5d23c05a2af
       internalID: 1227885474
       vertices: []
       indices: 
@@ -187,7 +187,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ede493c5333aa7f48ad342cff347db73
+      spriteID: 0f0e428d3d242cc459734c3629b05fbe
       internalID: 1187742650
       vertices: []
       indices: 
@@ -208,7 +208,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df3315316349feb45a3ae38035786390
+      spriteID: 37e1e58e5d0740043ad06566cd46b269
       internalID: 1333887133
       vertices: []
       indices: 
@@ -229,7 +229,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f232f4f089120f43a6be067b4cd7c7a
+      spriteID: 78a09e8502729914e9dab66f9add49b1
       internalID: 1317659213
       vertices: []
       indices: 
@@ -250,7 +250,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b78084bce6478444da5b8cf243e9f0fb
+      spriteID: 9bcac3bf086834f4d985a03cb8b16959
       internalID: -1816251964
       vertices: []
       indices: 
@@ -271,7 +271,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0085f2d029e8f104c89543c508eb7fcc
+      spriteID: 3fd3a62d16663c54299ad0ac7796f942
       internalID: -1069517010
       vertices: []
       indices: 
@@ -292,7 +292,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40d49d3400452f148aa2b19641ba9c13
+      spriteID: 1cc82647fdd85c34ab989eb02e49bed0
       internalID: -668166008
       vertices: []
       indices: 
@@ -313,7 +313,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6cc1f63b298d8df44ab9998a42227efb
+      spriteID: f6c60be071ca7f04c90d771530469281
       internalID: -461981556
       vertices: []
       indices: 
@@ -334,7 +334,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3730e16d6ae2da24394a80b2a13bddab
+      spriteID: d73c9426244820944ac0e4b1c56ae903
       internalID: -238868404
       vertices: []
       indices: 
@@ -355,7 +355,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9823f2f664582574b9979a88bb195181
+      spriteID: 4941e8b49721a314b8548648a67590e1
       internalID: 408393127
       vertices: []
       indices: 
@@ -376,7 +376,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ddeb61a004898a64da30a8eba90a5853
+      spriteID: 17a7c07e8fc2d1c4e9742809790e07ad
       internalID: -254852238
       vertices: []
       indices: 
@@ -397,7 +397,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 881175bc6062ab14cb73024b446374da
+      spriteID: 8b9f72bc9c294f94f9f1e60c27a36625
       internalID: -113601818
       vertices: []
       indices: 
@@ -418,7 +418,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cdc1eb43e53fd684285ff6454c4999b9
+      spriteID: bc8b0306724bf4a418cfd3f8e83bb893
       internalID: -1949374868
       vertices: []
       indices: 

@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Units
   - 
   - 
   - 
@@ -40,4 +40,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 495332365
+    locked: 0
+  - name: Highlight
+    uniqueID: 1065454327
+    locked: 0
+  - name: Path
+    uniqueID: 213052967
+    locked: 0
+  - name: Units
+    uniqueID: 3590921545
+    locked: 0
+  - name: Block
+    uniqueID: 2778456825
     locked: 0
