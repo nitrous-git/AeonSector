@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f84488da0e6fc7e439cbdb32ab2f929d, type: 3}
   m_Name: SO_Mech_Range
   m_EditorClassIdentifier: 
-  UnitName: Mech Melee
+  UnitName: Mech Ranged
   UnitType: 1
   MaxHP: 10
   MoveRange: 2
   AttackDamage: 3
   MinAttackRange: 1
-  MaxAttackRange: 1
+  MaxAttackRange: 4

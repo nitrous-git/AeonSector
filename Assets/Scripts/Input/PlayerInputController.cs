@@ -75,7 +75,7 @@ public class PlayerInputController : MonoBehaviour
             }
         }
 
-        if (commandMode == CommandMode.Attack && selectedUnit != null)
+        if (IsAttackMode(commandMode) && selectedUnit != null)
         {
             GridCoord clickedCoord = board.ConvertWorldToGrid(worldPos);
             TryCommitAttackAt(clickedCoord);
@@ -112,7 +112,12 @@ public class PlayerInputController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            EnterAttackMode();
+            EnterMeleeAttackMode();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            EnterRangedAttackMode();
         }
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -214,7 +219,17 @@ public class PlayerInputController : MonoBehaviour
     // --------------------
     // Attack flow
     // --------------------
-    private void EnterAttackMode()
+    private void EnterMeleeAttackMode()
+    {
+        EnterAttackMode(CommandMode.MeleeAttack);
+    }
+
+    private void EnterRangedAttackMode()
+    {
+        EnterAttackMode(CommandMode.RangedAttack);
+    }
+
+    private void EnterAttackMode(CommandMode attackMode)
     {
         if (selectedUnit == null)
             return;
@@ -225,17 +240,18 @@ public class PlayerInputController : MonoBehaviour
             return;
         }
 
-        reachableCells = attackRangeService.GetAttackRangeCells(board, selectedUnit);
-        Debug.Log(reachableCells.Count);
+        commandMode = attackMode;
 
-        commandMode = CommandMode.Attack;
+        reachableCells = attackRangeService.GetAttackRangeCells(board, selectedUnit, commandMode);
+        //Debug.Log(reachableCells.Count);
+
         hoveredCoord = null;
 
         board.ClearHighlights();
         board.ShowAttackCells(reachableCells);
         board.ShowSelected(selectedUnit.GridPosition);
 
-        Debug.Log($"Attack mode for {selectedUnit.name}");
+        Debug.Log($"{attackMode} mode for {selectedUnit.name}");
     }
 
     private bool TryCommitAttackAt(GridCoord targetCoord)
@@ -287,7 +303,9 @@ public class PlayerInputController : MonoBehaviour
 
         board.ClearPath();
 
-        Debug.Log($"{attacker.name} attacks {target.name} for {attacker.Stats.AttackDamage} damage.");
+        int damage = attacker.Stats.GetDamageForCommand(commandMode);
+
+        Debug.Log($"{attacker.name} uses {commandMode} on {target.name} for {damage} damage.");
 
         // Later:
         // - attacker animation
@@ -296,7 +314,7 @@ public class PlayerInputController : MonoBehaviour
         // - projectile coroutine for ranged units
         yield return null;
 
-        if (target.TakeDamage(attacker.Stats.AttackDamage))
+        if (target.TakeDamage(damage))
         {
             turnManager.RemoveUnitFromBattle(target);
         }
@@ -405,6 +423,11 @@ public class PlayerInputController : MonoBehaviour
         Vector3 world = mainCamera.ScreenToWorldPoint(mouse);
         world.z = 0f;
         return world;
+    }
+
+    private bool IsAttackMode(CommandMode mode)
+    {
+        return mode == CommandMode.MeleeAttack || mode == CommandMode.RangedAttack;
     }
 
     // { }

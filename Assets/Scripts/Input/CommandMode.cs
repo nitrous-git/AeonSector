@@ -2,5 +2,6 @@ public enum CommandMode
 {
     None,
     Move,
-    Attack
+    MeleeAttack,
+    RangedAttack
 }

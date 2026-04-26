@@ -9,23 +9,20 @@ public enum AttackShape
 
 public class AttackRangeService
 {
-    public HashSet<GridCoord> GetAttackRangeCells(TilemapBoardAdapter board, CombatUnit attacker)
+    public HashSet<GridCoord> GetAttackRangeCells(TilemapBoardAdapter board, CombatUnit attacker, CommandMode commandMode)
     {
         HashSet<GridCoord> empty = new();
 
         if (board == null || attacker == null || attacker.Stats == null)
             return empty;
 
-        int minRange = attacker.Stats.MinAttackRange;
-        int maxRange = attacker.Stats.MaxAttackRange;
-
-        switch (attacker.Stats.UnitType)
+        switch (commandMode)
         {
-            case UnitType.MechMelee:
-                return GetDiamondRangeCells(board, attacker.GridPosition, minRange, maxRange);
+            case CommandMode.MeleeAttack:
+                return GetDiamondRangeCells(board, attacker.GridPosition, attacker.Stats.MeleeMinAttackRange, attacker.Stats.MeleeMaxAttackRange);
 
-            case UnitType.MechRanged:
-                return GetCardinalLineRangeCells(board, attacker.GridPosition, minRange, maxRange);
+            case CommandMode.RangedAttack:
+                return GetCardinalLineRangeCells(board, attacker.GridPosition, attacker.Stats.RangedMinAttackRange, attacker.Stats.RangedMaxAttackRange);
 
             default:
                 return empty;
