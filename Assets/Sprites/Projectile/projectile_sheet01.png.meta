@@ -1,0 +1,989 @@
+fileFormatVersion: 2
+guid: c5e3e1805e0eed5489ec68598bdf256a
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: projectile_sheet01_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 374
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3cebf9b005c6684cab571b9bd949262
+      internalID: -474067576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_1
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 372
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acdaeaf8a7ec70e4f8334ae423438907
+      internalID: 2084579289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_2
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 370
+        width: 37
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb50dcde28aa46d4f9bbfed4755acf11
+      internalID: 223251138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_3
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 370
+        width: 41
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38ce78de53daab14da169d1616e3e64a
+      internalID: 1904993402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_4
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 371
+        width: 75
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85dc7582e78330448af5fc28e091bef1
+      internalID: -173487968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_5
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 370
+        width: 67
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bef037a8c3aaf343b3815d55391d6e7
+      internalID: 657113564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 370
+        width: 62
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b36f8cb8dac514349818883fcef78f83
+      internalID: 1149398699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_7
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 374
+        width: 68
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c797100144c82d46bd35a9fcb1cf6be
+      internalID: -175669308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_8
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 370
+        width: 43
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9cc498dc96431542b15d6201b3aeb28
+      internalID: 843434437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_9
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 362
+        width: 50
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce721054aff6bda4fac83d28dcfe3783
+      internalID: 1857145632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_10
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 360
+        width: 58
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8ac498bbcdb55b408789cb3e10e9b10
+      internalID: 524965078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_12
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 359
+        width: 60
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 973d7f2b8511ff640b6f71d5f057892e
+      internalID: 726563674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_14
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 287
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2e3d9f61eaa4fb4f94814a4eb67c610
+      internalID: 1275056720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_15
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 283
+        width: 59
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 201f3ddb13b6ad54cb45005952076b90
+      internalID: -643690926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_16
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 286
+        width: 62
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c167e37b2d9a414691a9c02234db603
+      internalID: -861991217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_18
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 284
+        width: 65
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b37c448132d9d0c4196d61fb3c5d1d57
+      internalID: -2093524902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_20
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 301
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad87295a21b9c8244a18487697b7e662
+      internalID: 108687661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_21
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 292
+        width: 36
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9397d0e1639ac6943971a5ac48a7a633
+      internalID: 954012752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_26
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 226
+        width: 89
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3b85b8444ac8c548a4930fde01a9c43
+      internalID: -552027565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_27
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 224
+        width: 86
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2404edaefd3534b4685027af662caa80
+      internalID: -185113347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_28
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 223
+        width: 92
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f04db673a4dbbbb4a853dc953de34539
+      internalID: 1626686496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_30
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 224
+        width: 99
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12d719dcd3e70d34cac5fa00aa34e2a4
+      internalID: 1765615078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_31
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 221
+        width: 52
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f671fdf6af974247a5816bcc0d8a530
+      internalID: -468466849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_32
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 212
+        width: 60
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42279ba7adada5e4b8030066d8614bdb
+      internalID: 1938031636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_33
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 209
+        width: 78
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 104f015e065ec1745a2f63e0e031f6a9
+      internalID: -741659086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_35
+      rect:
+        serializedVersion: 2
+        x: 606
+        y: 208
+        width: 61
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db211da3e775a9843be5cd9336f73c7a
+      internalID: -685687285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_36
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 154
+        width: 99
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a2cb75de706f0b468663631aa0118af
+      internalID: -1523985440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_37
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 154
+        width: 102
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 100fbc72e91c6e14c8a8d8166ea85761
+      internalID: -1067734311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_39
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 155
+        width: 99
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8f5b910b34ad824e87961b9dace76b0
+      internalID: 1318977116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_40
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 154
+        width: 98
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5c9140f54c9b6e4682622ddeb16e2b3
+      internalID: -1762829562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_42
+      rect:
+        serializedVersion: 2
+        x: 318
+        y: 79
+        width: 69
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a77c91a908f6b6c47b700acba5323ef4
+      internalID: 1969471043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_45
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 83
+        width: 62
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7033088ccf69e2049b840e5e4a5041f5
+      internalID: -641422722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_48
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 90
+        width: 40
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5fb8bc5786fcc544911600500bc0944
+      internalID: 1543386629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_54
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 78
+        width: 78
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2498ff63b8a9b740b6271ce9f82a0d1
+      internalID: -1870130140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_58
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 6
+        width: 134
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7117ba5f3dbda8246acb5fc8fda26f40
+      internalID: -905327239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_60
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 14
+        width: 49
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92f31f2d63694214cbbac210c2e66f2e
+      internalID: -391457901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_61
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 5
+        width: 148
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84efc2e408afc634c828fc098484d5c8
+      internalID: 1069571068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile_sheet01_63
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 10
+        width: 75
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e6f0305286df31419553ee2bbb5af3b
+      internalID: -2065500404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      projectile_sheet01_0: -474067576
+      projectile_sheet01_1: 2084579289
+      projectile_sheet01_10: 524965078
+      projectile_sheet01_11: 1753885487
+      projectile_sheet01_12: 726563674
+      projectile_sheet01_13: -1958042477
+      projectile_sheet01_14: 1275056720
+      projectile_sheet01_15: -643690926
+      projectile_sheet01_16: -861991217
+      projectile_sheet01_17: -1009836112
+      projectile_sheet01_18: -2093524902
+      projectile_sheet01_19: -1733877773
+      projectile_sheet01_2: 223251138
+      projectile_sheet01_20: 108687661
+      projectile_sheet01_21: 954012752
+      projectile_sheet01_22: -64440019
+      projectile_sheet01_23: 1699946007
+      projectile_sheet01_24: 1248968713
+      projectile_sheet01_25: 1093165440
+      projectile_sheet01_26: -552027565
+      projectile_sheet01_27: -185113347
+      projectile_sheet01_28: 1626686496
+      projectile_sheet01_29: 1544561936
+      projectile_sheet01_3: 1904993402
+      projectile_sheet01_30: 1765615078
+      projectile_sheet01_31: -468466849
+      projectile_sheet01_32: 1938031636
+      projectile_sheet01_33: -741659086
+      projectile_sheet01_34: 518171184
+      projectile_sheet01_35: -685687285
+      projectile_sheet01_36: -1523985440
+      projectile_sheet01_37: -1067734311
+      projectile_sheet01_38: 1935821954
+      projectile_sheet01_39: 1318977116
+      projectile_sheet01_4: -173487968
+      projectile_sheet01_40: -1762829562
+      projectile_sheet01_41: 76580603
+      projectile_sheet01_42: 1969471043
+      projectile_sheet01_43: 2129999643
+      projectile_sheet01_44: 1870471286
+      projectile_sheet01_45: -641422722
+      projectile_sheet01_46: 2043992022
+      projectile_sheet01_47: 2131043861
+      projectile_sheet01_48: 1543386629
+      projectile_sheet01_49: 1869068606
+      projectile_sheet01_5: 657113564
+      projectile_sheet01_50: -197169442
+      projectile_sheet01_51: -2040090559
+      projectile_sheet01_52: 1085407699
+      projectile_sheet01_53: 1817889513
+      projectile_sheet01_54: -1870130140
+      projectile_sheet01_55: -2072041728
+      projectile_sheet01_56: 1596160073
+      projectile_sheet01_57: 164223710
+      projectile_sheet01_58: -905327239
+      projectile_sheet01_59: 1948069765
+      projectile_sheet01_6: 1149398699
+      projectile_sheet01_60: -391457901
+      projectile_sheet01_61: 1069571068
+      projectile_sheet01_62: -1844368059
+      projectile_sheet01_63: -2065500404
+      projectile_sheet01_7: -175669308
+      projectile_sheet01_8: 843434437
+      projectile_sheet01_9: 1857145632
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

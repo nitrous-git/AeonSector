@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,15 @@ public class PlayerInputController : MonoBehaviour
     [SerializeField] private TurnManager turnManager;
     [SerializeField] private TilemapBoardAdapter board;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private ActionMenuUI actionMenuUI;
+
+    [Header("Projectile")]
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 0.15f, 0f);
+    [SerializeField] private Vector3 projectileHitOffset = new Vector3(0f, 0.15f, 0f);
+
+    [Header("Sword Slash")]
+    [SerializeField] private GameObject swordSlashPrefab;
 
     [Header("Selection")]
     [SerializeField] private LayerMask unitLayerMask;
@@ -32,6 +42,8 @@ public class PlayerInputController : MonoBehaviour
         {
             mainCamera = Camera.main;
         }
+
+        //actionMenuUI.Hide();
     }
 
     private void Update()
@@ -107,23 +119,22 @@ public class PlayerInputController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            EnterMoveMode();
+            SelectMoveCommand();
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            EnterMeleeAttackMode();
+            SelectMeleeAttackCommand();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            EnterRangedAttackMode();
+            SelectRangedAttackCommand();
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            TryEndPlayerTurn();
-            return;
+            EndSelectedUnitTurn();
         }
     }
 
@@ -133,6 +144,12 @@ public class PlayerInputController : MonoBehaviour
     private void SelectUnit(CombatUnit clickedUnit)
     {
         selectedUnit = clickedUnit;
+
+        if (actionMenuUI != null)
+        {
+            actionMenuUI.Show();
+            actionMenuUI.Refresh(selectedUnit);
+        }
 
         commandMode = CommandMode.None;
         reachableCells.Clear();
@@ -214,6 +231,9 @@ public class PlayerInputController : MonoBehaviour
         isResolvingAction = false;
 
         selectedUnit = unit;
+        board.ShowSelected(selectedUnit.GridPosition);
+
+        actionMenuUI.Refresh(selectedUnit);
     }
 
     // --------------------
@@ -311,8 +331,15 @@ public class PlayerInputController : MonoBehaviour
         // - attacker animation
         // - particle FX
         // - camera shake
-        // - projectile coroutine for ranged units
-        yield return null;
+        if (commandMode == CommandMode.RangedAttack)
+        {
+            attacker.transform.GetChild(0).GetComponent<Animator>().Play("MissileShooting");
+            yield return ResolveRangedAttackVisual(attacker, target);
+        }
+        else if (commandMode == CommandMode.MeleeAttack)
+        {
+            yield return ResolveMeleeAttackVisual(attacker, target);
+        }
 
         if (target.TakeDamage(damage))
         {
@@ -333,6 +360,50 @@ public class PlayerInputController : MonoBehaviour
         selectedUnit = attacker;
 
         turnManager.RefreshBattleEndState();
+
+        actionMenuUI.Refresh(selectedUnit);
+    }
+
+    private IEnumerator ResolveRangedAttackVisual(CombatUnit attacker, CombatUnit target)
+    {
+        if (projectilePrefab == null)
+        {
+            Debug.LogWarning("No projectile prefab assigned. Ranged attack will resolve instantly.");
+            yield break;
+        }
+
+        Vector3 startWorld = board.ConvertGridToWorld(attacker.GridPosition) + projectileSpawnOffset;
+        Vector3 targetWorld = board.ConvertGridToWorld(target.GridPosition) + projectileHitOffset;
+
+        GameObject projectileObject = Instantiate(projectilePrefab, startWorld, Quaternion.identity);
+
+        ProjectileMover projectileMover = projectileObject.GetComponent<ProjectileMover>();
+
+        if (projectileMover == null)
+        {
+            Debug.LogWarning("Projectile prefab has no ProjectileMover component. Ranged attack will resolve instantly.");
+            Destroy(projectileObject);
+            yield break;
+        }
+
+        yield return projectileMover.FlyAndHit(startWorld, targetWorld);
+
+        attacker.transform.GetChild(0).GetComponent<Animator>().Play("Idle_Down");
+    }
+
+    private IEnumerator ResolveMeleeAttackVisual(CombatUnit attacker, CombatUnit target)
+    {
+        
+        // Later we can add Animator.Play("Melee_Attack") here.
+
+        Vector3 spawnWorld = board.ConvertGridToWorld(attacker.GridPosition) + projectileSpawnOffset;
+        GameObject slashObject = Instantiate(swordSlashPrefab, spawnWorld, Quaternion.identity);
+        slashObject.GetComponent<Animator>().Play("SwordSlash");
+
+        yield return new WaitForSeconds(0.45f);
+        Destroy(slashObject);
+
+        yield return null;
     }
 
     // --------------------
@@ -391,6 +462,8 @@ public class PlayerInputController : MonoBehaviour
         if (isResolvingAction)
             return;
 
+        //actionMenuUI.Hide();
+
         commandMode = CommandMode.None;
         reachableCells.Clear();
         hoveredCoord = null;
@@ -407,6 +480,8 @@ public class PlayerInputController : MonoBehaviour
 
         selectedUnit = null;
 
+        //actionMenuUI.Hide();
+    
         commandMode = CommandMode.None;
         reachableCells.Clear();
         hoveredCoord = null;
@@ -428,6 +503,56 @@ public class PlayerInputController : MonoBehaviour
     private bool IsAttackMode(CommandMode mode)
     {
         return mode == CommandMode.MeleeAttack || mode == CommandMode.RangedAttack;
+    }
+
+    // --------------------
+    // ActionMenuUI Helpers
+    // --------------------
+
+    public void SelectMoveCommand()
+    {
+        if (selectedUnit == null || !selectedUnit.CanMove)
+            return;
+
+        Debug.Log("Move Command selected");
+        SetCommandMode(CommandMode.Move);
+    }
+
+    public void SelectRangedAttackCommand()
+    {
+        if (selectedUnit == null || !selectedUnit.CanAttack)
+            return;
+
+        SetCommandMode(CommandMode.RangedAttack);
+    }
+
+    public void SelectMeleeAttackCommand()
+    {
+        if (selectedUnit == null || !selectedUnit.CanAttack)
+            return;
+
+        SetCommandMode(CommandMode.MeleeAttack);
+    }
+
+    public void EndSelectedUnitTurn()
+    {
+        TryEndPlayerTurn();
+    }
+
+    private void SetCommandMode(CommandMode commandMode)
+    {
+        switch (commandMode)
+        {
+            case CommandMode.Move:
+                EnterMoveMode();
+                break;
+            case CommandMode.RangedAttack:
+                EnterRangedAttackMode();
+                break;
+            case CommandMode.MeleeAttack:
+                EnterMeleeAttackMode();
+                break;
+        }
     }
 
     // { }
