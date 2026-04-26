@@ -59,27 +59,6 @@ public class CombatUnit : MonoBehaviour
         GridPosition = coord;
     }
 
-    //public bool ApplyDamage(int amount)
-    //{
-    //    if (!IsAlive)
-    //    {
-    //        return false;
-    //    }
-
-    //    CurrentHP -= amount;
-
-    //    if (CurrentHP <= 0)
-    //    {
-    //        CurrentHP = 0;
-    //        IsAlive. = false;
-    //        Debug.Log($"{name} died.");
-    //        return true;
-    //    }
-
-    //    return false;
-    //}
-
-
     public bool TakeDamage(int amount)
     {
         if (!IsAlive) 

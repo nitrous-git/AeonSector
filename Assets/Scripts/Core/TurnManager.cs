@@ -145,6 +145,11 @@ public class TurnManager : MonoBehaviour
         return false;
     }
 
+    public bool RefreshBattleEndState()
+    {
+        return CheckBattleEnd();
+    }
+
     public void RemoveUnitFromBattle(CombatUnit unit)
     {
         if (unit == null)
@@ -158,7 +163,7 @@ public class TurnManager : MonoBehaviour
         }
 
         unit.gameObject.SetActive(false);
-        // Destroy(unit.gameObject);
+        Destroy(unit.gameObject);
     }
 
     // Debug ContextMenu for Pass 1

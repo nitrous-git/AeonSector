@@ -16,6 +16,7 @@ public class TilemapBoardAdapter : MonoBehaviour
     [Header("Highlight Tiles")]
     [SerializeField] private TileBase moveHighlightTile;
     [SerializeField] private TileBase pathHighlightTile;
+    [SerializeField] private TileBase attackHighlightTile;
 
     private BoundsInt bounds;
 
@@ -34,7 +35,6 @@ public class TilemapBoardAdapter : MonoBehaviour
         BuildBoard();
     }
 
-    [ContextMenu("Build Board")]
     public void BuildBoard()
     {
         if (groundTilemap == null)
@@ -70,6 +70,7 @@ public class TilemapBoardAdapter : MonoBehaviour
         ClearHighlights();
     }
 
+    // --------------------------------------------------
     // Board queries
     // --------------------------------------------------
 
@@ -109,6 +110,7 @@ public class TilemapBoardAdapter : MonoBehaviour
         return baseWalkable[coord.y, coord.x];
     }
 
+    // --------------------------------------------------
     // Unit occupancy
     // --------------------------------------------------
 
@@ -150,11 +152,13 @@ public class TilemapBoardAdapter : MonoBehaviour
 
         if (!IsInside(coord)) { return; }
 
-        if (occupancy[coord.y, coord.x] == unit) {
+        if (occupancy[coord.y, coord.x] == unit) 
+        {
             occupancy[coord.y, coord.x] = null;
         }
     }
 
+    // --------------------------------------------------
     // Neighbors
     // --------------------------------------------------
 
@@ -199,6 +203,7 @@ public class TilemapBoardAdapter : MonoBehaviour
         return new GridCoord(localX, localY);
     }
 
+    // --------------------------------------------------
     // Highlights
     // --------------------------------------------------
 
@@ -277,6 +282,48 @@ public class TilemapBoardAdapter : MonoBehaviour
         highlightTilemap.SetTile(tileCell, moveHighlightTile);
     }
 
+    // Duplicate of showCells but with the attackHighlightTile (Generalize this later)
+    public void ShowAttackCells(IEnumerable<GridCoord> cells)
+    {
+        if (highlightTilemap == null || attackHighlightTile == null)
+        {
+            return;
+        }
+
+        highlightTilemap.ClearAllTiles();
+
+        foreach (GridCoord coord in cells)
+        {
+            if (!IsInside(coord))
+            {
+                continue;
+            }
+
+            if (!HasBaseWalkable(coord))
+            {
+                continue;
+            }
+
+            Vector3Int tileCell = new Vector3Int(coord.x + bounds.xMin, coord.y + bounds.yMin,0);
+            highlightTilemap.SetTile(tileCell, attackHighlightTile);
+        }
+    }
+
+    // --------------------------------------------------
+    // Blocking validation
+    // --------------------------------------------------
+    public bool BlocksAttackLine(GridCoord coord)
+    {
+        if (!IsInside(coord))
+            return true;
+
+        if (!HasBaseWalkable(coord))
+            return true;
+
+        return false;
+    }
+
+    // --------------------------------------------------
     // Debug print
     // --------------------------------------------------
 

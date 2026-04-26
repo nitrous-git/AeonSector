@@ -15,6 +15,7 @@ public class PlayerInputController : MonoBehaviour
     // Pathfind Services
     private readonly ReachableTileService reachableTileService = new();
     private readonly AStarPathService pathService = new();
+    private readonly AttackRangeService attackRangeService = new();
 
     private HashSet<GridCoord> reachableCells = new();
     private GridCoord? hoveredCoord = null;
@@ -72,6 +73,13 @@ public class PlayerInputController : MonoBehaviour
                 CommitMove(clickedCoord);
                 return;
             }
+        }
+
+        if (commandMode == CommandMode.Attack && selectedUnit != null)
+        {
+            GridCoord clickedCoord = board.ConvertWorldToGrid(worldPos);
+            TryCommitAttackAt(clickedCoord);
+            return; 
         }
 
         Collider2D hit = Physics2D.OverlapPoint(worldPos, unitLayerMask);
@@ -217,12 +225,96 @@ public class PlayerInputController : MonoBehaviour
             return;
         }
 
+        reachableCells = attackRangeService.GetAttackRangeCells(board, selectedUnit);
+        Debug.Log(reachableCells.Count);
+
         commandMode = CommandMode.Attack;
         hoveredCoord = null;
 
         board.ClearHighlights();
+        board.ShowAttackCells(reachableCells);
+        board.ShowSelected(selectedUnit.GridPosition);
 
         Debug.Log($"Attack mode for {selectedUnit.name}");
+    }
+
+    private bool TryCommitAttackAt(GridCoord targetCoord)
+    {
+        if (selectedUnit == null)
+            return false;
+
+        if (!selectedUnit.CanAttack)
+            return false;
+
+        if (!reachableCells.Contains(targetCoord))
+        {
+            Debug.Log("Clicked cell is outside attack range.");
+            return false;
+        }
+
+        CombatUnit target = board.GetUnitAt(targetCoord);
+
+        if (target == null || !target.IsAlive)
+        {
+            Debug.Log("No valid target on clicked attack cell.");
+            return false;
+        }
+
+        if (target.OwnerFaction == selectedUnit.OwnerFaction)
+        {
+            Debug.Log("Cannot attack friendly unit.");
+            return false;
+        }
+
+        CommitAttack(target);
+        return true;
+    }
+
+    private void CommitAttack(CombatUnit target)
+    {
+        if (selectedUnit == null || target == null)
+            return;
+
+        if (!selectedUnit.CanAttack)
+            return;
+
+        StartCoroutine(ResolveUnitAttack(selectedUnit, target));
+    }
+
+    private IEnumerator ResolveUnitAttack(CombatUnit attacker, CombatUnit target)
+    {
+        isResolvingAction = true;
+
+        board.ClearPath();
+
+        Debug.Log($"{attacker.name} attacks {target.name} for {attacker.Stats.AttackDamage} damage.");
+
+        // Later:
+        // - attacker animation
+        // - particle FX
+        // - camera shake
+        // - projectile coroutine for ranged units
+        yield return null;
+
+        if (target.TakeDamage(attacker.Stats.AttackDamage))
+        {
+            turnManager.RemoveUnitFromBattle(target);
+        }
+
+        attacker.MarkAttacked();
+
+        board.ClearHighlights();
+        board.ClearPath();
+
+        reachableCells.Clear();
+        hoveredCoord = null;
+
+        commandMode = CommandMode.None;
+        isResolvingAction = false;
+
+        selectedUnit = attacker;
+
+        turnManager.RefreshBattleEndState();
     }
 
     // --------------------
