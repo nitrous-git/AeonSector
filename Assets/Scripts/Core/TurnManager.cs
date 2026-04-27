@@ -1,19 +1,21 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
+using System.Reflection;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TurnManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private TilemapBoardAdapter board;
+    [SerializeField] private ChangeTurnBanner changeTurnBanner;
 
     [Header("Scene Unit References")]
     [SerializeField] private List<CombatUnit> playerUnits = new();
     [SerializeField] private List<CombatUnit> enemyUnits = new();
+
+    [Header("Enemy AI")]
+    [SerializeField] private EnemyTurnController enemyTurnController;
 
     public Faction PlayerFaction { get; private set; }
     public Faction EnemyFaction { get; private set; }
@@ -79,9 +81,15 @@ public class TurnManager : MonoBehaviour
         }
     }
 
+    // ------------------------------
+    // Respective Turn Utilities
+    // ------------------------------
+
     public void StartPlayerTurn()
     {
         if (CheckBattleEnd()) { return; }
+
+        changeTurnBanner?.ShowPlayerTurn();
 
         CurrentFaction = PlayerFaction;
         CurrentFaction.BeginTurn();
@@ -94,12 +102,46 @@ public class TurnManager : MonoBehaviour
         if (CheckBattleEnd()) { return; }
 
         CurrentFaction = EnemyFaction;
+
+        changeTurnBanner?.ShowEnemyTurn();
+        StartCoroutine(EnemyTurnRoutine());
+
+        //CurrentFaction.BeginTurn();
+        //CurrentBattleState = BattleState.EnemyTurn;
+
+        //Debug.Log("--- ENEMY TURN ---");
+
+        //if (enemyTurnController != null)
+        //{
+        //    enemyTurnController.BeginEnemyTurn();
+        //}
+        //else
+        //{
+        //    Debug.LogWarning("No EnemyTurnController assigned. Enemy turn will not auto-resolve.");
+        //}
+    }
+
+    private IEnumerator EnemyTurnRoutine()
+    {
+        // Delay the AI slightly so the banner has time to read
+        if (changeTurnBanner != null)
+            yield return new WaitForSeconds(changeTurnBanner.TotalDuration);
+
+        // Enemy AI actions starts here
         CurrentFaction.BeginTurn();
         CurrentBattleState = BattleState.EnemyTurn;
 
         Debug.Log("--- ENEMY TURN ---");
-    }
 
+        if (enemyTurnController != null)
+        {
+            enemyTurnController.BeginEnemyTurn();
+        }
+        else
+        {
+            Debug.LogWarning("No EnemyTurnController assigned. Enemy turn will not auto-resolve.");
+        }
+    }
 
     public void EndCurrentTurn()
     {
@@ -166,7 +208,9 @@ public class TurnManager : MonoBehaviour
         Destroy(unit.gameObject);
     }
 
-    // Debug ContextMenu for Pass 1
+    // -----------------------------------------
+    // Context Menu debug (not used anymore)
+    // -----------------------------------------
 
     [ContextMenu("Debug End Turn")]
     public void DebugEndTurn()

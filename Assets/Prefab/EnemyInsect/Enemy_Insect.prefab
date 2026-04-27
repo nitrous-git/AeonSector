@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1295793163105823664}
   - component: {fileID: 6192114448921829228}
+  - component: {fileID: 8413327430465916352}
+  - component: {fileID: 1867375595896894892}
   m_Layer: 0
   m_Name: Enemy_Insect
   m_TagString: Untagged
@@ -46,6 +48,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: f5aaee70b00f5de40a68327cbfc22e61, type: 2}
+--- !u!114 &8413327430465916352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892534107209442605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c7bbd965e2a864098fbfa25c3145fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 1.1
+  animator: {fileID: 8037081740008746021}
+--- !u!95 &1867375595896894892
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892534107209442605}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4950797108375375506
 GameObject:
   m_ObjectHideFlags: 0

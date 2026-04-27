@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: Insect
   UnitType: 2
-  MaxHP: 5
-  MoveRange: 4
-  AttackDamage: 2
-  MinAttackRange: 1
-  MaxAttackRange: 1
+  MaxHP: 2
+  MoveRange: 2
+  MeleeAttackDamage: 2
+  MeleeMinAttackRange: 1
+  MeleeMaxAttackRange: 1
+  RangedAttackDamage: 2
+  RangedMinAttackRange: 2
+  RangedMaxAttackRange: 5
