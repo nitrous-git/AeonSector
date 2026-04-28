@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class EnemyTurnController : MonoBehaviour
@@ -14,7 +15,7 @@ public class EnemyTurnController : MonoBehaviour
     [SerializeField] private float turnStartDelay = 0.35f;
     [SerializeField] private float previewDelay = 0.35f;
     [SerializeField] private float unitDelay = 0.25f;
-    [SerializeField] private float attackDelay = 0.35f;
+    [SerializeField] private float attackDelay = 1.5f;
 
     private readonly ReachableTileService reachableTileService = new();
     private readonly AStarPathService pathService = new();
@@ -250,12 +251,15 @@ public class EnemyTurnController : MonoBehaviour
             yield break;
         }
 
-        Animator animator = enemy.GetComponentInChildren<Animator>();
+        //Animator animator = enemy.GetComponentInChildren<Animator>();
 
-        if (animator != null)
-        {
-            animator.Play("Attack");
-        }
+        //if (animator != null)
+        //{
+        //    animator.Play("Attack");
+        //}
+
+        enemy.FaceTowards(target.GridPosition);
+        enemy.PlayAttack();
 
         yield return new WaitForSeconds(attackDelay);
 
@@ -272,10 +276,12 @@ public class EnemyTurnController : MonoBehaviour
             turnManager.RemoveUnitFromBattle(target);
         }
 
-        if (animator != null)
-        {
-            animator.Play("Idle");
-        }
+        //if (animator != null)
+        //{
+        //    animator.Play("Idle");
+        //}
+
+        enemy.PlayIdle();
 
         board.ClearHighlights();
         board.ClearPath();

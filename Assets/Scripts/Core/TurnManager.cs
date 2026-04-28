@@ -8,7 +8,7 @@ public class TurnManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private TilemapBoardAdapter board;
-    [SerializeField] private ChangeTurnBanner changeTurnBanner;
+    [SerializeField] private BattleBannerUI battleBanner;
 
     [Header("Scene Unit References")]
     [SerializeField] private List<CombatUnit> playerUnits = new();
@@ -89,7 +89,7 @@ public class TurnManager : MonoBehaviour
     {
         if (CheckBattleEnd()) { return; }
 
-        changeTurnBanner?.ShowPlayerTurn();
+        battleBanner?.Show(BattleBannerType.PlayerTurn);
 
         CurrentFaction = PlayerFaction;
         CurrentFaction.BeginTurn();
@@ -103,7 +103,7 @@ public class TurnManager : MonoBehaviour
 
         CurrentFaction = EnemyFaction;
 
-        changeTurnBanner?.ShowEnemyTurn();
+        battleBanner?.Show(BattleBannerType.EnemyTurn);
         StartCoroutine(EnemyTurnRoutine());
 
         //CurrentFaction.BeginTurn();
@@ -124,8 +124,8 @@ public class TurnManager : MonoBehaviour
     private IEnumerator EnemyTurnRoutine()
     {
         // Delay the AI slightly so the banner has time to read
-        if (changeTurnBanner != null)
-            yield return new WaitForSeconds(changeTurnBanner.TotalDuration);
+        if (battleBanner != null)
+            yield return new WaitForSeconds(battleBanner.TotalDuration);
 
         // Enemy AI actions starts here
         CurrentFaction.BeginTurn();
@@ -173,12 +173,14 @@ public class TurnManager : MonoBehaviour
         bool enemyAlive = EnemyFaction.HasLivingUnits();
 
         if (!playerAlive) {
+            battleBanner?.Show(BattleBannerType.Defeat);
             CurrentBattleState = BattleState.Defeat;
             Debug.Log("DEFEAT");
             return true;
         }
 
         if (!enemyAlive) {
+            battleBanner?.Show(BattleBannerType.Victory);
             CurrentBattleState = BattleState.Victory;
             Debug.Log("VICTORY");
             return true;

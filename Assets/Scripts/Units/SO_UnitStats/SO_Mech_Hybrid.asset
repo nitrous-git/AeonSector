@@ -15,8 +15,8 @@ MonoBehaviour:
   UnitName: Mech Ranged
   UnitType: 1
   MaxHP: 10
-  MoveRange: 2
-  MeleeAttackDamage: 4
+  MoveRange: 3
+  MeleeAttackDamage: 3
   MeleeMinAttackRange: 1
   MeleeMaxAttackRange: 1
   RangedAttackDamage: 2

@@ -15,8 +15,8 @@ MonoBehaviour:
   UnitName: Insect
   UnitType: 2
   MaxHP: 2
-  MoveRange: 2
-  MeleeAttackDamage: 2
+  MoveRange: 3
+  MeleeAttackDamage: 3
   MeleeMinAttackRange: 1
   MeleeMaxAttackRange: 1
   RangedAttackDamage: 2

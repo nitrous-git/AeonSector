@@ -26,14 +26,15 @@ public class UnitMover : MonoBehaviour
 
         IsMoving = true;
 
-        if (animator != null)
-        {
-            animator.Play("Walk");
-        }
-
         for (int i = 1; i < path.Count; i++)
         {
-            Vector3 targetWorldPos = board.ConvertGridToWorld(path[i]);
+            GridCoord fromCoord = path[i - 1];
+            GridCoord nextCoord = path[i];
+
+            unit.FaceFromTo(fromCoord, nextCoord);
+            unit.PlayIdle();
+
+            Vector3 targetWorldPos = board.ConvertGridToWorld(nextCoord);
 
             while ((transform.position - targetWorldPos).sqrMagnitude > 0.0001f)
             {
@@ -44,11 +45,7 @@ public class UnitMover : MonoBehaviour
             transform.position = targetWorldPos;
         }
 
-        if (animator != null)
-        {
-            animator.Play("Idle");
-        }
-
+        unit.PlayIdle();
         IsMoving = false;
     }
 }

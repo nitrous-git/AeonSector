@@ -2040,7 +2040,7 @@ GameObject:
   - component: {fileID: 1271190061}
   - component: {fileID: 1271190063}
   m_Layer: 0
-  m_Name: ChangeTurnBanner
+  m_Name: BattleBanner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,11 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
-public class ChangeTurnBanner : MonoBehaviour
+public enum BattleBannerType
+{
+    PlayerTurn,
+    EnemyTurn,
+    Victory,
+    Defeat
+}
+
+public class BattleBannerUI : MonoBehaviour
 {
     [Header("Banners")]
     [SerializeField] private CanvasGroup playerTurnBanner;
     [SerializeField] private CanvasGroup enemyTurnBanner;
+    [SerializeField] private CanvasGroup victoryBanner;
+    [SerializeField] private CanvasGroup defeatBanner;
 
     [Header("Timing")]
     [SerializeField] private float fadeInDuration = 0.15f;
@@ -18,37 +28,55 @@ public class ChangeTurnBanner : MonoBehaviour
 
     private void Awake()
     {
-        HideInstant(playerTurnBanner);
-        HideInstant(enemyTurnBanner);
+        HideAllInstant();
     }
 
-    public void ShowPlayerTurn()
+    public void Show(BattleBannerType bannerType)
     {
-        ShowBanner(playerTurnBanner);
-    }
+        CanvasGroup banner = GetBanner(bannerType);
 
-    public void ShowEnemyTurn()
-    {
-        ShowBanner(enemyTurnBanner);
-    }
+        if (bannerType == BattleBannerType.Victory || bannerType == BattleBannerType.Defeat)
+        {
+            holdDuration *= 10.0f;
+        }
 
-    private void ShowBanner(CanvasGroup banner)
-    {
         if (banner == null)
             return;
 
         if (currentRoutine != null)
             StopCoroutine(currentRoutine);
 
-        HideInstant(playerTurnBanner);
-        HideInstant(enemyTurnBanner);
+        HideAllInstant();
 
         currentRoutine = StartCoroutine(PlayBannerRoutine(banner));
+    }
+
+    private CanvasGroup GetBanner(BattleBannerType bannerType)
+    {
+        switch (bannerType)
+        {
+            case BattleBannerType.PlayerTurn:
+                return playerTurnBanner;
+
+            case BattleBannerType.EnemyTurn:
+                return enemyTurnBanner;
+
+            case BattleBannerType.Victory:
+                return victoryBanner;
+
+            case BattleBannerType.Defeat:
+                return defeatBanner;
+
+            default:
+                return null;
+        }
     }
 
     private IEnumerator PlayBannerRoutine(CanvasGroup banner)
     {
         banner.gameObject.SetActive(true);
+        banner.interactable = false;
+        banner.blocksRaycasts = false;
 
         yield return Fade(banner, 0f, 1f, fadeInDuration);
         yield return new WaitForSeconds(holdDuration);
@@ -72,11 +100,21 @@ public class ChangeTurnBanner : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = elapsed / duration;
+
             group.alpha = Mathf.Lerp(from, to, t);
+
             yield return null;
         }
 
         group.alpha = to;
+    }
+
+    private void HideAllInstant()
+    {
+        HideInstant(playerTurnBanner);
+        HideInstant(enemyTurnBanner);
+        HideInstant(victoryBanner);
+        HideInstant(defeatBanner);
     }
 
     private void HideInstant(CanvasGroup group)

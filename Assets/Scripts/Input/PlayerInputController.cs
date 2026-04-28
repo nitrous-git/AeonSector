@@ -43,7 +43,7 @@ public class PlayerInputController : MonoBehaviour
             mainCamera = Camera.main;
         }
 
-        //actionMenuUI.Hide();
+        actionMenuUI.Hide();
     }
 
     private void Update()
@@ -327,19 +327,22 @@ public class PlayerInputController : MonoBehaviour
 
         Debug.Log($"{attacker.name} uses {commandMode} on {target.name} for {damage} damage.");
 
+        attacker.FaceTowards(target.GridPosition);
+        attacker.PlayAttack();
+
         // Later:
-        // - attacker animation
         // - particle FX
         // - camera shake
         if (commandMode == CommandMode.RangedAttack)
         {
-            attacker.transform.GetChild(0).GetComponent<Animator>().Play("MissileShooting");
             yield return ResolveRangedAttackVisual(attacker, target);
         }
         else if (commandMode == CommandMode.MeleeAttack)
         {
             yield return ResolveMeleeAttackVisual(attacker, target);
         }
+
+        attacker.PlayIdle();
 
         if (target.TakeDamage(damage))
         {
@@ -387,8 +390,6 @@ public class PlayerInputController : MonoBehaviour
         }
 
         yield return projectileMover.FlyAndHit(startWorld, targetWorld);
-
-        attacker.transform.GetChild(0).GetComponent<Animator>().Play("Idle_Down");
     }
 
     private IEnumerator ResolveMeleeAttackVisual(CombatUnit attacker, CombatUnit target)
@@ -462,7 +463,7 @@ public class PlayerInputController : MonoBehaviour
         if (isResolvingAction)
             return;
 
-        //actionMenuUI.Hide();
+        actionMenuUI.Hide();
 
         commandMode = CommandMode.None;
         reachableCells.Clear();
@@ -480,7 +481,7 @@ public class PlayerInputController : MonoBehaviour
 
         selectedUnit = null;
 
-        //actionMenuUI.Hide();
+        actionMenuUI.Hide();
     
         commandMode = CommandMode.None;
         reachableCells.Clear();
