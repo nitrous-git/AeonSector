@@ -49,6 +49,7 @@ public class ProjectileMover : MonoBehaviour
         if (animator != null)
         {
             animator.Play("Missile_Hit");
+            CameraShakeImpulse.PlayMediumHit();
         }
 
         if (hitAnimationDuration > 0f)

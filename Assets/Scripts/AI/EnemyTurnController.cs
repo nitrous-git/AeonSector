@@ -261,6 +261,8 @@ public class EnemyTurnController : MonoBehaviour
         enemy.FaceTowards(target.GridPosition);
         enemy.PlayAttack();
 
+        CameraShakeImpulse.PlayHeavyHit();
+
         yield return new WaitForSeconds(attackDelay);
 
         int damage = enemy.Stats.GetDamageForCommand(CommandMode.MeleeAttack);

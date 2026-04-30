@@ -327,8 +327,8 @@ public class PlayerInputController : MonoBehaviour
 
         Debug.Log($"{attacker.name} uses {commandMode} on {target.name} for {damage} damage.");
 
-        attacker.FaceTowards(target.GridPosition);
-        attacker.PlayAttack();
+        attacker.FaceFromTo(attacker.GridPosition, target.GridPosition);
+        attacker.PlayAttack(commandMode);
 
         // Later:
         // - particle FX
@@ -400,6 +400,8 @@ public class PlayerInputController : MonoBehaviour
         Vector3 spawnWorld = board.ConvertGridToWorld(attacker.GridPosition) + projectileSpawnOffset;
         GameObject slashObject = Instantiate(swordSlashPrefab, spawnWorld, Quaternion.identity);
         slashObject.GetComponent<Animator>().Play("SwordSlash");
+
+        CameraShakeImpulse.PlayLongMediumHit();
 
         yield return new WaitForSeconds(0.45f);
         Destroy(slashObject);

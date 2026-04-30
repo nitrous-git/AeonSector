@@ -130,6 +130,12 @@ public class CombatUnit : MonoBehaviour
             visualAnimator.PlayAttack(Facing);
     }
 
+    public void PlayAttack(CommandMode commandMode)
+    {
+        if (visualAnimator != null)
+            visualAnimator.PlayAttack(Facing, commandMode);
+    }
+
     private UnitFacing GetFacingFromDelta(GridCoord from, GridCoord to)
     {
         int dx = to.x - from.x;

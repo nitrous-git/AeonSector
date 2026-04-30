@@ -39,6 +39,25 @@ public class UnitVisualAnimator : MonoBehaviour
         animator.Play(IsBackFacing(facing) ? "Attack_BackNE" : "Attack_FrontSW");
     }
 
+    public void PlayAttack(UnitFacing facing, CommandMode commandMode)
+    {
+        Debug.Log("Attack Facing : " + facing + " with commandMode overload :" + commandMode.ToString());
+        ApplyFacing(facing);
+
+        if (animator == null)
+            return;
+
+        switch (commandMode)
+        { 
+            case CommandMode.MeleeAttack:
+                animator.Play(IsBackFacing(facing) ? "MeleeAttack_BackNE" : "MeleeAttack_FrontSW");
+                break;
+            case CommandMode.RangedAttack:
+                animator.Play(IsBackFacing(facing) ? "RangedAttack_BackNE" : "RangedAttack_FrontSW");
+                break;
+        }
+    }
+
     private void ApplyFacing(UnitFacing facing)
     {
         if (visualRoot == null)
