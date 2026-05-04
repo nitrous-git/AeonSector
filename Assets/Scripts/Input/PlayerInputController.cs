@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerInputController : MonoBehaviour
 {
     [Header("References")]
@@ -13,7 +14,7 @@ public class PlayerInputController : MonoBehaviour
 
     [Header("Projectile")]
     [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 0.15f, 0f);
+    [SerializeField] private Vector3 projectileSpawnOffset = new Vector3(0f, 0.80f, 0f);
     [SerializeField] private Vector3 projectileHitOffset = new Vector3(0f, 0.15f, 0f);
 
     [Header("Sword Slash")]
@@ -35,6 +36,23 @@ public class PlayerInputController : MonoBehaviour
 
     private CommandMode commandMode = CommandMode.None;
     private bool isResolvingAction = false;
+
+    // Internal class (for simplicity)
+    private class RangedAttackContext
+    {
+        public CombatUnit attacker;
+        public CombatUnit target;
+        public int damage;
+
+        public RangedAttackContext(CombatUnit attacker, CombatUnit target, int damage)
+        { 
+            this.attacker = attacker;
+            this.target = target;
+            this.damage = damage;
+        }
+    }
+
+    private RangedAttackContext rangedAttackContext;
 
     private void Awake()
     {
@@ -332,10 +350,12 @@ public class PlayerInputController : MonoBehaviour
 
         // Later:
         // - particle FX
-        // - camera shake
         if (commandMode == CommandMode.RangedAttack)
         {
-            yield return ResolveRangedAttackVisual(attacker, target);
+
+            rangedAttackContext = new RangedAttackContext(attacker, target, damage);
+            yield break;
+            //yield return ResolveRangedAttackVisual(attacker, target);
         }
         else if (commandMode == CommandMode.MeleeAttack)
         {
@@ -349,29 +369,29 @@ public class PlayerInputController : MonoBehaviour
             turnManager.RemoveUnitFromBattle(target);
         }
 
-        attacker.MarkAttacked();
-
-        board.ClearHighlights();
-        board.ClearPath();
-
-        reachableCells.Clear();
-        hoveredCoord = null;
-
-        commandMode = CommandMode.None;
-        isResolvingAction = false;
-
-        selectedUnit = attacker;
-
-        turnManager.RefreshBattleEndState();
-
-        actionMenuUI.Refresh(selectedUnit);
+        FinishAttackResolution(attacker);
     }
 
-    private IEnumerator ResolveRangedAttackVisual(CombatUnit attacker, CombatUnit target)
+    public void AnimEvent_FireRangedProjectile(CombatUnit eventOwner)
+    {
+        if (rangedAttackContext == null)
+            return;
+
+        if (rangedAttackContext.attacker != eventOwner)
+            return;
+
+        if (rangedAttackContext.target == null || !rangedAttackContext.target.IsAlive)
+            return;
+
+        StartCoroutine(FireProjectileAndApplyDamage(rangedAttackContext.attacker, rangedAttackContext.target, rangedAttackContext.damage));
+    }
+
+    private IEnumerator FireProjectileAndApplyDamage(CombatUnit attacker, CombatUnit target, int damage)
     {
         if (projectilePrefab == null)
         {
-            Debug.LogWarning("No projectile prefab assigned. Ranged attack will resolve instantly.");
+            Debug.LogWarning("No projectile prefab assigned.");
+            ApplyRangedDamage(target, damage);
             yield break;
         }
 
@@ -384,15 +404,44 @@ public class PlayerInputController : MonoBehaviour
 
         if (projectileMover == null)
         {
-            Debug.LogWarning("Projectile prefab has no ProjectileMover component. Ranged attack will resolve instantly.");
+            Debug.LogWarning("Projectile prefab has no ProjectileMover.");
             Destroy(projectileObject);
+            ApplyRangedDamage(target, damage);
             yield break;
         }
 
         yield return projectileMover.FlyAndHit(startWorld, targetWorld);
+
+        ApplyRangedDamage(target, damage);
     }
 
+    public void AnimEvent_RangedAttackFinished(CombatUnit eventOwner)
+    {
+        if (rangedAttackContext == null)
+            return;
 
+        if (rangedAttackContext.attacker != eventOwner)
+            return;
+
+        CombatUnit attacker = rangedAttackContext.attacker;
+
+        rangedAttackContext = null;
+
+        FinishAttackResolution(attacker);
+    }
+
+    private void ApplyRangedDamage(CombatUnit target, int damage)
+    {
+        if (target == null || !target.IsAlive)
+            return;
+
+        if (target.TakeDamage(damage))
+        {
+            turnManager.RemoveUnitFromBattle(target);
+        }
+
+        turnManager.RefreshBattleEndState();
+    }
 
     private IEnumerator ResolveMeleeAttackVisual(CombatUnit attacker, CombatUnit target)
     {
@@ -409,6 +458,27 @@ public class PlayerInputController : MonoBehaviour
         Destroy(slashObject);
 
         yield return null;
+    }
+
+    // Shared finish helper (melee and ranged both reuse)
+    private void FinishAttackResolution(CombatUnit attacker)
+    {
+        attacker.PlayIdle();
+        attacker.MarkAttacked();
+
+        board.ClearHighlights();
+        board.ClearPath();
+
+        reachableCells.Clear();
+        hoveredCoord = null;
+
+        commandMode = CommandMode.None;
+        isResolvingAction = false;
+
+        selectedUnit = attacker;
+
+        turnManager.RefreshBattleEndState();
+        actionMenuUI.Refresh(selectedUnit);
     }
 
     // --------------------

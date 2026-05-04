@@ -16,7 +16,7 @@ MonoBehaviour:
   UnitType: 1
   MaxHP: 10
   MoveRange: 3
-  MeleeAttackDamage: 3
+  MeleeAttackDamage: 8
   MeleeMinAttackRange: 1
   MeleeMaxAttackRange: 1
   RangedAttackDamage: 2

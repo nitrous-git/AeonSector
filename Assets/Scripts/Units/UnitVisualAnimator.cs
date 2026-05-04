@@ -5,6 +5,9 @@ public class UnitVisualAnimator : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private Transform visualRoot;
 
+    [SerializeField] private PlayerInputController playerInputController;
+    [SerializeField] private CombatUnit ownerUnit;
+
     private float baseScaleX = 1f;
 
     private void Awake()
@@ -14,6 +17,9 @@ public class UnitVisualAnimator : MonoBehaviour
 
         if (visualRoot == null)
             visualRoot = transform;
+
+        if (ownerUnit == null)
+            ownerUnit = GetComponentInParent<CombatUnit>();
 
         baseScaleX = Mathf.Abs(visualRoot.localScale.x);
     }
@@ -57,6 +63,20 @@ public class UnitVisualAnimator : MonoBehaviour
                 break;
         }
     }
+
+    // Ranged attack animation triggered event 
+
+    public void AnimEvent_FireRangedProjectile()
+    {
+        playerInputController.AnimEvent_FireRangedProjectile(ownerUnit);
+    }
+
+    public void AnimEvent_RangedAttackFinished()
+    {
+        playerInputController.AnimEvent_RangedAttackFinished(ownerUnit);
+    }
+
+    // Helpers 
 
     private void ApplyFacing(UnitFacing facing)
     {
