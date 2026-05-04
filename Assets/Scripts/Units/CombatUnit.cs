@@ -1,12 +1,13 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatUnit : MonoBehaviour
 {
     [SerializeField] private UnitStats stats;
     [SerializeField] private UnitFacing startingFacing = UnitFacing.SouthWest;
     [SerializeField] private UnitVisualAnimator visualAnimator;
-
+   
     public UnitStats Stats => stats;
     public Faction OwnerFaction { get; private set; }
     public GridCoord GridPosition { get; private set; }
@@ -22,12 +23,18 @@ public class CombatUnit : MonoBehaviour
     public bool CanAttack => IsAlive && !HasAttacked;
     public bool IsTurnExhausted => !CanMove && !CanAttack;
 
+    private Slider healthBar;
+
     private void Awake()
     {
         if (visualAnimator == null)
         {
             visualAnimator = GetComponentInChildren<UnitVisualAnimator>();
         }
+
+        healthBar = transform.GetChild(1).GetComponentInChildren<Slider>();
+        Debug.Log("Health Bar is : " + healthBar);
+        healthBar.maxValue = stats.MaxHP;
     }
 
     public void Initialize(Faction ownerFaction, GridCoord startCoord)
@@ -82,6 +89,7 @@ public class CombatUnit : MonoBehaviour
         }
 
         CurrentHP = Mathf.Max(0, CurrentHP - amount);
+        healthBar.value = CurrentHP;
 
         if (CurrentHP == 0)
         {
