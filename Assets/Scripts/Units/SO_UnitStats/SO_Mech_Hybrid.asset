@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f84488da0e6fc7e439cbdb32ab2f929d, type: 3}
   m_Name: SO_Mech_Hybrid
   m_EditorClassIdentifier: 
-  UnitName: Mech Ranged
+  UnitName: Mech Vanguard
   UnitType: 1
   MaxHP: 10
   MoveRange: 3

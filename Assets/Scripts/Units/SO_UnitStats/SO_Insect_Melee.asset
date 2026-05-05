@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f84488da0e6fc7e439cbdb32ab2f929d, type: 3}
   m_Name: SO_Insect_Melee
   m_EditorClassIdentifier: 
-  UnitName: Insect
+  UnitName: Insect Drone
   UnitType: 2
-  MaxHP: 10
+  MaxHP: 8
   MoveRange: 3
   MeleeAttackDamage: 3
   MeleeMinAttackRange: 1
