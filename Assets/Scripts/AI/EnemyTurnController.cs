@@ -17,6 +17,10 @@ public class EnemyTurnController : MonoBehaviour
     [SerializeField] private float unitDelay = 0.25f;
     [SerializeField] private float attackDelay = 1.5f;
 
+    [Header("Unit Cards")]
+    [SerializeField] private UnitCardUI enemyCard;
+    [SerializeField] private UnitCardUI playerCard;
+
     private readonly ReachableTileService reachableTileService = new();
     private readonly AStarPathService pathService = new();
     private readonly AttackRangeService attackRangeService = new();
@@ -67,6 +71,9 @@ public class EnemyTurnController : MonoBehaviour
             yield return new WaitForSeconds(unitDelay);
         }
 
+        enemyCard.Hide();
+        playerCard.Hide();
+
         board.ClearHighlights();
         board.ClearPath();
 
@@ -78,10 +85,12 @@ public class EnemyTurnController : MonoBehaviour
     private IEnumerator ResolveEnemyUnit(CombatUnit enemy)
     {
         Debug.Log($"Enemy AI resolving unit: {enemy.name}");
-
+        enemyCard.Show(enemy);
+        
         if (enemy.CanMove)
         {
             yield return TryMoveTowardPlayer(enemy);
+            enemyCard.Refresh();
         }
 
         if (enemy == null || !enemy.IsAlive)
@@ -92,6 +101,8 @@ public class EnemyTurnController : MonoBehaviour
         if (enemy.CanAttack)
         {
             yield return TryMeleeAttack(enemy);
+            enemyCard.Refresh();
+            playerCard.Refresh();
         }
     }
 
@@ -258,6 +269,9 @@ public class EnemyTurnController : MonoBehaviour
         //    animator.Play("Attack");
         //}
 
+        Debug.Log("Show player card for : " + target.ToString());
+        playerCard.Show(target);
+
         enemy.FaceTowards(target.GridPosition);
         enemy.PlayAttack();
 
@@ -271,17 +285,15 @@ public class EnemyTurnController : MonoBehaviour
 
         bool targetDied = target.TakeDamage(damage);
 
+        playerCard.Refresh();
+        enemyCard.Refresh();
+
         enemy.MarkAttacked();
 
         if (targetDied)
         {
             turnManager.RemoveUnitFromBattle(target);
         }
-
-        //if (animator != null)
-        //{
-        //    animator.Play("Idle");
-        //}
 
         enemy.PlayIdle();
 
