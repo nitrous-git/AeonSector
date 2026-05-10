@@ -7,6 +7,7 @@ public class UnitStats : ScriptableObject
     [Header("Identity")]
     public string UnitName;
     public UnitType UnitType;
+    public Sprite UnitIcon;
 
     [Header("Core Stats")]
     public int MaxHP = 10;
@@ -21,6 +22,10 @@ public class UnitStats : ScriptableObject
     public int RangedAttackDamage = 2;
     public int RangedMinAttackRange = 2;
     public int RangedMaxAttackRange = 5;
+
+    [Header("Card Display")]
+    public int DisplayMaxHP = 0;
+    public int DisplayMaxEN = 0;
 
     // ---------------
     // Helpers

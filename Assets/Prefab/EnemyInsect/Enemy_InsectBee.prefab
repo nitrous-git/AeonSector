@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3936421828421267990}
   - component: {fileID: 1306261435921679950}
   - component: {fileID: 6242190177967544868}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,8 @@ GameObject:
   - component: {fileID: 1295793163105823664}
   - component: {fileID: 6192114448921829228}
   - component: {fileID: 8413327430465916352}
-  m_Layer: 0
+  - component: {fileID: 8348341261149584561}
+  m_Layer: 6
   m_Name: Enemy_InsectBee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,6 +140,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   animator: {fileID: 8037081740008746021}
+--- !u!70 &8348341261149584561
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892534107209442605}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.025369048, y: -0.033825576}
+  m_Size: {x: 0.6183889, y: 0.66174567}
+  m_Direction: 0
 --- !u!1 &3966181290813781906
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,7 +185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2517470814919640412}
   - component: {fileID: 6195874672903695354}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -359,7 +395,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6812285577788679667}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -397,7 +433,7 @@ GameObject:
   - component: {fileID: 3584513901510607418}
   - component: {fileID: 7032454539516250317}
   - component: {fileID: 2380532308304212748}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Background_Gray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -472,7 +508,7 @@ GameObject:
   - component: {fileID: 7558841203135193092}
   - component: {fileID: 3176185146400986210}
   - component: {fileID: 6563948292799281879}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Background_Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -548,7 +584,7 @@ GameObject:
   - component: {fileID: 6416663189931211563}
   - component: {fileID: 1789068376712432752}
   - component: {fileID: 967199385494694354}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: HPBar_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

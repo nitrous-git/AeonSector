@@ -22,7 +22,11 @@ public class PlayerInputController : MonoBehaviour
 
     [Header("Selection")]
     [SerializeField] private LayerMask unitLayerMask;
- 
+
+    [Header("Unit Cards")]
+    [SerializeField] private UnitCardUI playerCard;
+    [SerializeField] private UnitCardUI enemyCard;
+
     // Pathfind Services
     private readonly ReachableTileService reachableTileService = new();
     private readonly AStarPathService pathService = new();
@@ -54,6 +58,7 @@ public class PlayerInputController : MonoBehaviour
 
     private RangedAttackContext rangedAttackContext;
 
+    // Unity Lifecycle
     private void Awake()
     {
         if (mainCamera == null)
@@ -86,6 +91,11 @@ public class PlayerInputController : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             CancelCurrentMode();
+
+            //if (selectedUnit.OwnerFaction.Type != FactionType.Player)
+            //{
+            //    ClearSelection();
+            //}
         }
 
     }
@@ -120,8 +130,8 @@ public class PlayerInputController : MonoBehaviour
         if (clickedUnit == null)
             return;
 
-        if (clickedUnit.OwnerFaction != turnManager.PlayerFaction)
-            return;
+        //if (clickedUnit.OwnerFaction != turnManager.PlayerFaction)
+        //    return;
 
         if (!clickedUnit.IsAlive)
             return;
@@ -163,11 +173,21 @@ public class PlayerInputController : MonoBehaviour
     {
         selectedUnit = clickedUnit;
 
-        if (actionMenuUI != null)
+        if (clickedUnit.OwnerFaction != turnManager.PlayerFaction)
         {
-            actionMenuUI.Show();
-            actionMenuUI.Refresh(selectedUnit);
+            //Debug.Log($"Selected {clickedUnit.name}");
+            ClearSelection();   
+            board.ClearHighlights();
+            board.ShowAttackCells( new List<GridCoord>(){ clickedUnit.GridPosition });
+            enemyCard.Show(clickedUnit);
+            return;
         }
+
+        actionMenuUI.Show();
+        actionMenuUI.Refresh(selectedUnit);
+
+        playerCard.Show(selectedUnit);
+        enemyCard.Hide();
 
         commandMode = CommandMode.None;
         reachableCells.Clear();
@@ -252,6 +272,7 @@ public class PlayerInputController : MonoBehaviour
         board.ShowSelected(selectedUnit.GridPosition);
 
         actionMenuUI.Refresh(selectedUnit);
+        playerCard.Refresh();
     }
 
     // --------------------
@@ -320,6 +341,12 @@ public class PlayerInputController : MonoBehaviour
             return false;
         }
 
+        // We should show the card on hovering 
+        if (enemyCard != null)
+        {
+            enemyCard.Show(target);
+        }
+
         CommitAttack(target);
         return true;
     }
@@ -352,7 +379,6 @@ public class PlayerInputController : MonoBehaviour
         // - particle FX
         if (commandMode == CommandMode.RangedAttack)
         {
-
             rangedAttackContext = new RangedAttackContext(attacker, target, damage);
             yield break;
             //yield return ResolveRangedAttackVisual(attacker, target);
@@ -368,6 +394,9 @@ public class PlayerInputController : MonoBehaviour
         {
             turnManager.RemoveUnitFromBattle(target);
         }
+      
+        playerCard.Refresh();
+        enemyCard.Show(target);
 
         FinishAttackResolution(attacker);
     }
@@ -413,6 +442,7 @@ public class PlayerInputController : MonoBehaviour
         yield return projectileMover.FlyAndHit(startWorld, targetWorld);
 
         ApplyRangedDamage(target, damage);
+        enemyCard.Refresh();
     }
 
     public void AnimEvent_RangedAttackFinished(CombatUnit eventOwner)
@@ -454,7 +484,7 @@ public class PlayerInputController : MonoBehaviour
 
         CameraShakeImpulse.PlayLongMediumHit();
 
-        yield return new WaitForSeconds(0.45f);
+        yield return new WaitForSeconds(1.20f);
         Destroy(slashObject);
 
         yield return null;
@@ -465,6 +495,8 @@ public class PlayerInputController : MonoBehaviour
     {
         attacker.PlayIdle();
         attacker.MarkAttacked();
+
+        playerCard.Refresh();
 
         board.ClearHighlights();
         board.ClearPath();
@@ -556,7 +588,9 @@ public class PlayerInputController : MonoBehaviour
         selectedUnit = null;
 
         actionMenuUI.Hide();
-    
+        //playerCard.Hide();
+        enemyCard.Hide();
+
         commandMode = CommandMode.None;
         reachableCells.Clear();
         hoveredCoord = null;
