@@ -9,6 +9,9 @@ public class TurnManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private TilemapBoardAdapter board;
     [SerializeField] private BattleBannerUI battleBanner;
+    [SerializeField] private EndBattleUI endBattleUI;
+    [SerializeField] private BattleStatsTracker battleStatsTracker;
+    [SerializeField] private ActionMenuUI actionMenuUI;
 
     [Header("Scene Unit References")]
     [SerializeField] private List<CombatUnit> playerUnits = new();
@@ -21,6 +24,9 @@ public class TurnManager : MonoBehaviour
     public Faction EnemyFaction { get; private set; }
     public Faction CurrentFaction { get; private set; }
     public BattleState CurrentBattleState { get; private set; } = BattleState.None;
+
+    private bool battleEnded;
+    private Coroutine endBattleRoutine;
 
     private void Start()
     {
@@ -39,6 +45,8 @@ public class TurnManager : MonoBehaviour
 
         RegisterSceneUnits(playerUnits, PlayerFaction);
         RegisterSceneUnits(enemyUnits, EnemyFaction);
+
+        battleStatsTracker?.BeginBattle();
 
         Debug.Log("Battle initialized");
         //Debug.Log($"Player Units: {PlayerFaction.UnitManager.GetLivingUnits().Count()}");
@@ -88,6 +96,8 @@ public class TurnManager : MonoBehaviour
     public void StartPlayerTurn()
     {
         if (CheckBattleEnd()) { return; }
+
+        battleStatsTracker?.RegisterPlayerTurnStarted();
 
         battleBanner?.Show(BattleBannerType.PlayerTurn);
 
@@ -167,26 +177,66 @@ public class TurnManager : MonoBehaviour
         return CurrentFaction == EnemyFaction;
     }
 
+    // ------------------------------
+    // Battle End
+    // ------------------------------
+
     private bool CheckBattleEnd()
     {
+        if (battleEnded)
+        {
+            return true;
+        }
+
         bool playerAlive = PlayerFaction.HasLivingUnits();
         bool enemyAlive = EnemyFaction.HasLivingUnits();
 
         if (!playerAlive) {
-            battleBanner?.Show(BattleBannerType.Defeat);
-            CurrentBattleState = BattleState.Defeat;
+            EndBattle(BattleState.Defeat, BattleBannerType.Defeat);
+            //battleBanner?.Show(BattleBannerType.Defeat);
+            //CurrentBattleState = BattleState.Defeat;
             Debug.Log("DEFEAT");
             return true;
         }
 
         if (!enemyAlive) {
-            battleBanner?.Show(BattleBannerType.Victory);
-            CurrentBattleState = BattleState.Victory;
+            EndBattle(BattleState.Victory, BattleBannerType.Victory);
+            //battleBanner?.Show(BattleBannerType.Victory);
+            //CurrentBattleState = BattleState.Victory;
             Debug.Log("VICTORY");
             return true;
         }
 
         return false;
+    }
+
+    private void EndBattle(BattleState result, BattleBannerType bannerType)
+    {
+        battleEnded = true;
+        CurrentBattleState = result;
+
+        battleBanner?.Show(bannerType);
+
+        actionMenuUI?.Hide();
+
+        // This should not happen
+        if (endBattleRoutine != null)
+        {
+            StopCoroutine(endBattleRoutine);
+        }
+
+        endBattleRoutine = StartCoroutine(ShowEndBattleUIAfterBanner(result, bannerType));
+    }
+
+    private IEnumerator ShowEndBattleUIAfterBanner(BattleState result, BattleBannerType bannerType)
+    {
+        if (battleBanner != null)
+        {
+            yield return new WaitForSeconds(battleBanner.TotalDuration);
+        }
+
+        BattleEndStats stats = battleStatsTracker.BuildEndStats(result, PlayerFaction);
+        endBattleUI?.Show(stats);
     }
 
     public bool RefreshBattleEndState()
