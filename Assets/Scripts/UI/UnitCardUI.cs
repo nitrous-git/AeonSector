@@ -39,16 +39,14 @@ public class UnitCardUI : MonoBehaviour
             ? Mathf.Clamp01((float)unit.CurrentHP / stats.MaxHP)
             : 0f;
 
-        float energyPercent = CalculateEnergy(unit);
+        float energyPercent = unit.GetEnergyPercent();
 
         int displayCurrentHP = Mathf.RoundToInt(hpPercent * stats.DisplayMaxHP);
         int displayCurrentEN = Mathf.RoundToInt(energyPercent * stats.DisplayMaxEN);
 
         if (nameText != null)
         {
-            nameText.text = !string.IsNullOrWhiteSpace(stats.UnitName)
-                ? stats.UnitName
-                : unit.name;
+            nameText.text = !string.IsNullOrWhiteSpace(stats.UnitName) ? stats.UnitName : unit.name;
         }
 
         if (iconImage != null)
@@ -93,27 +91,27 @@ public class UnitCardUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private float CalculateEnergy(CombatUnit unit)
-    {
-        UnitStats stats = unit.Stats;
+    //private float CalculateEnergy(CombatUnit unit)
+    //{
+    //    UnitStats stats = unit.Stats;
 
-        float hpPercent = stats.MaxHP > 0
-            ? Mathf.Clamp01((float)unit.CurrentHP / stats.MaxHP)
-            : 0f;
+    //    float hpPercent = stats.MaxHP > 0
+    //        ? Mathf.Clamp01((float)unit.CurrentHP / stats.MaxHP)
+    //        : 0f;
 
-        float energy = 0f;
+    //    float energy = 0f;
 
-        // 70% comes from HP.
-        energy += hpPercent * 0.70f;
+    //    // 70% comes from HP.
+    //    energy += hpPercent * 0.70f;
 
-        // 15% if the unit can still move.
-        if (unit.CanMove)
-            energy += 0.15f;
+    //    // 15% if the unit can still move.
+    //    if (unit.CanMove)
+    //        energy += 0.15f;
 
-        // 15% if the unit can still attack.
-        if (unit.CanAttack)
-            energy += 0.15f;
+    //    // 15% if the unit can still attack.
+    //    if (unit.CanAttack)
+    //        energy += 0.15f;
 
-        return Mathf.Clamp01(energy);
-    }
+    //    return Mathf.Clamp01(energy);
+    //}
 }

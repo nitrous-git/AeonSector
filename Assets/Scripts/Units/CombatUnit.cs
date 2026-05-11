@@ -166,6 +166,39 @@ public class CombatUnit : MonoBehaviour
     }
 
     // -----------------------
+    // Energy Calculation
+    // -----------------------
+
+    public float GetEnergyPercent()
+    {
+        float hpPercent = stats.MaxHP > 0 ? Mathf.Clamp01((float)CurrentHP / stats.MaxHP) : 0f;
+
+        float energy = 0f;
+
+        // 70% comes from HP.
+        energy += hpPercent * 0.70f;
+
+        // 15% if the unit can still move.
+        if (CanMove)
+        {
+            energy += 0.15f;
+        }
+
+        // 15% if the unit can still attack.
+        if (CanAttack)
+        {
+            energy += 0.15f;
+        }
+
+        return Mathf.Clamp01(energy);
+    }
+
+    public float GetEnergyUsedPercent()
+    {
+        return 1f - GetEnergyPercent();
+    }
+
+    // -----------------------
     // Pretty printing
     // -----------------------
 
