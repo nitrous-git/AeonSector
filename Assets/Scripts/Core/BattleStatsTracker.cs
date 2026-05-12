@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class BattleStatsTracker : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private TurnMenuUI turnMenuUI;
+
     private float battleStartTime;
     private int playerTurnCount;
 
@@ -10,11 +13,13 @@ public class BattleStatsTracker : MonoBehaviour
     {
         battleStartTime = Time.time;
         playerTurnCount = 0;
+        turnMenuUI.UpdateTurnText(playerTurnCount, 10);
     }
 
     public void RegisterPlayerTurnStarted()
     {
         playerTurnCount++;
+        turnMenuUI.UpdateTurnText(playerTurnCount, 10);
     }
 
     public BattleEndStats BuildEndStats(BattleState result, Faction playerFaction)
@@ -22,7 +27,7 @@ public class BattleStatsTracker : MonoBehaviour
         float battleTime = Time.time - battleStartTime;
         float averagePowerUsedPercent = CalculateAvgPowerPercent(result, playerFaction);
 
-        return new BattleEndStats(result, battleTime, playerTurnCount,averagePowerUsedPercent);
+        return new BattleEndStats(result, battleTime, playerTurnCount, averagePowerUsedPercent);
     }
 
     private float CalculateAvgPowerPercent(BattleState result, Faction playerFaction)
