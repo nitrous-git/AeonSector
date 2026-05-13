@@ -101,6 +101,8 @@ public class TurnManager : MonoBehaviour
 
         battleBanner?.Show(BattleBannerType.PlayerTurn);
 
+        SFXManager.PlayerStartTurn();
+
         CurrentFaction = PlayerFaction;
         CurrentFaction.BeginTurn();
         CurrentBattleState = BattleState.PlayerTurn;
@@ -114,6 +116,9 @@ public class TurnManager : MonoBehaviour
         CurrentFaction = EnemyFaction;
 
         battleBanner?.Show(BattleBannerType.EnemyTurn);
+
+        SFXManager.EnemyStartTurn();
+
         StartCoroutine(EnemyTurnRoutine());
 
         //CurrentFaction.BeginTurn();
@@ -192,6 +197,7 @@ public class TurnManager : MonoBehaviour
         bool enemyAlive = EnemyFaction.HasLivingUnits();
 
         if (!playerAlive) {
+            SFXManager.Victory();
             EndBattle(BattleState.Defeat, BattleBannerType.Defeat);
             //battleBanner?.Show(BattleBannerType.Defeat);
             //CurrentBattleState = BattleState.Defeat;
@@ -200,6 +206,7 @@ public class TurnManager : MonoBehaviour
         }
 
         if (!enemyAlive) {
+            SFXManager.Defeat();
             EndBattle(BattleState.Victory, BattleBannerType.Victory);
             //battleBanner?.Show(BattleBannerType.Victory);
             //CurrentBattleState = BattleState.Victory;
@@ -234,6 +241,8 @@ public class TurnManager : MonoBehaviour
         {
             yield return new WaitForSeconds(battleBanner.TotalDuration);
         }
+
+        SFXManager.Victory();
 
         BattleEndStats stats = battleStatsTracker.BuildEndStats(result, PlayerFaction);
         endBattleUI?.Show(stats);

@@ -14,6 +14,8 @@ public class MainMenuUI : MonoBehaviour
             return;
         }
 
+        SFXManager.ButtonClick();
+
         SceneManager.LoadScene(battleSceneName);
     }
 
@@ -25,6 +27,8 @@ public class MainMenuUI : MonoBehaviour
     public void Exit()
     {
         Debug.Log("Exit game.");
+
+        SFXManager.Defeat();
 
         #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;

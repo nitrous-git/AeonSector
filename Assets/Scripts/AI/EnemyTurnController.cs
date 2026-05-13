@@ -86,6 +86,8 @@ public class EnemyTurnController : MonoBehaviour
     {
         Debug.Log($"Enemy AI resolving unit: {enemy.name}");
         enemyCard.Show(enemy);
+
+        SFXManager.UnitSelect();
         
         if (enemy.CanMove)
         {
@@ -125,10 +127,13 @@ public class EnemyTurnController : MonoBehaviour
 
         if (path == null || path.Count <= 1)
         {
+            SFXManager.InvalidAction();
             Debug.Log($"{enemy.name} has no useful move.");
             board.ClearPath();
             yield break;
         }
+
+        SFXManager.UnitMove();
 
         board.ShowPath(path);
 
@@ -276,6 +281,8 @@ public class EnemyTurnController : MonoBehaviour
         enemy.PlayAttack();
 
         CameraShakeImpulse.PlayHeavyHit();
+
+        SFXManager.EnemyMelee();
 
         yield return new WaitForSeconds(attackDelay);
 

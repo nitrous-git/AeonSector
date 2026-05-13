@@ -7,7 +7,7 @@ public class MusicManager : MonoBehaviour
     public static MusicManager Instance;
 
     private AudioSource audioSource;
-    [SerializeField, Range(0f, 1f)] private float volume = 0.55f;
+    [SerializeField, Range(0f, 1f)] private float volume = 0.35f;
 
     private void Awake()
     {

@@ -83,6 +83,8 @@ public class EndBattleUI : MonoBehaviour
             return;
         }
 
+        SFXManager.ButtonClick();
+
         SceneManager.LoadScene(nextBattleSceneName);
     }
 
@@ -90,6 +92,9 @@ public class EndBattleUI : MonoBehaviour
     {
         // Go back to MainMenu or Replay 
         //Hide();
+
+        SFXManager.Defeat();
+
         SceneManager.LoadScene(noButtonSceneFlow);
     }
 
