@@ -113,6 +113,10 @@ public class PlayerInputController : MonoBehaviour
                 CommitMove(clickedCoord);
                 return;
             }
+            else
+            {
+                SFXManager.InvalidAction();
+            }
         }
 
         if (IsAttackMode(commandMode) && selectedUnit != null)
@@ -135,6 +139,8 @@ public class PlayerInputController : MonoBehaviour
 
         if (!clickedUnit.IsAlive)
             return;
+
+        SFXManager.UnitSelect();
 
         //Debug.Log($"SelectedUnit : {clickedUnit.name}");
         SelectUnit(clickedUnit);
@@ -237,6 +243,8 @@ public class PlayerInputController : MonoBehaviour
             return;
         }
 
+        SFXManager.UnitMove();
+
         StartCoroutine(ResolveUnitMove(selectedUnit, path));
     }
 
@@ -323,6 +331,7 @@ public class PlayerInputController : MonoBehaviour
 
         if (!reachableCells.Contains(targetCoord))
         {
+            SFXManager.InvalidAction();
             Debug.Log("Clicked cell is outside attack range.");
             return false;
         }
@@ -331,12 +340,14 @@ public class PlayerInputController : MonoBehaviour
 
         if (target == null || !target.IsAlive)
         {
+            SFXManager.InvalidAction();
             Debug.Log("No valid target on clicked attack cell.");
             return false;
         }
 
         if (target.OwnerFaction == selectedUnit.OwnerFaction)
         {
+            SFXManager.InvalidAction();
             Debug.Log("Cannot attack friendly unit.");
             return false;
         }
@@ -431,6 +442,8 @@ public class PlayerInputController : MonoBehaviour
 
         ProjectileMover projectileMover = projectileObject.GetComponent<ProjectileMover>();
 
+        SFXManager.PlayerShoot();
+
         if (projectileMover == null)
         {
             Debug.LogWarning("Projectile prefab has no ProjectileMover.");
@@ -465,6 +478,8 @@ public class PlayerInputController : MonoBehaviour
         if (target == null || !target.IsAlive)
             return;
 
+        SFXManager.ProjectileImpact();
+
         if (target.TakeDamage(damage))
         {
             turnManager.RemoveUnitFromBattle(target);
@@ -483,6 +498,8 @@ public class PlayerInputController : MonoBehaviour
         slashObject.GetComponent<Animator>().Play("SwordSlash");
 
         CameraShakeImpulse.PlayLongMediumHit();
+
+        SFXManager.PlayerMelee();
 
         yield return new WaitForSeconds(1.20f);
         Destroy(slashObject);
@@ -623,6 +640,7 @@ public class PlayerInputController : MonoBehaviour
         if (selectedUnit == null || !selectedUnit.CanMove)
             return;
 
+        SFXManager.ButtonClick();
         Debug.Log("Move Command selected");
         SetCommandMode(CommandMode.Move);
     }
@@ -632,6 +650,7 @@ public class PlayerInputController : MonoBehaviour
         if (selectedUnit == null || !selectedUnit.CanAttack)
             return;
 
+        SFXManager.ButtonClick();
         SetCommandMode(CommandMode.RangedAttack);
     }
 
@@ -640,11 +659,13 @@ public class PlayerInputController : MonoBehaviour
         if (selectedUnit == null || !selectedUnit.CanAttack)
             return;
 
+        SFXManager.ButtonClick();
         SetCommandMode(CommandMode.MeleeAttack);
     }
 
     public void EndSelectedUnitTurn()
     {
+        SFXManager.ButtonClick();
         TryEndPlayerTurn();
     }
 

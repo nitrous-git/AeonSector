@@ -97,6 +97,12 @@ public class CombatUnit : MonoBehaviour
             return true;
         }
 
+        switch (OwnerFaction.Type)
+        {
+            case FactionType.Player: SFXManager.PlayerHit(); break;
+            case FactionType.Enemy: SFXManager.EnemyHit(); break;
+        }
+
         return false;
     }
 

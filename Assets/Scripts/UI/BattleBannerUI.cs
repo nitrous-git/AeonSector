@@ -37,7 +37,7 @@ public class BattleBannerUI : MonoBehaviour
 
         if (bannerType == BattleBannerType.Victory || bannerType == BattleBannerType.Defeat)
         {
-            holdDuration *= 10.0f;
+            holdDuration *= 2.0f;
         }
 
         if (banner == null)
