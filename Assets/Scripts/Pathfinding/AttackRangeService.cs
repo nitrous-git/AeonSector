@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum AttackShape
 {
@@ -23,6 +24,9 @@ public class AttackRangeService
 
             case CommandMode.RangedAttack:
                 return GetCardinalLineRangeCells(board, attacker.GridPosition, attacker.Stats.RangedMinAttackRange, attacker.Stats.RangedMaxAttackRange);
+
+            case CommandMode.AreaAttack:
+                return GetBFSAreaRangeCells(board, attacker.GridPosition, attacker.Stats.AreaAttackMinRange, attacker.Stats.AreaAttackMaxRange);
 
             default:
                 return empty;
@@ -107,6 +111,52 @@ public class AttackRangeService
                 // Friendly blocks the line.
                 if (unitAtCell != null)
                     break;
+            }
+        }
+
+        return cells;
+    }
+
+    private HashSet<GridCoord> GetBFSAreaRangeCells(TilemapBoardAdapter board, GridCoord origin, int minRange, int maxRange)
+    {
+        HashSet<GridCoord> cells = new HashSet<GridCoord>();
+        HashSet<GridCoord> visited = new HashSet<GridCoord>();
+        Queue<(GridCoord coord, int distance)> queue = new Queue<(GridCoord coord, int distance)>();
+
+        int min = Mathf.Max(0, minRange);
+        int max = Mathf.Max(min, maxRange);
+
+        visited.Add(origin);
+        queue.Enqueue((origin, 0));
+
+        while (queue.Count > 0)
+        {
+            (GridCoord coord, int distance) current = queue.Dequeue();
+
+            if (current.distance >= min && current.distance <= max)
+            {
+                cells.Add(current.coord);
+            }
+
+            if (current.distance >= max)
+            {
+                continue;
+            }
+
+            foreach (GridCoord neighbor in board.GetNeighborsList(current.coord))
+            {
+                if (visited.Contains(neighbor))
+                {
+                    continue;
+                }
+
+                if (!board.HasBaseWalkable(neighbor))
+                {
+                    continue;
+                }
+
+                visited.Add(neighbor);
+                queue.Enqueue((neighbor, current.distance + 1));
             }
         }
 

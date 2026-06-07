@@ -314,7 +314,7 @@ MonoBehaviour:
   enemyUnits:
   - {fileID: 682163059}
   - {fileID: 847861285}
-  - {fileID: 244084898}
+  - {fileID: 206023534}
   enemyTurnController: {fileID: 2063487644}
 --- !u!114 &70138307
 MonoBehaviour:
@@ -922,6 +922,17 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &206023534 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6192114448921829228, guid: fe3b54439729ad542860a24be22094ed, type: 3}
+  m_PrefabInstance: {fileID: 1564018045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aec3f32da18ab347bac80b072fc0e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &212591327
 GameObject:
   m_ObjectHideFlags: 0
@@ -1092,17 +1103,6 @@ RectTransform:
   m_AnchoredPosition: {x: 2.5, y: 0}
   m_SizeDelta: {x: -5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &244084898 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6192114448921829228, guid: fe3b54439729ad542860a24be22094ed, type: 3}
-  m_PrefabInstance: {fileID: 1564018045}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aec3f32da18ab347bac80b072fc0e62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &260490080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,11 +1765,11 @@ PrefabInstance:
       objectReference: {fileID: 1260295046}
     - target: {fileID: 312690829368802284, guid: cdb952813f240c9438b0d960eb4cede6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.54
+      value: 2.51
       objectReference: {fileID: 0}
     - target: {fileID: 312690829368802284, guid: cdb952813f240c9438b0d960eb4cede6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.22
+      value: 1.14
       objectReference: {fileID: 0}
     - target: {fileID: 312690829368802284, guid: cdb952813f240c9438b0d960eb4cede6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8516,6 +8516,11 @@ MonoBehaviour:
   attackDelay: 0.55
   enemyCard: {fileID: 2050984135}
   playerCard: {fileID: 1608344534}
+  areaProjectilePrefab: {fileID: 4084444184300456215, guid: 08a14c61c52f1934486cb9c5ffede06c, type: 3}
+  areaProjectileFallOffset: {x: 0, y: 8, z: 0}
+  areaProjectileHitOffset: {x: 0, y: 0, z: 0}
+  areaProjectileCellStagger: 0.045
+  areaAttackPostDelay: 0.2
 --- !u!1001 &1637155651477887992
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8618,7 +8623,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8146730164102266708, guid: efa016c32acac9447872c8105225d681, type: 3}
       propertyPath: noButtonSceneFlow
-      value: BattleTestScene01
+      value: MainMenu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

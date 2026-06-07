@@ -3,5 +3,6 @@ public enum CommandMode
     None,
     Move,
     MeleeAttack,
-    RangedAttack
+    RangedAttack,
+    AreaAttack
 }
