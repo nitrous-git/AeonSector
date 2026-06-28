@@ -1229,6 +1229,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: EndBattleUI
       objectReference: {fileID: 0}
+    - target: {fileID: 4321252179518228158, guid: efa016c32acac9447872c8105225d681, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8146730164102266708, guid: efa016c32acac9447872c8105225d681, type: 3}
+      propertyPath: noButtonSceneFlow
+      value: MainMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 8146730164102266708, guid: efa016c32acac9447872c8105225d681, type: 3}
+      propertyPath: nextBattleSceneName
+      value: BattleTestScene06
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8290,6 +8302,11 @@ MonoBehaviour:
   attackDelay: 0.55
   enemyCard: {fileID: 2050984135}
   playerCard: {fileID: 1608344534}
+  areaProjectilePrefab: {fileID: 0}
+  areaProjectileFallOffset: {x: 0, y: 8, z: 0}
+  areaProjectileHitOffset: {x: 0, y: 0, z: 0}
+  areaProjectileCellStagger: 0.045
+  areaAttackPostDelay: 0.2
 --- !u!114 &2112265565 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8146730164102266708, guid: efa016c32acac9447872c8105225d681, type: 3}

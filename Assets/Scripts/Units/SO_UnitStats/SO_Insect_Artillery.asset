@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f84488da0e6fc7e439cbdb32ab2f929d, type: 3}
+  m_Name: SO_Insect_Artillery
+  m_EditorClassIdentifier: 
+  UnitName: FL Artillery
+  UnitType: 3
+  UnitIcon: {fileID: -77127230, guid: 09c37b75bc16f3e48a953971dfe5c39f, type: 3}
+  MaxHP: 8
+  MoveRange: 0
+  MeleeAttackDamage: 3
+  MeleeMinAttackRange: 1
+  MeleeMaxAttackRange: 1
+  RangedAttackDamage: 2
+  RangedMinAttackRange: 2
+  RangedMaxAttackRange: 5
+  DisplayMaxHP: 150
+  DisplayMaxEN: 90
+  AreaAttackDamage: 3
+  AreaAttackMinRange: 3
+  AreaAttackMaxRange: 4

@@ -27,6 +27,11 @@ public class UnitStats : ScriptableObject
     public int DisplayMaxHP = 0;
     public int DisplayMaxEN = 0;
 
+    [Header("Area Attack")]
+    public int AreaAttackDamage = 2;
+    public int AreaAttackMinRange = 2;
+    public int AreaAttackMaxRange = 5;
+
     // ---------------
     // Helpers
     // ---------------
@@ -39,6 +44,9 @@ public class UnitStats : ScriptableObject
 
             case CommandMode.RangedAttack:
                 return RangedAttackDamage;
+
+            case CommandMode.AreaAttack:
+                return AreaAttackDamage;
 
             default:
                 return 0;

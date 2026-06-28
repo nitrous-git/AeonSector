@@ -3,5 +3,6 @@ public enum UnitType
 {
     MechMelee,
     MechRanged,
-    InsectMelee
+    InsectMelee,
+    InsectArtillery
 }
