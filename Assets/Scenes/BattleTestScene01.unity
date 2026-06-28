@@ -9859,7 +9859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4321252179518228158, guid: efa016c32acac9447872c8105225d681, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8146730164102266708, guid: efa016c32acac9447872c8105225d681, type: 3}
       propertyPath: noButtonSceneFlow
