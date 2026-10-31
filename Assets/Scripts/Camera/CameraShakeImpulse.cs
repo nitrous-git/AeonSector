@@ -1,12 +1,12 @@
 using UnityEngine;
-using Cinemachine;
 
-[RequireComponent(typeof(CinemachineImpulseSource))]
+
+[RequireComponent(typeof(Unity.Cinemachine.CinemachineImpulseSource))]
 public class CameraShakeImpulse : MonoBehaviour
 {
     public static CameraShakeImpulse Instance { get; private set; }
 
-    [SerializeField] private CinemachineImpulseSource impulseSource;
+    [SerializeField] private Unity.Cinemachine.CinemachineImpulseSource impulseSource;
 
     private void Awake()
     {
@@ -19,24 +19,24 @@ public class CameraShakeImpulse : MonoBehaviour
         Instance = this;
 
         if (impulseSource == null)
-            impulseSource = GetComponent<CinemachineImpulseSource>();
+            impulseSource = GetComponent<Unity.Cinemachine.CinemachineImpulseSource>();
     }
 
     public static void PlayLongMediumHit()
     {
-        Instance.impulseSource.m_ImpulseDefinition.m_ImpulseDuration = 1.0f;
+        Instance.impulseSource.ImpulseDefinition.ImpulseDuration = 1.0f;
         Play(0.5f);
     }
 
     public static void PlayMediumHit()
     {
-        Instance.impulseSource.m_ImpulseDefinition.m_ImpulseDuration = 0.13f;
+        Instance.impulseSource.ImpulseDefinition.ImpulseDuration = 0.13f;
         Play(0.75f);
     }
 
     public static void PlayHeavyHit()
     {
-        Instance.impulseSource.m_ImpulseDefinition.m_ImpulseDuration = 0.35f;
+        Instance.impulseSource.ImpulseDefinition.ImpulseDuration = 0.35f;
         Play(1.2f);
     }
 
