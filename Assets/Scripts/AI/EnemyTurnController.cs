@@ -526,15 +526,16 @@ public class EnemyTurnController : MonoBehaviour
         if (target == null) { board.ClearHighlights(); yield break; }
         enemy.FaceTowards(target.GridPosition);
         enemy.PlayAttack(); // Enemy animation; never waits for player-only clip events.
+        float animationStarted = Time.time;
         playerCard?.Show(target);
-        yield return new WaitForSeconds(attackDelay);
+        yield return new WaitForSeconds(enemy.GetRangedReleaseDelay(attackDelay));
         if (!CanExecute(enemy, CommandMode.RangedAttack)) yield break;
         if (target != null && target.IsAlive && attackRangeService.GetAttackRangeCells(board, enemy, CommandMode.RangedAttack).Contains(target.GridPosition))
         {
             var projectilePrefab = enemy.Stats.RangedProjectilePrefab != null ? enemy.Stats.RangedProjectilePrefab : rangedProjectilePrefab;
             if (projectilePrefab != null)
             {
-                Vector3 start = board.ConvertGridToWorld(enemy.GridPosition) + Vector3.up * 0.8f;
+                Vector3 start = enemy.GetProjectileOrigin(board.ConvertGridToWorld(enemy.GridPosition) + Vector3.up * 0.8f);
                 Vector3 hit = board.ConvertGridToWorld(target.GridPosition) + Vector3.up * 0.15f;
                 var projectile = Instantiate(projectilePrefab, start, Quaternion.identity);
                 var mover = projectile.GetComponent<ProjectileMover>();
@@ -544,7 +545,12 @@ public class EnemyTurnController : MonoBehaviour
             if (CanExecute(enemy, CommandMode.RangedAttack))
                 ApplyEnemyDamage(enemy, target, enemy.Stats.GetDamageForCommand(CommandMode.RangedAttack));
         }
-        if (enemy != null && enemy.IsAlive && !turnManager.IsBattleOver) { enemy.MarkAttacked(); enemy.PlayIdle(); }
+        if (enemy != null && enemy.IsAlive && !turnManager.IsBattleOver)
+        {
+            float recovery = enemy.RangedAnimationDuration - (Time.time - animationStarted);
+            if (recovery > 0f) yield return new WaitForSeconds(recovery);
+            if (enemy != null && enemy.IsAlive && !turnManager.IsBattleOver) { enemy.MarkAttacked(); enemy.PlayIdle(); }
+        }
         playerCard?.Refresh(); enemyCard?.Refresh();
         board.ClearHighlights(); board.ClearPath();
     }

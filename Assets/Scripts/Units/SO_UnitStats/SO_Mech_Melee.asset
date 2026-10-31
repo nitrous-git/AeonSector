@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: Assault
   UnitType: 0
-  UnitIcon: {fileID: 21300000, guid: b906c1f68e929ac47a22c6afdbaf8ad3, type: 3}
+  UnitIcon: {fileID: 21300000, guid: 246e05fb0f8fa1447b5a620335d40c65, type: 3}
   SupportedAttacks: 1
   EnemyRole: 0
   RangedProjectilePrefab: {fileID: 0}

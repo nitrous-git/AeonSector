@@ -1,0 +1,391 @@
+fileFormatVersion: 2
+guid: 5adcfbc8473c3124fa46b75fd728718b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3419724109697664421
+    second: Idle_FrontSW_0
+  - first:
+      213: 6915064769163697934
+    second: Idle_FrontSW_1
+  - first:
+      213: -7757044126862363381
+    second: Idle_FrontSW_2
+  - first:
+      213: -1254363531642447627
+    second: Idle_FrontSW_3
+  - first:
+      213: -190472212337468363
+    second: Idle_FrontSW_4
+  - first:
+      213: 1215488809288089945
+    second: Idle_FrontSW_5
+  - first:
+      213: 1951400849041700760
+    second: Idle_FrontSW_6
+  - first:
+      213: 828653405780875466
+    second: Idle_FrontSW_7
+  - first:
+      213: -6267364272026344002
+    second: Idle_FrontSW_8
+  - first:
+      213: -7903990676299416941
+    second: Idle_FrontSW_9
+  - first:
+      213: -4176396439960539872
+    second: Idle_FrontSW_10
+  - first:
+      213: 7136534735686914125
+    second: Idle_FrontSW_11
+  - first:
+      213: 2263549702515905355
+    second: Idle_FrontSW_12
+  - first:
+      213: -3284502621439562626
+    second: Idle_FrontSW_13
+  - first:
+      213: -4661151995904868182
+    second: Idle_FrontSW_14
+  - first:
+      213: 294870091141544426
+    second: Idle_FrontSW_15
+  - first:
+      213: 5600587891242696822
+    second: Idle_FrontSW_16
+  - first:
+      213: 7537110418179259528
+    second: Idle_FrontSW_17
+  - first:
+      213: -1548755071699796105
+    second: Idle_FrontSW_18
+  - first:
+      213: -2107210572471814029
+    second: Idle_FrontSW_19
+  - first:
+      213: 1397866267554968066
+    second: Idle_FrontSW_20
+  - first:
+      213: 8721310864819339702
+    second: Idle_FrontSW_21
+  - first:
+      213: 2871235860369593271
+    second: Idle_FrontSW_22
+  - first:
+      213: 2552463116561909197
+    second: Idle_FrontSW_23
+  - first:
+      213: 1345648224906500104
+    second: Idle_FrontSW_24
+  - first:
+      213: -820337073186062897
+    second: Idle_FrontSW_25
+  - first:
+      213: -183245083267556300
+    second: Idle_FrontSW_26
+  - first:
+      213: -8394159599045697128
+    second: Idle_FrontSW_27
+  - first:
+      213: -6764977513390540093
+    second: Idle_FrontSW_28
+  - first:
+      213: 7654572326370631536
+    second: Idle_FrontSW_29
+  - first:
+      213: 4094781206960996947
+    second: Idle_FrontSW_30
+  - first:
+      213: 2603083300542047717
+    second: Idle_FrontSW_31
+  - first:
+      213: -1732648159605493166
+    second: Idle_FrontSW_32
+  - first:
+      213: 6285561538892358902
+    second: Idle_FrontSW_33
+  - first:
+      213: 4954502685147012804
+    second: Idle_FrontSW_34
+  - first:
+      213: -2094456739171389982
+    second: Idle_FrontSW_35
+  - first:
+      213: 1211516665128118834
+    second: Idle_FrontSW_36
+  - first:
+      213: 8626138316892392552
+    second: Idle_FrontSW_37
+  - first:
+      213: -2188697533633155112
+    second: Idle_FrontSW_38
+  - first:
+      213: 8349457765259593719
+    second: Idle_FrontSW_39
+  - first:
+      213: -7642781897804640455
+    second: Idle_FrontSW_40
+  - first:
+      213: 6368009519904446010
+    second: Idle_FrontSW_41
+  - first:
+      213: 7487829113422342676
+    second: Idle_FrontSW_42
+  - first:
+      213: -2606457678680293153
+    second: Idle_FrontSW_43
+  - first:
+      213: -2021550364956246535
+    second: Idle_FrontSW_44
+  - first:
+      213: -7671369156418917779
+    second: Idle_FrontSW_45
+  - first:
+      213: -6878383809586502030
+    second: Idle_FrontSW_46
+  - first:
+      213: 6598740705025624043
+    second: Idle_FrontSW_47
+  - first:
+      213: 2656384627563142938
+    second: Idle_FrontSW_48
+  - first:
+      213: 4050948530146757954
+    second: Idle_FrontSW_49
+  - first:
+      213: 3038524649895179574
+    second: Idle_FrontSW_50
+  - first:
+      213: -3450806416322129818
+    second: Idle_FrontSW_51
+  - first:
+      213: 3805016152035698017
+    second: Idle_FrontSW_52
+  - first:
+      213: -2827595445000394769
+    second: Idle_FrontSW_53
+  - first:
+      213: -2301394354959724209
+    second: Idle_FrontSW_54
+  - first:
+      213: 3355379769067647279
+    second: Idle_FrontSW_55
+  - first:
+      213: 3812380069659534599
+    second: Idle_FrontSW_56
+  - first:
+      213: 1674734009448029031
+    second: Idle_FrontSW_57
+  - first:
+      213: 2401510664173969190
+    second: Idle_FrontSW_58
+  - first:
+      213: 1062418810028852041
+    second: Idle_FrontSW_59
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Idle_FrontSW_00
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0cb298653b2b07342ab8ede554ab293c
+      internalID: 620606644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle_FrontSW_01
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b69818eeeaaa4964aa00bd1064fb6e38
+      internalID: 94395645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle_FrontSW_02
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e803643d3250b7940902f9eef2bc8f19
+      internalID: -106841694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle_FrontSW_03
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24040df6f0768204aaf93c4614355de5
+      internalID: 1973752574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: f6c7e2397ed6275499d2a54a21fddada
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Idle_FrontSW_00: 620606644
+      Idle_FrontSW_01: 94395645
+      Idle_FrontSW_02: -106841694
+      Idle_FrontSW_03: 1973752574
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

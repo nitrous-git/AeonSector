@@ -1,0 +1,307 @@
+fileFormatVersion: 2
+guid: e79eedb5b20fec54a8512b0725885d61
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2552631857968264002
+    second: Idle_BackNE_0
+  - first:
+      213: 8824138108983235612
+    second: Idle_BackNE_1
+  - first:
+      213: -3310583313601556111
+    second: Idle_BackNE_2
+  - first:
+      213: 70215649288288383
+    second: Idle_BackNE_3
+  - first:
+      213: -439573828484114956
+    second: Idle_BackNE_4
+  - first:
+      213: 3103978928263329304
+    second: Idle_BackNE_5
+  - first:
+      213: 2012802663472170809
+    second: Idle_BackNE_6
+  - first:
+      213: 5030966093425566093
+    second: Idle_BackNE_7
+  - first:
+      213: -6301666220412246496
+    second: Idle_BackNE_8
+  - first:
+      213: 4157789452069566637
+    second: Idle_BackNE_9
+  - first:
+      213: -5212890096270022546
+    second: Idle_BackNE_10
+  - first:
+      213: -7957830969792257128
+    second: Idle_BackNE_11
+  - first:
+      213: 5491424278759652938
+    second: Idle_BackNE_12
+  - first:
+      213: 1497938045661605188
+    second: Idle_BackNE_13
+  - first:
+      213: -5041167637435613415
+    second: Idle_BackNE_14
+  - first:
+      213: 2694611808980863190
+    second: Idle_BackNE_15
+  - first:
+      213: 8541710874940324836
+    second: Idle_BackNE_16
+  - first:
+      213: -6579978500411599551
+    second: Idle_BackNE_17
+  - first:
+      213: -5856538703912805103
+    second: Idle_BackNE_18
+  - first:
+      213: 574960303923552276
+    second: Idle_BackNE_19
+  - first:
+      213: 2211884235660448188
+    second: Idle_BackNE_20
+  - first:
+      213: -5740257746819225073
+    second: Idle_BackNE_21
+  - first:
+      213: -4420031242696480122
+    second: Idle_BackNE_22
+  - first:
+      213: -4410002894105515277
+    second: Idle_BackNE_23
+  - first:
+      213: 1648592467884437185
+    second: Idle_BackNE_24
+  - first:
+      213: -4868954276908043720
+    second: Idle_BackNE_25
+  - first:
+      213: 3086583236957100612
+    second: Idle_BackNE_26
+  - first:
+      213: 450193981374035077
+    second: Idle_BackNE_27
+  - first:
+      213: -7471181581372336394
+    second: Idle_BackNE_28
+  - first:
+      213: -424531132123734491
+    second: Idle_BackNE_29
+  - first:
+      213: 2275089611876264638
+    second: Idle_BackNE_30
+  - first:
+      213: 8604992034092110917
+    second: Idle_BackNE_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Idle_BackNE_00
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49ab63ed7b275994ca9279c3ac8659c0
+      internalID: -1241575883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle_BackNE_01
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e48cb0f2ded4b7340902b3d66f579a3e
+      internalID: -1156476555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle_BackNE_02
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 256dc3bb4fc93694e8eb0ad6d76c8e98
+      internalID: -1278028971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Idle_BackNE_03
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e99ab394a820150418af32b0b0081dc7
+      internalID: -2020576654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 33cb90c864455234faa3a31cbb8669e9
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Idle_BackNE_00: -1241575883
+      Idle_BackNE_01: -1156476555
+      Idle_BackNE_02: -1278028971
+      Idle_BackNE_03: -2020576654
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

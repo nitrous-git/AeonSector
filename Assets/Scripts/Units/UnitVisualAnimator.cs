@@ -8,6 +8,23 @@ public class UnitVisualAnimator : MonoBehaviour
     [SerializeField] private PlayerInputController playerInputController;
     [SerializeField] private CombatUnit ownerUnit;
 
+    [Header("Ranged presentation (negative timing keeps legacy defaults)")]
+    [SerializeField] private float rangedReleaseDelay = -1f;
+    [SerializeField] private float rangedAnimationDuration = -1f;
+    [SerializeField] private Transform projectileOriginFrontSW;
+    [SerializeField] private Transform projectileOriginBackNE;
+
+    public float GetRangedReleaseDelay(float fallback)
+        => rangedReleaseDelay < 0f ? fallback : Mathf.Clamp(rangedReleaseDelay, 0f, 3f);
+
+    public float RangedAnimationDuration => Mathf.Clamp(rangedAnimationDuration, 0f, 4f);
+
+    public Vector3 GetProjectileOrigin(UnitFacing facing, Vector3 fallback)
+    {
+        Transform origin = IsBackFacing(facing) ? projectileOriginBackNE : projectileOriginFrontSW;
+        return origin != null ? origin.position : fallback;
+    }
+
     private float baseScaleX = 1f;
 
     private void Awake()

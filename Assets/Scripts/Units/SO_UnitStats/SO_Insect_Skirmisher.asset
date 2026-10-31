@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f84488da0e6fc7e439cbdb32ab2f929d, type: 3}
   m_Name: SO_Insect_Skirmisher
   m_EditorClassIdentifier: 
-  UnitName: Insect Skirmisher
+  UnitName: Scorpion Skirmisher
   UnitType: 2
-  UnitIcon: {fileID: -323900, guid: bd66b61c62228ea4cb1dae5645e9053f, type: 3}
+  UnitIcon: {fileID: 21300000, guid: d768f6c5f76819d41bac264aecda3c1c, type: 3}
   SupportedAttacks: 2
   EnemyRole: 2
   RangedProjectilePrefab: {fileID: 7916894974454691004, guid: f0e7a924cacaa924fa007ceac6bb28ff, type: 3}

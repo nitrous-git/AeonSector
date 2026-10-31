@@ -39,6 +39,8 @@ internal sealed class PlayerAttackExecutor
         public bool projectileResolved;
         public bool damageApplied;
         public bool animationFinished;
+        public Coroutine projectileRoutine;
+        public GameObject projectileObject;
 
         public RangedAttackContext(CombatUnit attacker, CombatUnit target, int damage)
         { 
@@ -195,7 +197,7 @@ internal sealed class PlayerAttackExecutor
 
         rangedAttackContext.projectileStarted = true;
 
-        host.StartCoroutine(FireProjectileAndApplyDamage(rangedAttackContext));
+        rangedAttackContext.projectileRoutine = host.StartCoroutine(FireProjectileAndApplyDamage(rangedAttackContext));
     }
 
     private IEnumerator FireProjectileAndApplyDamage(RangedAttackContext context)
@@ -222,10 +224,11 @@ internal sealed class PlayerAttackExecutor
             yield break;
         }
 
-        Vector3 startWorld = board.ConvertGridToWorld(attacker.GridPosition) + projectileSpawnOffset;
+        Vector3 startWorld = attacker.GetProjectileOrigin(board.ConvertGridToWorld(attacker.GridPosition) + projectileSpawnOffset);
         Vector3 targetWorld = board.ConvertGridToWorld(target.GridPosition) + projectileHitOffset;
 
         GameObject projectileObject = Object.Instantiate(projectilePrefab, startWorld, Quaternion.identity);
+        context.projectileObject = projectileObject;
 
         ProjectileMover projectileMover = projectileObject.GetComponent<ProjectileMover>();
 
@@ -264,7 +267,11 @@ internal sealed class PlayerAttackExecutor
 
     private IEnumerator ResolveRangedAttackTimeout(RangedAttackContext context)
     {
-        yield return new WaitForSeconds(RangedProjectileFallbackDelay);
+        // Allow the visible release frame and one event-delivery margin before falling back.
+        // Legacy prefabs retain their existing 0.25-second fallback.
+        float releaseDelay = context.attacker.GetRangedReleaseDelay(-1f);
+        float fireFallback = releaseDelay < 0f ? RangedProjectileFallbackDelay : releaseDelay + 0.1f;
+        yield return new WaitForSeconds(fireFallback);
 
         if (rangedAttackContext != context)
             yield break;
@@ -281,7 +288,7 @@ internal sealed class PlayerAttackExecutor
             AnimEvent_FireRangedProjectile(context.attacker);
         }
 
-        yield return new WaitForSeconds(Mathf.Max(0f, RangedAttackResolutionTimeout - RangedProjectileFallbackDelay));
+        yield return new WaitForSeconds(Mathf.Max(0f, RangedAttackResolutionTimeout - fireFallback));
 
         if (rangedAttackContext != context)
             yield break;
@@ -296,6 +303,15 @@ internal sealed class PlayerAttackExecutor
         {
             Debug.LogWarning("Ranged attack finished event was not received; completing the animation fallback.");
             context.animationFinished = true;
+        }
+
+        if (!context.projectileResolved)
+        {
+            Debug.LogWarning("Ranged projectile exceeded its resolution deadline; resolving once and removing the stalled effect.");
+            if (context.projectileRoutine != null) host.StopCoroutine(context.projectileRoutine);
+            if (context.projectileObject != null) Object.Destroy(context.projectileObject);
+            ApplyRangedDamage(context);
+            context.projectileResolved = true;
         }
 
         TryCompleteRangedAttack(context);

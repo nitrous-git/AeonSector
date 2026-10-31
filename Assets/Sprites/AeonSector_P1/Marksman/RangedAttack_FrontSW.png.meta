@@ -1,0 +1,327 @@
+fileFormatVersion: 2
+guid: 8baf7821dd9a52146b27c1f7e5ca4ffc
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3332627363257788274
+    second: RangedAttack_FrontSW_0
+  - first:
+      213: -8976454106972145217
+    second: RangedAttack_FrontSW_1
+  - first:
+      213: -3808882954988329909
+    second: RangedAttack_FrontSW_2
+  - first:
+      213: 7319799552689144227
+    second: RangedAttack_FrontSW_3
+  - first:
+      213: 5686385163765722015
+    second: RangedAttack_FrontSW_4
+  - first:
+      213: 2174722607504727597
+    second: RangedAttack_FrontSW_5
+  - first:
+      213: 3027414205514876828
+    second: RangedAttack_FrontSW_6
+  - first:
+      213: -1915338514567120914
+    second: RangedAttack_FrontSW_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RangedAttack_FrontSW_00
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 896
+        width: 896
+        height: 896
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56e04f3064d6d4346bf89a3bc882ca86
+      internalID: -1083682779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RangedAttack_FrontSW_01
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 896
+        width: 896
+        height: 896
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 495eef225a18868439db09f0a2920216
+      internalID: -1508961140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RangedAttack_FrontSW_02
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 896
+        width: 896
+        height: 896
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71b98cd497fdd514e88fefe02ec6e98e
+      internalID: -288200394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RangedAttack_FrontSW_03
+      rect:
+        serializedVersion: 2
+        x: 2688
+        y: 896
+        width: 896
+        height: 896
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 857d19baee725af4b88c9edc66012dff
+      internalID: 1416504567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RangedAttack_FrontSW_04
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 896
+        height: 896
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 326f35c6be6f11c47b5020d748ac1e12
+      internalID: 2117710987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RangedAttack_FrontSW_05
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 896
+        height: 896
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2e085e0885bcf046a45c4104dc9d306
+      internalID: 530162510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RangedAttack_FrontSW_06
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 896
+        height: 896
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d675decefb308f44090058026d14b78b
+      internalID: -598651136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RangedAttack_FrontSW_07
+      rect:
+        serializedVersion: 2
+        x: 2688
+        y: 0
+        width: 896
+        height: 896
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 274dcc394c593074a967f8c7a63439cf
+      internalID: 935029590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 0e519a1345fbec341b9068f1db81a09d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      RangedAttack_FrontSW_00: -1083682779
+      RangedAttack_FrontSW_01: -1508961140
+      RangedAttack_FrontSW_02: -288200394
+      RangedAttack_FrontSW_03: 1416504567
+      RangedAttack_FrontSW_04: 2117710987
+      RangedAttack_FrontSW_05: 530162510
+      RangedAttack_FrontSW_06: -598651136
+      RangedAttack_FrontSW_07: 935029590
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

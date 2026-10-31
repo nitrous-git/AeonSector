@@ -1,0 +1,663 @@
+fileFormatVersion: 2
+guid: 70c298798bb0f4948ad18da65e3d10d8
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5622825721696306676
+    second: Attack_FrontSW_0
+  - first:
+      213: 7510385604335564148
+    second: Attack_FrontSW_1
+  - first:
+      213: -8503960495183615885
+    second: Attack_FrontSW_2
+  - first:
+      213: 1519089740495865553
+    second: Attack_FrontSW_3
+  - first:
+      213: 2797197187592382375
+    second: Attack_FrontSW_4
+  - first:
+      213: -1864277051491045588
+    second: Attack_FrontSW_5
+  - first:
+      213: -6159489739314190497
+    second: Attack_FrontSW_6
+  - first:
+      213: -6700530844894284931
+    second: Attack_FrontSW_7
+  - first:
+      213: 662351719102942850
+    second: Attack_FrontSW_8
+  - first:
+      213: -534073555109728325
+    second: Attack_FrontSW_9
+  - first:
+      213: 1981849968176466029
+    second: Attack_FrontSW_10
+  - first:
+      213: -4342987979759283167
+    second: Attack_FrontSW_11
+  - first:
+      213: 6549922185279012177
+    second: Attack_FrontSW_12
+  - first:
+      213: -1746305422236469259
+    second: Attack_FrontSW_13
+  - first:
+      213: -1411992412799095178
+    second: Attack_FrontSW_14
+  - first:
+      213: -1111524911621129986
+    second: Attack_FrontSW_15
+  - first:
+      213: -3112708271654457653
+    second: Attack_FrontSW_16
+  - first:
+      213: -8001938319365434165
+    second: Attack_FrontSW_17
+  - first:
+      213: 1816930787806875056
+    second: Attack_FrontSW_18
+  - first:
+      213: -5718434803075273778
+    second: Attack_FrontSW_19
+  - first:
+      213: -6127517439243883733
+    second: Attack_FrontSW_20
+  - first:
+      213: -6520436114505098409
+    second: Attack_FrontSW_21
+  - first:
+      213: -6453844129012742729
+    second: Attack_FrontSW_22
+  - first:
+      213: -8159831848051509084
+    second: Attack_FrontSW_23
+  - first:
+      213: 3498799883198984079
+    second: Attack_FrontSW_24
+  - first:
+      213: 3060280056775337354
+    second: Attack_FrontSW_25
+  - first:
+      213: 6286006571379767603
+    second: Attack_FrontSW_26
+  - first:
+      213: 7976209997794650733
+    second: Attack_FrontSW_27
+  - first:
+      213: -447156155020726227
+    second: Attack_FrontSW_28
+  - first:
+      213: -1818699344607995244
+    second: Attack_FrontSW_29
+  - first:
+      213: 6503561697588412958
+    second: Attack_FrontSW_30
+  - first:
+      213: 1497545731834706660
+    second: Attack_FrontSW_31
+  - first:
+      213: 551501218170474341
+    second: Attack_FrontSW_32
+  - first:
+      213: 2736767153346291759
+    second: Attack_FrontSW_33
+  - first:
+      213: 3998794770881852150
+    second: Attack_FrontSW_34
+  - first:
+      213: 7907459880243509806
+    second: Attack_FrontSW_35
+  - first:
+      213: -3730591592758462678
+    second: Attack_FrontSW_36
+  - first:
+      213: 248425351756878278
+    second: Attack_FrontSW_37
+  - first:
+      213: -7357238294133526037
+    second: Attack_FrontSW_38
+  - first:
+      213: 7632654292742358209
+    second: Attack_FrontSW_39
+  - first:
+      213: 6611011257843257183
+    second: Attack_FrontSW_40
+  - first:
+      213: 8721736248289621358
+    second: Attack_FrontSW_41
+  - first:
+      213: -5012971994098418079
+    second: Attack_FrontSW_42
+  - first:
+      213: 1650008119004526558
+    second: Attack_FrontSW_43
+  - first:
+      213: 291626120771565366
+    second: Attack_FrontSW_44
+  - first:
+      213: -3849925655050342741
+    second: Attack_FrontSW_45
+  - first:
+      213: -7336832291873288689
+    second: Attack_FrontSW_46
+  - first:
+      213: 1445833521148223983
+    second: Attack_FrontSW_47
+  - first:
+      213: 5210606064507870886
+    second: Attack_FrontSW_48
+  - first:
+      213: -3088059747183950207
+    second: Attack_FrontSW_49
+  - first:
+      213: -6988154845669889187
+    second: Attack_FrontSW_50
+  - first:
+      213: 6654107436481689008
+    second: Attack_FrontSW_51
+  - first:
+      213: 7761056757518730891
+    second: Attack_FrontSW_52
+  - first:
+      213: -1183801047991629914
+    second: Attack_FrontSW_53
+  - first:
+      213: -3459617732979797867
+    second: Attack_FrontSW_54
+  - first:
+      213: 1093191487248420750
+    second: Attack_FrontSW_55
+  - first:
+      213: -1136062768050407861
+    second: Attack_FrontSW_56
+  - first:
+      213: 779735116111198547
+    second: Attack_FrontSW_57
+  - first:
+      213: 8829016731058091596
+    second: Attack_FrontSW_58
+  - first:
+      213: -4750435923871602795
+    second: Attack_FrontSW_59
+  - first:
+      213: 5577540065613872314
+    second: Attack_FrontSW_60
+  - first:
+      213: 3416388829356471862
+    second: Attack_FrontSW_61
+  - first:
+      213: -1731207902017233573
+    second: Attack_FrontSW_62
+  - first:
+      213: -6952360203929497865
+    second: Attack_FrontSW_63
+  - first:
+      213: -3120952487858027125
+    second: Attack_FrontSW_64
+  - first:
+      213: -5288899763525229465
+    second: Attack_FrontSW_65
+  - first:
+      213: 2635710400771805360
+    second: Attack_FrontSW_66
+  - first:
+      213: -6601790529555489878
+    second: Attack_FrontSW_67
+  - first:
+      213: 5223345630043561445
+    second: Attack_FrontSW_68
+  - first:
+      213: -892763278421868618
+    second: Attack_FrontSW_69
+  - first:
+      213: 2362362636856703491
+    second: Attack_FrontSW_70
+  - first:
+      213: -6046738419062861640
+    second: Attack_FrontSW_71
+  - first:
+      213: -717246006269600077
+    second: Attack_FrontSW_72
+  - first:
+      213: -4581168077413151260
+    second: Attack_FrontSW_73
+  - first:
+      213: -879349810715922137
+    second: Attack_FrontSW_74
+  - first:
+      213: 4189488766667811368
+    second: Attack_FrontSW_75
+  - first:
+      213: 6533695654270086255
+    second: Attack_FrontSW_76
+  - first:
+      213: 6228885108763044349
+    second: Attack_FrontSW_77
+  - first:
+      213: 5354274965475982198
+    second: Attack_FrontSW_78
+  - first:
+      213: -6536234952819493813
+    second: Attack_FrontSW_79
+  - first:
+      213: -4379288142229883161
+    second: Attack_FrontSW_80
+  - first:
+      213: -8164545851255124903
+    second: Attack_FrontSW_81
+  - first:
+      213: -3383761500697937106
+    second: Attack_FrontSW_82
+  - first:
+      213: 40870988113757674
+    second: Attack_FrontSW_83
+  - first:
+      213: -8113056481507231
+    second: Attack_FrontSW_84
+  - first:
+      213: 8885207699155758190
+    second: Attack_FrontSW_85
+  - first:
+      213: -8143704537105488285
+    second: Attack_FrontSW_86
+  - first:
+      213: 4549348936971906311
+    second: Attack_FrontSW_87
+  - first:
+      213: -6950849305885442351
+    second: Attack_FrontSW_88
+  - first:
+      213: 5940528587806784730
+    second: Attack_FrontSW_89
+  - first:
+      213: 4293743029109543315
+    second: Attack_FrontSW_90
+  - first:
+      213: -7535976352813857467
+    second: Attack_FrontSW_91
+  - first:
+      213: -5703815336059439268
+    second: Attack_FrontSW_92
+  - first:
+      213: -53627743658587076
+    second: Attack_FrontSW_93
+  - first:
+      213: 5305856530756959951
+    second: Attack_FrontSW_94
+  - first:
+      213: 2403734132458742097
+    second: Attack_FrontSW_95
+  - first:
+      213: -1582574801719821219
+    second: Attack_FrontSW_96
+  - first:
+      213: 1991734010435729767
+    second: Attack_FrontSW_97
+  - first:
+      213: -6151693998196048461
+    second: Attack_FrontSW_98
+  - first:
+      213: -1933775609572914286
+    second: Attack_FrontSW_99
+  - first:
+      213: -2577587422176295677
+    second: Attack_FrontSW_100
+  - first:
+      213: 2760006393679556618
+    second: Attack_FrontSW_101
+  - first:
+      213: -3073469973742138690
+    second: Attack_FrontSW_102
+  - first:
+      213: -8356318652031021477
+    second: Attack_FrontSW_103
+  - first:
+      213: -6347768440008813707
+    second: Attack_FrontSW_104
+  - first:
+      213: 2972511472985259291
+    second: Attack_FrontSW_105
+  - first:
+      213: 2874080772586382783
+    second: Attack_FrontSW_106
+  - first:
+      213: -7371184309891705349
+    second: Attack_FrontSW_107
+  - first:
+      213: -9177984784634119158
+    second: Attack_FrontSW_108
+  - first:
+      213: -3136614092027771248
+    second: Attack_FrontSW_109
+  - first:
+      213: -5668407658367502604
+    second: Attack_FrontSW_110
+  - first:
+      213: 5556958316709938044
+    second: Attack_FrontSW_111
+  - first:
+      213: -3879240687281624583
+    second: Attack_FrontSW_112
+  - first:
+      213: 4505418517671002244
+    second: Attack_FrontSW_113
+  - first:
+      213: 1070623070790845741
+    second: Attack_FrontSW_114
+  - first:
+      213: 9029167971143116474
+    second: Attack_FrontSW_115
+  - first:
+      213: -6556448220754943449
+    second: Attack_FrontSW_116
+  - first:
+      213: -2686078089231204691
+    second: Attack_FrontSW_117
+  - first:
+      213: 8210514705357579990
+    second: Attack_FrontSW_118
+  - first:
+      213: -4436733490766164021
+    second: Attack_FrontSW_119
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Attack_FrontSW_00
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ef4809e6d141fd46812043d788da6a8
+      internalID: 792564871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_FrontSW_01
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 106ee6e627574c24591d7c91bd7efdf6
+      internalID: -339564683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_FrontSW_02
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a506a9be505da654ebf0c44024a360e4
+      internalID: 308625491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_FrontSW_03
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a805d2632f2149946b0c31f41999f207
+      internalID: -1264935329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_FrontSW_04
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad82f8d83cbe2a64c87d504643a112e5
+      internalID: 1405215977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_FrontSW_05
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc83e1136d9fa1e4b8e725375dbe3913
+      internalID: -969574899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_FrontSW_06
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 551afe4b74319ce4ca41705a6edea586
+      internalID: -1828904596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_FrontSW_07
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f8bd9c2ce1a9844b9bb7345ad2336eb
+      internalID: -1879429491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: cac616543a5bfaf458a34e7f6cb99742
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Attack_FrontSW_00: 792564871
+      Attack_FrontSW_01: -339564683
+      Attack_FrontSW_02: 308625491
+      Attack_FrontSW_03: -1264935329
+      Attack_FrontSW_04: 1405215977
+      Attack_FrontSW_05: -969574899
+      Attack_FrontSW_06: -1828904596
+      Attack_FrontSW_07: -1879429491
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

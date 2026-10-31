@@ -1,0 +1,486 @@
+fileFormatVersion: 2
+guid: 0d68412f244ea624296731be01d0f660
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3577757172358976900
+    second: Attack_BackNE_0
+  - first:
+      213: 7625904791366721348
+    second: Attack_BackNE_1
+  - first:
+      213: 6440261565288339563
+    second: Attack_BackNE_2
+  - first:
+      213: -2857054979492133417
+    second: Attack_BackNE_3
+  - first:
+      213: -5689026038829222605
+    second: Attack_BackNE_4
+  - first:
+      213: -1113000699163867977
+    second: Attack_BackNE_5
+  - first:
+      213: -8700586001307559942
+    second: Attack_BackNE_6
+  - first:
+      213: -8446568050593380814
+    second: Attack_BackNE_7
+  - first:
+      213: 818246199489443755
+    second: Attack_BackNE_8
+  - first:
+      213: 6355804857439908173
+    second: Attack_BackNE_9
+  - first:
+      213: -8154478278050493664
+    second: Attack_BackNE_10
+  - first:
+      213: 7347505549772221026
+    second: Attack_BackNE_11
+  - first:
+      213: -5031508376511719632
+    second: Attack_BackNE_12
+  - first:
+      213: 353169371036199263
+    second: Attack_BackNE_13
+  - first:
+      213: 7331775654090618665
+    second: Attack_BackNE_14
+  - first:
+      213: 4204136587428243038
+    second: Attack_BackNE_15
+  - first:
+      213: 2847959104893340593
+    second: Attack_BackNE_16
+  - first:
+      213: -7096452031840799882
+    second: Attack_BackNE_17
+  - first:
+      213: -5108024141751363089
+    second: Attack_BackNE_18
+  - first:
+      213: -2729135695315257545
+    second: Attack_BackNE_19
+  - first:
+      213: -2025823258670341527
+    second: Attack_BackNE_20
+  - first:
+      213: 7894774436794519415
+    second: Attack_BackNE_21
+  - first:
+      213: -79804311252672087
+    second: Attack_BackNE_22
+  - first:
+      213: 5023238152785654570
+    second: Attack_BackNE_23
+  - first:
+      213: 8808553473941274698
+    second: Attack_BackNE_24
+  - first:
+      213: 916917197531400363
+    second: Attack_BackNE_25
+  - first:
+      213: -5514457904010147145
+    second: Attack_BackNE_26
+  - first:
+      213: -7058604768336620043
+    second: Attack_BackNE_27
+  - first:
+      213: -5133638573990607664
+    second: Attack_BackNE_28
+  - first:
+      213: 1580291348239715905
+    second: Attack_BackNE_29
+  - first:
+      213: 5599877418496184320
+    second: Attack_BackNE_30
+  - first:
+      213: 6590327261679945042
+    second: Attack_BackNE_31
+  - first:
+      213: 8484377099819271385
+    second: Attack_BackNE_32
+  - first:
+      213: -6637052133577929613
+    second: Attack_BackNE_33
+  - first:
+      213: 4901330342724235505
+    second: Attack_BackNE_34
+  - first:
+      213: -2650080713798141574
+    second: Attack_BackNE_35
+  - first:
+      213: 319615318669654257
+    second: Attack_BackNE_36
+  - first:
+      213: 7057828101602045017
+    second: Attack_BackNE_37
+  - first:
+      213: 8648964432941044831
+    second: Attack_BackNE_38
+  - first:
+      213: -1787426518702973739
+    second: Attack_BackNE_39
+  - first:
+      213: -4864354096538916354
+    second: Attack_BackNE_40
+  - first:
+      213: 7670712047344287249
+    second: Attack_BackNE_41
+  - first:
+      213: -8894032998174219145
+    second: Attack_BackNE_42
+  - first:
+      213: 5843980265582567716
+    second: Attack_BackNE_43
+  - first:
+      213: 347216671214157290
+    second: Attack_BackNE_44
+  - first:
+      213: 2895078534598218094
+    second: Attack_BackNE_45
+  - first:
+      213: -2699767686057433021
+    second: Attack_BackNE_46
+  - first:
+      213: -7195999262855046989
+    second: Attack_BackNE_47
+  - first:
+      213: -8644439993750572473
+    second: Attack_BackNE_48
+  - first:
+      213: 491732501481842313
+    second: Attack_BackNE_49
+  - first:
+      213: 3692910410952535956
+    second: Attack_BackNE_50
+  - first:
+      213: -2134145577285532508
+    second: Attack_BackNE_51
+  - first:
+      213: -2721869570246465329
+    second: Attack_BackNE_52
+  - first:
+      213: 26323687093918840
+    second: Attack_BackNE_53
+  - first:
+      213: -4295185468687167592
+    second: Attack_BackNE_54
+  - first:
+      213: 5848806085904584973
+    second: Attack_BackNE_55
+  - first:
+      213: 2748639529158750600
+    second: Attack_BackNE_56
+  - first:
+      213: -8197124651754846174
+    second: Attack_BackNE_57
+  - first:
+      213: 524710435804378984
+    second: Attack_BackNE_58
+  - first:
+      213: 5769714701188886900
+    second: Attack_BackNE_59
+  - first:
+      213: -6045671215426338806
+    second: Attack_BackNE_60
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 256
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Attack_BackNE_00
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28e3b4a6f6b8cfd4aa943bf8c52a3900
+      internalID: 2130721091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_BackNE_01
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12e59a68a7702b94db986edba9b87e78
+      internalID: -246665788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_BackNE_02
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 432f2f1395a8d1a409e4295e0fc7f62b
+      internalID: 1669867845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_BackNE_03
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 1024
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb9ae62bff5f59f48a51624c55ac28e2
+      internalID: -1461777626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_BackNE_04
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df8844b55595bf64281ea888c0484807
+      internalID: -1348716406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_BackNE_05
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2a8ad04f07ea4d4686576e508b2a45d
+      internalID: -209870169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_BackNE_06
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e8554b189922074ca8663b239d004a7
+      internalID: 171099516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Attack_BackNE_07
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 0
+        width: 1024
+        height: 1024
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04830389b214ef5429ded73aef148a6c
+      internalID: 939913767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 18371622aed6d3f4c83040f334140d18
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Attack_BackNE_00: 2130721091
+      Attack_BackNE_01: -246665788
+      Attack_BackNE_02: 1669867845
+      Attack_BackNE_03: -1461777626
+      Attack_BackNE_04: -1348716406
+      Attack_BackNE_05: -209870169
+      Attack_BackNE_06: 171099516
+      Attack_BackNE_07: 939913767
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

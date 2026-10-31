@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: Marksman
   UnitType: 1
-  UnitIcon: {fileID: 21300000, guid: b906c1f68e929ac47a22c6afdbaf8ad3, type: 3}
+  UnitIcon: {fileID: 21300000, guid: 46a1e7b26863f3b42965e5b81ab043ae, type: 3}
   SupportedAttacks: 2
   EnemyRole: 0
   RangedProjectilePrefab: {fileID: 0}

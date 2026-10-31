@@ -14,6 +14,14 @@ public class CombatUnit : MonoBehaviour
 
     public UnitFacing Facing { get; private set; }
 
+    public float GetRangedReleaseDelay(float fallback)
+        => visualAnimator != null ? visualAnimator.GetRangedReleaseDelay(fallback) : fallback;
+
+    public float RangedAnimationDuration => visualAnimator != null ? visualAnimator.RangedAnimationDuration : 0f;
+
+    public Vector3 GetProjectileOrigin(Vector3 fallback)
+        => visualAnimator != null ? visualAnimator.GetProjectileOrigin(Facing, fallback) : fallback;
+
     public int CurrentHP { get; private set; }
     public bool HasMoved { get; private set; }
     public bool HasAttacked { get; private set; }
