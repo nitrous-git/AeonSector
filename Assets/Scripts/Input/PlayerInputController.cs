@@ -47,6 +47,10 @@ public class PlayerInputController : MonoBehaviour
         public CombatUnit attacker;
         public CombatUnit target;
         public int damage;
+        public bool projectileStarted;
+        public bool projectileResolved;
+        public bool damageApplied;
+        public bool animationFinished;
 
         public RangedAttackContext(CombatUnit attacker, CombatUnit target, int damage)
         { 
@@ -58,6 +62,9 @@ public class PlayerInputController : MonoBehaviour
 
     private RangedAttackContext rangedAttackContext;
 
+    private const float RangedProjectileFallbackDelay = 0.25f;
+    private const float RangedAttackResolutionTimeout = 5f;
+
     // Unity Lifecycle
     private void Awake()
     {
@@ -66,12 +73,12 @@ public class PlayerInputController : MonoBehaviour
             mainCamera = Camera.main;
         }
 
-        actionMenuUI.Hide();
+        actionMenuUI?.Hide();
     }
 
     private void Update()
     {
-        if (turnManager == null || board == null || mainCamera == null)
+        if (turnManager == null || board == null || mainCamera == null || turnManager.IsBattleOver)
             return;
 
         if (!turnManager.IsPlayerTurn())
@@ -209,10 +216,10 @@ public class PlayerInputController : MonoBehaviour
     // ----------------------------
     private void EnterMoveMode()
     {
-        if (selectedUnit == null)
+        if (selectedUnit == null || turnManager == null || board == null || !board.IsReady)
             return;
 
-        if (!selectedUnit.CanMove)
+        if (!turnManager.IsPlayerTurn() || selectedUnit.Stats == null || !selectedUnit.CanMove)
         {
             Debug.Log("Selected unit cannot move.");
             return;
@@ -231,56 +238,153 @@ public class PlayerInputController : MonoBehaviour
 
     private void CommitMove(GridCoord targetCoord)
     {
-        if (selectedUnit == null)
+        if (isResolvingAction || turnManager == null || board == null || selectedUnit == null)
             return;
 
-        if (!selectedUnit.CanMove)
-            return;
-
-        List<GridCoord> path = pathService.FindPath(board, selectedUnit.GridPosition, targetCoord);
-        if (path.Count <= 1)
+        CombatUnit unit = selectedUnit;
+        if (!turnManager.IsPlayerTurn()
+            || unit.OwnerFaction != turnManager.PlayerFaction
+            || unit.Stats == null
+            || !unit.CanMove)
         {
+            ResetMoveState(unit);
             return;
         }
 
-        SFXManager.UnitMove();
+        if (!board.IsReady
+            || !board.IsInside(unit.GridPosition)
+            || !board.IsInside(targetCoord)
+            || !board.HasBaseWalkable(targetCoord)
+            || !board.IsWalkable(targetCoord)
+            || !reachableCells.Contains(targetCoord))
+        {
+            ResetMoveState(unit);
+            return;
+        }
 
-        StartCoroutine(ResolveUnitMove(selectedUnit, path));
+        HashSet<GridCoord> currentReachableCells = reachableTileService.GetReachableTiles(board, unit.GridPosition, unit.Stats.MoveRange);
+        if (!currentReachableCells.Contains(targetCoord))
+        {
+            Debug.LogWarning($"Rejected move for {unit.name}: destination {targetCoord} is no longer reachable.");
+            ResetMoveState(unit);
+            return;
+        }
+
+        List<GridCoord> path = pathService.FindPath(board, unit.GridPosition, targetCoord);
+        if (path.Count <= 1)
+        {
+            ResetMoveState(unit);
+            return;
+        }
+
+        UnitMover mover = unit.GetComponent<UnitMover>();
+        if (mover == null || mover.IsMoving)
+        {
+            Debug.LogWarning($"Rejected move for {unit.name}: no available UnitMover or movement is already in progress.");
+            ResetMoveState(unit);
+            return;
+        }
+
+        isResolvingAction = true;
+        StartCoroutine(ResolveUnitMove(unit, path));
     }
 
     private IEnumerator ResolveUnitMove(CombatUnit unit, List<GridCoord> path)
     {
-        isResolvingAction = true;
+        if (unit == null || path == null || path.Count <= 1 || board == null || !board.IsReady)
+        {
+            ResetMoveState(unit);
+            yield break;
+        }
 
-        board.ShowPath(path);
+        if (turnManager == null
+            || !turnManager.IsPlayerTurn()
+            || unit != selectedUnit
+            || unit.OwnerFaction != turnManager.PlayerFaction
+            || unit.Stats == null
+            || !unit.CanMove
+            || !board.IsInside(unit.GridPosition))
+        {
+            ResetMoveState(unit);
+            yield break;
+        }
 
+        GridCoord origin = unit.GridPosition;
         GridCoord destination = path[path.Count - 1];
+        HashSet<GridCoord> currentReachableCells = reachableTileService.GetReachableTiles(board, origin, unit.Stats.MoveRange);
+        if (!board.IsInside(destination) || !currentReachableCells.Contains(destination))
+        {
+            Debug.LogWarning($"Rejected move for {unit.name}: destination {destination} is no longer valid.");
+            ResetMoveState(unit);
+            yield break;
+        }
+
+        List<GridCoord> currentPath = pathService.FindPath(board, origin, destination);
+        if (currentPath.Count <= 1)
+        {
+            Debug.LogWarning($"Rejected move for {unit.name}: no valid path remains to {destination}.");
+            ResetMoveState(unit);
+            yield break;
+        }
+
+        UnitMover mover = unit.GetComponent<UnitMover>();
+        if (mover == null || mover.IsMoving)
+        {
+            Debug.LogWarning($"Rejected move for {unit.name}: no available UnitMover or movement is already in progress.");
+            ResetMoveState(unit);
+            yield break;
+        }
 
         bool moved = board.TryMoveUnit(unit, destination);
         if (!moved)
         {
             Debug.LogWarning($"Failed to reserve move for {unit.name} to {destination}");
+            ResetMoveState(unit);
+            yield break;
         }
 
-        UnitMover mover = selectedUnit.GetComponent<UnitMover>();
-        yield return mover.MoveAlongPath(board, path);
+        board.ShowPath(currentPath);
+        SFXManager.UnitMove();
+        yield return mover.MoveAlongPath(board, currentPath);
+
+        Vector3 destinationWorld = board.ConvertGridToWorld(destination);
+        if ((unit.transform.position - destinationWorld).sqrMagnitude > 0.0001f)
+        {
+            Debug.LogWarning($"Movement animation for {unit.name} did not reach {destination}; restoring the reserved board cell.");
+            board.TryMoveUnit(unit, origin);
+            unit.transform.position = board.ConvertGridToWorld(origin);
+            ResetMoveState(unit);
+            yield break;
+        }
 
         Debug.Log("MarkMoved for this unit.");
         unit.MarkMoved();
 
-        board.ClearHighlights();
-        board.ClearPath();
+        ResetMoveState(unit);
+    }
+
+    private void ResetMoveState(CombatUnit unit)
+    {
+        board?.ClearHighlights();
+        board?.ClearPath();
         reachableCells.Clear();
         hoveredCoord = null;
 
         commandMode = CommandMode.None;
         isResolvingAction = false;
 
-        selectedUnit = unit;
-        board.ShowSelected(selectedUnit.GridPosition);
+        if (unit == null || !unit.IsAlive || board == null || !board.IsReady || !board.IsInside(unit.GridPosition))
+        {
+            selectedUnit = null;
+            actionMenuUI?.Hide();
+            return;
+        }
 
-        actionMenuUI.Refresh(selectedUnit);
-        playerCard.Refresh();
+        selectedUnit = unit;
+        board.ShowSelected(unit.GridPosition);
+
+        actionMenuUI?.Refresh(unit);
+        playerCard?.Refresh();
     }
 
     // --------------------
@@ -298,10 +402,13 @@ public class PlayerInputController : MonoBehaviour
 
     private void EnterAttackMode(CommandMode attackMode)
     {
-        if (selectedUnit == null)
+        if (selectedUnit == null || turnManager == null || board == null || !board.IsReady || turnManager.IsBattleOver)
             return;
 
-        if (!selectedUnit.CanAttack)
+        if (!turnManager.IsPlayerTurn()
+            || selectedUnit.OwnerFaction != turnManager.PlayerFaction
+            || selectedUnit.Stats == null
+            || !selectedUnit.CanAttack)
         {
             Debug.Log("Selected unit cannot attack.");
             return;
@@ -323,10 +430,19 @@ public class PlayerInputController : MonoBehaviour
 
     private bool TryCommitAttackAt(GridCoord targetCoord)
     {
-        if (selectedUnit == null)
+        if (isResolvingAction
+            || selectedUnit == null
+            || turnManager == null
+            || board == null
+            || !board.IsReady
+            || turnManager.IsBattleOver
+            || !turnManager.IsPlayerTurn())
             return false;
 
-        if (!selectedUnit.CanAttack)
+        if (selectedUnit.OwnerFaction != turnManager.PlayerFaction
+            || selectedUnit.Stats == null
+            || !selectedUnit.CanAttack
+            || !board.IsInside(targetCoord))
             return false;
 
         if (!reachableCells.Contains(targetCoord))
@@ -364,18 +480,47 @@ public class PlayerInputController : MonoBehaviour
 
     private void CommitAttack(CombatUnit target)
     {
-        if (selectedUnit == null || target == null)
+        if (isResolvingAction
+            || selectedUnit == null
+            || target == null
+            || turnManager == null
+            || board == null
+            || !board.IsReady
+            || turnManager.IsBattleOver
+            || !turnManager.IsPlayerTurn())
             return;
 
-        if (!selectedUnit.CanAttack)
+        if (selectedUnit.OwnerFaction != turnManager.PlayerFaction
+            || selectedUnit.Stats == null
+            || !selectedUnit.CanAttack
+            || !target.IsAlive
+            || target.OwnerFaction == selectedUnit.OwnerFaction)
             return;
 
+        isResolvingAction = true;
         StartCoroutine(ResolveUnitAttack(selectedUnit, target));
     }
 
     private IEnumerator ResolveUnitAttack(CombatUnit attacker, CombatUnit target)
     {
-        isResolvingAction = true;
+        if (attacker == null
+            || target == null
+            || turnManager == null
+            || board == null
+            || !board.IsReady
+            || turnManager.IsBattleOver
+            || !turnManager.IsPlayerTurn()
+            || attacker != selectedUnit
+            || attacker.OwnerFaction != turnManager.PlayerFaction
+            || attacker.Stats == null
+            || !attacker.IsAlive
+            || !attacker.CanAttack
+            || !target.IsAlive
+            || target.OwnerFaction == attacker.OwnerFaction)
+        {
+            CancelAttackResolution();
+            yield break;
+        }
 
         board.ClearPath();
 
@@ -383,55 +528,71 @@ public class PlayerInputController : MonoBehaviour
 
         Debug.Log($"{attacker.name} uses {commandMode} on {target.name} for {damage} damage.");
 
-        attacker.FaceFromTo(attacker.GridPosition, target.GridPosition);
-        attacker.PlayAttack(commandMode);
-
-        // Later:
-        // - particle FX
         if (commandMode == CommandMode.RangedAttack)
         {
             rangedAttackContext = new RangedAttackContext(attacker, target, damage);
+            attacker.FaceFromTo(attacker.GridPosition, target.GridPosition);
+            attacker.PlayAttack(commandMode);
+            yield return ResolveRangedAttackTimeout(rangedAttackContext);
             yield break;
-            //yield return ResolveRangedAttackVisual(attacker, target);
         }
-        else if (commandMode == CommandMode.MeleeAttack)
+
+        attacker.FaceFromTo(attacker.GridPosition, target.GridPosition);
+        attacker.PlayAttack(commandMode);
+
+        if (commandMode == CommandMode.MeleeAttack)
         {
             yield return ResolveMeleeAttackVisual(attacker, target);
         }
 
-        attacker.PlayIdle();
-
-        if (target.TakeDamage(damage))
+        if (attacker == null || !attacker.IsAlive || turnManager.IsBattleOver)
         {
-            turnManager.RemoveUnitFromBattle(target);
+            FinishAttackResolution(attacker);
+            yield break;
         }
       
-        playerCard.Refresh();
-        enemyCard.Show(target);
+        ApplyDamage(target, damage);
 
         FinishAttackResolution(attacker);
     }
 
     public void AnimEvent_FireRangedProjectile(CombatUnit eventOwner)
     {
-        if (rangedAttackContext == null)
+        if (rangedAttackContext == null
+            || rangedAttackContext.projectileStarted
+            || turnManager == null
+            || turnManager.IsBattleOver)
             return;
 
         if (rangedAttackContext.attacker != eventOwner)
             return;
 
-        if (rangedAttackContext.target == null || !rangedAttackContext.target.IsAlive)
-            return;
+        rangedAttackContext.projectileStarted = true;
 
-        StartCoroutine(FireProjectileAndApplyDamage(rangedAttackContext.attacker, rangedAttackContext.target, rangedAttackContext.damage));
+        StartCoroutine(FireProjectileAndApplyDamage(rangedAttackContext));
     }
 
-    private IEnumerator FireProjectileAndApplyDamage(CombatUnit attacker, CombatUnit target, int damage)
+    private IEnumerator FireProjectileAndApplyDamage(RangedAttackContext context)
     {
+        if (context == null || rangedAttackContext != context)
+            yield break;
+
+        CombatUnit attacker = context.attacker;
+        CombatUnit target = context.target;
+
+        if (attacker == null || !attacker.IsAlive || target == null || !target.IsAlive || board == null || !board.IsReady)
+        {
+            context.projectileResolved = true;
+            TryCompleteRangedAttack(context);
+            yield break;
+        }
+
         if (projectilePrefab == null)
         {
             Debug.LogWarning("No projectile prefab assigned.");
-            ApplyRangedDamage(target, damage);
+            ApplyRangedDamage(context);
+            context.projectileResolved = true;
+            TryCompleteRangedAttack(context);
             yield break;
         }
 
@@ -448,44 +609,115 @@ public class PlayerInputController : MonoBehaviour
         {
             Debug.LogWarning("Projectile prefab has no ProjectileMover.");
             Destroy(projectileObject);
-            ApplyRangedDamage(target, damage);
+            ApplyRangedDamage(context);
+            context.projectileResolved = true;
+            TryCompleteRangedAttack(context);
             yield break;
         }
 
         yield return projectileMover.FlyAndHit(startWorld, targetWorld);
 
-        ApplyRangedDamage(target, damage);
-        enemyCard.Refresh();
+        if (rangedAttackContext != context)
+            yield break;
+
+        ApplyRangedDamage(context);
+        context.projectileResolved = true;
+        enemyCard?.Refresh();
+        TryCompleteRangedAttack(context);
     }
 
     public void AnimEvent_RangedAttackFinished(CombatUnit eventOwner)
     {
-        if (rangedAttackContext == null)
+        if (rangedAttackContext == null
+            || rangedAttackContext.attacker != eventOwner)
             return;
 
-        if (rangedAttackContext.attacker != eventOwner)
-            return;
-
-        CombatUnit attacker = rangedAttackContext.attacker;
-
-        rangedAttackContext = null;
-
-        FinishAttackResolution(attacker);
+        rangedAttackContext.animationFinished = true;
+        TryCompleteRangedAttack(rangedAttackContext);
     }
 
-    private void ApplyRangedDamage(CombatUnit target, int damage)
+    private IEnumerator ResolveRangedAttackTimeout(RangedAttackContext context)
     {
-        if (target == null || !target.IsAlive)
+        yield return new WaitForSeconds(RangedProjectileFallbackDelay);
+
+        if (rangedAttackContext != context)
+            yield break;
+
+        if (turnManager == null || turnManager.IsBattleOver)
+        {
+            CancelAttackResolution();
+            yield break;
+        }
+
+        if (!context.projectileStarted)
+        {
+            Debug.LogWarning("Ranged attack fire event was not received; starting the projectile fallback.");
+            AnimEvent_FireRangedProjectile(context.attacker);
+        }
+
+        yield return new WaitForSeconds(Mathf.Max(0f, RangedAttackResolutionTimeout - RangedProjectileFallbackDelay));
+
+        if (rangedAttackContext != context)
+            yield break;
+
+        if (turnManager == null || turnManager.IsBattleOver)
+        {
+            CancelAttackResolution();
+            yield break;
+        }
+
+        if (!context.animationFinished)
+        {
+            Debug.LogWarning("Ranged attack finished event was not received; completing the animation fallback.");
+            context.animationFinished = true;
+        }
+
+        TryCompleteRangedAttack(context);
+    }
+
+    private void ApplyRangedDamage(RangedAttackContext context)
+    {
+        if (context == null || context.damageApplied)
+            return;
+
+        context.damageApplied = true;
+
+        CombatUnit target = context.target;
+        if (target == null || !target.IsAlive || turnManager == null || turnManager.IsBattleOver)
             return;
 
         SFXManager.ProjectileImpact();
+
+        ApplyDamage(target, context.damage);
+    }
+
+    private void ApplyDamage(CombatUnit target, int damage)
+    {
+        if (target == null || !target.IsAlive || turnManager == null || turnManager.IsBattleOver)
+            return;
 
         if (target.TakeDamage(damage))
         {
             turnManager.RemoveUnitFromBattle(target);
         }
 
+        playerCard?.Refresh();
+        if (target != null && target.IsAlive)
+            enemyCard?.Show(target);
         turnManager.RefreshBattleEndState();
+    }
+
+    private void TryCompleteRangedAttack(RangedAttackContext context)
+    {
+        if (context == null
+            || rangedAttackContext != context
+            || !context.projectileResolved
+            || !context.animationFinished)
+            return;
+
+        CombatUnit attacker = context.attacker;
+        rangedAttackContext = null;
+        FinishAttackResolution(attacker);
     }
 
     private IEnumerator ResolveMeleeAttackVisual(CombatUnit attacker, CombatUnit target)
@@ -493,16 +725,21 @@ public class PlayerInputController : MonoBehaviour
         
         // Later we can add Animator.Play("Melee_Attack") here.
 
-        Vector3 spawnWorld = board.ConvertGridToWorld(attacker.GridPosition) + projectileSpawnOffset;
-        GameObject slashObject = Instantiate(swordSlashPrefab, spawnWorld, Quaternion.identity);
-        slashObject.GetComponent<Animator>().Play("SwordSlash");
+        GameObject slashObject = null;
+        if (swordSlashPrefab != null && board != null && board.IsReady)
+        {
+            Vector3 spawnWorld = board.ConvertGridToWorld(attacker.GridPosition) + projectileSpawnOffset;
+            slashObject = Instantiate(swordSlashPrefab, spawnWorld, Quaternion.identity);
+            slashObject.GetComponent<Animator>()?.Play("SwordSlash");
+        }
 
         CameraShakeImpulse.PlayLongMediumHit();
 
         SFXManager.PlayerMelee();
 
         yield return new WaitForSeconds(1.20f);
-        Destroy(slashObject);
+        if (slashObject != null)
+            Destroy(slashObject);
 
         yield return null;
     }
@@ -510,13 +747,17 @@ public class PlayerInputController : MonoBehaviour
     // Shared finish helper (melee and ranged both reuse)
     private void FinishAttackResolution(CombatUnit attacker)
     {
-        attacker.PlayIdle();
-        attacker.MarkAttacked();
+        bool battleEnded = turnManager == null || turnManager.IsBattleOver;
+        bool attackerValid = attacker != null && attacker.IsAlive && !battleEnded;
 
-        playerCard.Refresh();
+        if (attackerValid)
+        {
+            attacker.PlayIdle();
+            attacker.MarkAttacked();
+        }
 
-        board.ClearHighlights();
-        board.ClearPath();
+        board?.ClearHighlights();
+        board?.ClearPath();
 
         reachableCells.Clear();
         hoveredCoord = null;
@@ -524,10 +765,33 @@ public class PlayerInputController : MonoBehaviour
         commandMode = CommandMode.None;
         isResolvingAction = false;
 
-        selectedUnit = attacker;
+        if (turnManager != null)
+            turnManager.RefreshBattleEndState();
 
-        turnManager.RefreshBattleEndState();
-        actionMenuUI.Refresh(selectedUnit);
+        if (attackerValid && turnManager != null && !turnManager.IsBattleOver)
+        {
+            selectedUnit = attacker;
+            playerCard?.Refresh();
+            actionMenuUI?.Refresh(selectedUnit);
+        }
+        else
+        {
+            selectedUnit = null;
+            actionMenuUI?.Hide();
+        }
+    }
+
+    private void CancelAttackResolution()
+    {
+        rangedAttackContext = null;
+        board?.ClearHighlights();
+        board?.ClearPath();
+        reachableCells.Clear();
+        hoveredCoord = null;
+        commandMode = CommandMode.None;
+        isResolvingAction = false;
+        selectedUnit = null;
+        actionMenuUI?.Hide();
     }
 
     // --------------------
@@ -535,7 +799,7 @@ public class PlayerInputController : MonoBehaviour
     // --------------------
     private void TryEndPlayerTurn()
     {
-        if (!turnManager.IsPlayerTurn())
+        if (turnManager == null || turnManager.IsBattleOver || !turnManager.IsPlayerTurn())
             return;
 
         if (isResolvingAction)

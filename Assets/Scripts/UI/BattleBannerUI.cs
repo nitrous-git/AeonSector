@@ -26,6 +26,11 @@ public class BattleBannerUI : MonoBehaviour
 
     public float TotalDuration => fadeInDuration + holdDuration + fadeOutDuration;
 
+    public float GetDuration(BattleBannerType type) => fadeInDuration + GetHoldDuration(type) + fadeOutDuration;
+
+    private float GetHoldDuration(BattleBannerType type) => holdDuration *
+        ((type == BattleBannerType.Victory || type == BattleBannerType.Defeat) ? 2f : 1f);
+
     private void Awake()
     {
         HideAllInstant();
@@ -35,11 +40,6 @@ public class BattleBannerUI : MonoBehaviour
     {
         CanvasGroup banner = GetBanner(bannerType);
 
-        if (bannerType == BattleBannerType.Victory || bannerType == BattleBannerType.Defeat)
-        {
-            holdDuration *= 2.0f;
-        }
-
         if (banner == null)
             return;
 
@@ -48,7 +48,7 @@ public class BattleBannerUI : MonoBehaviour
 
         HideAllInstant();
 
-        currentRoutine = StartCoroutine(PlayBannerRoutine(banner));
+        currentRoutine = StartCoroutine(PlayBannerRoutine(banner, GetHoldDuration(bannerType)));
     }
 
     private CanvasGroup GetBanner(BattleBannerType bannerType)
@@ -72,14 +72,14 @@ public class BattleBannerUI : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayBannerRoutine(CanvasGroup banner)
+    private IEnumerator PlayBannerRoutine(CanvasGroup banner, float hold)
     {
         banner.gameObject.SetActive(true);
         banner.interactable = false;
         banner.blocksRaycasts = false;
 
         yield return Fade(banner, 0f, 1f, fadeInDuration);
-        yield return new WaitForSeconds(holdDuration);
+        yield return new WaitForSeconds(hold);
         yield return Fade(banner, 1f, 0f, fadeOutDuration);
 
         HideInstant(banner);

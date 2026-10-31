@@ -29,6 +29,7 @@ public class TilemapBoardAdapter : MonoBehaviour
     public int Width => bounds.size.x;
     public int Height => bounds.size.y;
     public BoundsInt Bounds => bounds;
+    public bool IsReady => baseWalkable != null && occupancy != null && Width > 0 && Height > 0;
 
     private void Awake()
     {
@@ -39,6 +40,9 @@ public class TilemapBoardAdapter : MonoBehaviour
     {
         if (groundTilemap == null)
         {
+            bounds = default;
+            baseWalkable = null;
+            occupancy = null;
             Debug.LogError("TilemapBoardAdapter: Ground Tilemap is not assigned");
             return;
         }
@@ -81,13 +85,13 @@ public class TilemapBoardAdapter : MonoBehaviour
 
     public bool IsOccupied(GridCoord coord)
     {
-        if (!IsInside(coord)) { return false; }
+        if (!IsReady || !IsInside(coord)) { return false; }
         return occupancy[coord.y, coord.x] != null;
     }
 
     public CombatUnit GetUnitAt(GridCoord coord)
     {
-        if (!IsInside(coord)) 
+        if (!IsReady || !IsInside(coord))
         { 
             return null; 
         }
@@ -97,13 +101,13 @@ public class TilemapBoardAdapter : MonoBehaviour
     // Does this cell have valid ground, no blocking tile, and no unit currently on it?
     public bool IsWalkable(GridCoord coord)
     {
-        return IsInside(coord) && baseWalkable[coord.y, coord.x] && occupancy[coord.y, coord.x] == null;
+        return IsReady && IsInside(coord) && baseWalkable[coord.y, coord.x] && occupancy[coord.y, coord.x] == null;
     }
 
     // Does this cell have valid ground and no blocking tile?
     public bool HasBaseWalkable(GridCoord coord)
     {
-        if (!IsInside(coord)) 
+        if (!IsReady || !IsInside(coord))
         { 
             return false; 
         }
@@ -116,7 +120,13 @@ public class TilemapBoardAdapter : MonoBehaviour
 
     public bool TryPlaceUnit(CombatUnit unit, GridCoord coord)
     {
-        if (unit == null || !IsWalkable(coord)) 
+        if (unit == null || !IsReady || !IsWalkable(coord))
+        {
+            return false;
+        }
+
+        GridCoord currentCoord = unit.GridPosition;
+        if (IsInside(currentCoord) && occupancy[currentCoord.y, currentCoord.x] == unit)
         {
             return false;
         }
@@ -129,7 +139,7 @@ public class TilemapBoardAdapter : MonoBehaviour
 
     public bool TryMoveUnit(CombatUnit unit, GridCoord targetCoord)
     {
-        if (unit == null || !unit.IsAlive) { return false; }
+        if (unit == null || !unit.IsAlive || !IsReady) { return false; }
         if (!IsWalkable(targetCoord)) { return false; }
 
         GridCoord from = unit.GridPosition;
@@ -146,7 +156,7 @@ public class TilemapBoardAdapter : MonoBehaviour
 
     public void RemoveUnit(CombatUnit unit)
     {
-        if (unit == null) { return; }
+        if (unit == null || !IsReady) { return; }
 
         GridCoord coord = unit.GridPosition;
 

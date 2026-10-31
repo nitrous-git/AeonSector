@@ -14,8 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: Mech Ranged
   UnitType: 1
+  UnitIcon: {fileID: 0}
   MaxHP: 10
   MoveRange: 2
-  AttackDamage: 3
-  MinAttackRange: 1
-  MaxAttackRange: 4
+  MeleeAttackDamage: 4
+  MeleeMinAttackRange: 1
+  MeleeMaxAttackRange: 1
+  RangedAttackDamage: 3
+  RangedMinAttackRange: 1
+  RangedMaxAttackRange: 4
+  DisplayMaxHP: 0
+  DisplayMaxEN: 0
+  AreaAttackDamage: 2
+  AreaAttackMinRange: 2
+  AreaAttackMaxRange: 5

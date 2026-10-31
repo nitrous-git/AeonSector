@@ -21,6 +21,9 @@ public class UnitVisualAnimator : MonoBehaviour
         if (ownerUnit == null)
             ownerUnit = GetComponentInParent<CombatUnit>();
 
+        if (playerInputController == null)
+            playerInputController = FindFirstObjectByType<PlayerInputController>();
+
         baseScaleX = Mathf.Abs(visualRoot.localScale.x);
     }
 
@@ -68,12 +71,14 @@ public class UnitVisualAnimator : MonoBehaviour
 
     public void AnimEvent_FireRangedProjectile()
     {
-        playerInputController.AnimEvent_FireRangedProjectile(ownerUnit);
+        if (playerInputController != null && ownerUnit != null)
+            playerInputController.AnimEvent_FireRangedProjectile(ownerUnit);
     }
 
     public void AnimEvent_RangedAttackFinished()
     {
-        playerInputController.AnimEvent_RangedAttackFinished(ownerUnit);
+        if (playerInputController != null && ownerUnit != null)
+            playerInputController.AnimEvent_RangedAttackFinished(ownerUnit);
     }
 
     // Helpers 

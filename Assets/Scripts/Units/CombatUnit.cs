@@ -24,6 +24,7 @@ public class CombatUnit : MonoBehaviour
     public bool IsTurnExhausted => !CanMove && !CanAttack;
 
     private Slider healthBar;
+    private bool deathProcessed;
 
     private void Awake()
     {
@@ -32,9 +33,12 @@ public class CombatUnit : MonoBehaviour
             visualAnimator = GetComponentInChildren<UnitVisualAnimator>();
         }
 
-        healthBar = transform.GetChild(1).GetComponentInChildren<Slider>();
+        if (transform.childCount > 1)
+            healthBar = transform.GetChild(1).GetComponentInChildren<Slider>();
+
         Debug.Log("Health Bar is : " + healthBar);
-        healthBar.maxValue = stats.MaxHP;
+        if (healthBar != null && stats != null)
+            healthBar.maxValue = stats.MaxHP;
     }
 
     public void Initialize(Faction ownerFaction, GridCoord startCoord)
@@ -52,6 +56,7 @@ public class CombatUnit : MonoBehaviour
         CurrentHP = stats.MaxHP;
         HasMoved = false;
         HasAttacked = false;
+        deathProcessed = false;
 
         SetFacing(startingFacing);
         PlayIdle();
@@ -89,13 +94,17 @@ public class CombatUnit : MonoBehaviour
         }
 
         CurrentHP = Mathf.Max(0, CurrentHP - amount);
-        healthBar.value = CurrentHP;
+        if (healthBar != null)
+            healthBar.value = CurrentHP;
 
         if (CurrentHP == 0)
         {
             OnDeath();
             return true;
         }
+
+        if (OwnerFaction == null)
+            return false;
 
         switch (OwnerFaction.Type)
         {
@@ -108,6 +117,10 @@ public class CombatUnit : MonoBehaviour
 
     private void OnDeath()
     {
+        if (deathProcessed)
+            return;
+
+        deathProcessed = true;
         HasMoved = true;
         HasAttacked = true;
         Debug.Log($"{name} has been destroyed.");

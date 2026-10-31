@@ -70,14 +70,17 @@ Relevant prefab families: `Assets/Prefab/PlayerMech/` (hybrid, melee, range), `A
 
 These are **source-observed risks**, to be runtime-verified and fixed in narrow phases:
 
-**P0.1 — Board registration and rejected movement**
-- `TurnManager.RegisterSceneUnits` calls `TryPlaceUnit` but continues to `Initialize`, register and reposition a unit when placement fails. This may create a faction-roster/occupancy mismatch. Treat duplicate/spawn-on-blocked/out-of-bounds cases explicitly.
-- `PlayerInputController.ResolveUnitMove` logs failed `board.TryMoveUnit` but continues visual movement and `MarkMoved`; the `UnitMover` reference is not null-guarded. Never animate or consume movement after a rejected board reservation.
+**P0.1 — Board registration and rejected movement (stabilized 2026-10-31)**
+- `TurnManager.RegisterSceneUnits` now requires a ready board, valid unit stats, an in-bounds/base-walkable/unoccupied cell, and successful `TryPlaceUnit` before initialization or faction registration. Duplicate faction/roster membership is rejected.
+- `PlayerInputController.CommitMove`/`ResolveUnitMove` now revalidate reachability and A* path data, require an idle `UnitMover`, reserve occupancy before animation, and clear/restore state on rejection or incomplete animation. Failed reservations do not mark the unit moved.
 
 **P0.2 — Attack sequencing and battle-end behavior**
-- Player ranged attack uses animation-event callbacks and a projectile coroutine. Investigate whether `AnimEvent_RangedAttackFinished` can finish an attack before projectile damage resolves, as well as absent-animation-event cases.
+- Player ranged attacks now use a one-shot resolution context: repeated fire callbacks are ignored, damage is applied after the projectile routine resolves, and animation/projectile completion are both required before input is restored. A bounded fallback covers missing animation callbacks and missing projectile dependencies.
+- `UnitVisualAnimator` resolves the scene `PlayerInputController` when its prefab reference is unset, which is required for the existing ranged animation events to reach gameplay code.
+- Melee, artillery and unit removal paths guard invalid/dead targets, remove dead units from board occupancy and faction rosters once, and stop applying pending projectile damage after battle termination.
+- `TurnManager` exposes an idempotent battle-ended state; victory/defeat transitions and delayed enemy-turn startup reject post-battle turn changes.
 - `TurnManager.CheckBattleEnd` invokes victory sound on defeat and defeat sound on victory; `ShowEndBattleUIAfterBanner` also plays victory sound unconditionally.
-- Review turn-state changes around victory/defeat and pending coroutines to avoid post-battle commands.
+- The sound-routing mismatch remains outside this checkpoint; P0.2 validation focused on combat state and resolution ordering.
 
 **P0.3 — Unit definitions and scene robustness**
 - `SO_Mech_Melee.asset` and `SO_Mech_Range.asset` still serialize older `AttackDamage`/`MinAttackRange`/`MaxAttackRange` fields instead of the current `Melee*`/`Ranged*` schema. Confirm whether they are active before editing; migrate safely with tests and no stat loss.
@@ -105,6 +108,25 @@ Individual Codex implementation briefs are delivered in the **ChatGPT desktop co
 
 ## Development checkpoint tracking
 
+### P0.3 implementation and content readiness (2026-10-31)
+
+- Result audio routing is corrected in TurnManager; result-screen display no longer replays victory audio. Return navigation uses button-click audio. Audible verification remains Not tested.
+- Banner durations use an immutable per-banner hold multiplier. A live Play Mode repeated-victory probe returned 4.7 seconds before and after repeated Show calls, with the turn duration unchanged at 2.9 seconds. Result-screen waiting uses the relevant banner duration.
+- Turn display now shows the actual current turn without a fictitious/clamped 10-turn maximum. This does not impose or remove a gameplay turn limit.
+- Unity confirmed MainMenu, BattleTestScene01, BattleTestScene04 and BattleTestScene06 are enabled. Serialized routing is MainMenu→01→04→06; battle No buttons route to MainMenu. Scene06 Yes routes to itself. The buttons use Yes/No graphics; intentional replay versus accidental progression remains ambiguous and was retained pending owner direction. Actual button-driven scene loading remains Not tested in P0.3.
+- Legacy melee/ranged assets were migrated through Unity: both retain HP 10 and move 2; melee primary damage/range is 3/1–1, ranged primary damage/range is 3/1–4. Unspecified secondary stats retain existing schema defaults. Their prefab references remain intact; no direct scene references to these stats GUIDs were found. Hybrid and enemy stats were unchanged.
+- P0.3 compilation passed and final Console reported zero errors/warnings. Full combat regression and automated tests were not rerun; prior P0.1/P0.2 observations remain historical evidence, not P0.3 passes. Stabilization acceptance is therefore still pending.
+
+### Adding unit content
+
+1. Create a UnitStats asset; configure identity/icon, HP/move and the supported attack damage/ranges. Display HP/EN must be configured deliberately; they are presentation values, not resources.
+2. Duplicate a compatible prefab, assign its stats, CombatUnit, UnitMover, visual animator and health slider. Preserve animator state names and front/back directional clips; ranged clips require the existing callback receiver. Test both facing families.
+3. Place it on a free walkable cell and add it once to the appropriate TurnManager scene roster. Initialization reserves occupancy before faction registration.
+4. Verify selection, card/bar, movement, attack and death in Play Mode. Existing player melee/ranged logic is shared across definitions.
+
+Content expansion limitations for P1: UnitType currently mixes identity with behavior selection; EnemyTurnController specifically treats InsectArtillery as area AI and all other enemies as melee. New ranged/hybrid enemy AI needs an explicit behavior-selection extension. Weapon/loadout assets and specialized abilities do not exist. Player attack availability is not a capability system: merely naming a unit melee/ranged does not disable its other command. Do not infer new balance or capabilities from enum names. Health-bar discovery still depends on prefab hierarchy, so validate it when authoring new prefabs.
+
 - **2026-10-31 GitHub source audit:** complete; no Editor Play Mode validation in this audit.
 - **Unity bridge:** previous isolated scene/prefab/material integration test reported successful source and Editor mutations and compilation; Play Mode not tested.
-- **Current stabilization backlog:** start with P0.1 board registration and rejected-movement invariants; no runtime results recorded. The active task itself is supplied separately in the desktop conversation.
+- **2026-10-31 P0.1 stabilization:** compiled cleanly and smoke-tested in Play Mode on BattleTestScene01 (1 player/3 enemies), BattleTestScene04 (2/6), and BattleTestScene06 (2/6). Registration samples matched board occupancy; valid movement, blocked movement, enemy turn handoff, melee resolution, and victory transition were exercised. No project-owned automated tests were available.
+- **2026-10-31 P0.2 stabilization:** Unity compiled with zero Console errors. Live AnimationClip inspection confirmed three existing ranged fire events plus one finish event per ranged clip; the hybrid prefab had an unset `UnitVisualAnimator.playerInputController`. Play Mode probes verified one ranged damage application with control restored after resolution, enemy melee damage, artillery projectile staggering/cleanup, and idempotent victory/defeat turn guards in BattleTestScene01/04/06. Automated regression tests remain unavailable.

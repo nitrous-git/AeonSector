@@ -14,8 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: Mech Melee
   UnitType: 0
+  UnitIcon: {fileID: 0}
   MaxHP: 10
   MoveRange: 2
-  AttackDamage: 3
-  MinAttackRange: 1
-  MaxAttackRange: 1
+  MeleeAttackDamage: 3
+  MeleeMinAttackRange: 1
+  MeleeMaxAttackRange: 1
+  RangedAttackDamage: 2
+  RangedMinAttackRange: 2
+  RangedMaxAttackRange: 5
+  DisplayMaxHP: 0
+  DisplayMaxEN: 0
+  AreaAttackDamage: 2
+  AreaAttackMinRange: 2
+  AreaAttackMaxRange: 5

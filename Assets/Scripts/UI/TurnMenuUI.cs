@@ -8,7 +8,7 @@ public class TurnMenuUI : MonoBehaviour
 
     public void UpdateTurnText(int currentTurnText, int maxTurnText)
     {
-        currentTurnText = Math.Min(currentTurnText, maxTurnText);
-        turnText.text = $"{currentTurnText:00}/{maxTurnText:00}";
+        if (turnText != null)
+            turnText.text = $"{currentTurnText:00}";
     }
 }

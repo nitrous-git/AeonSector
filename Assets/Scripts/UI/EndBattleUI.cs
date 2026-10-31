@@ -42,7 +42,8 @@ public class EndBattleUI : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        resultImage.sprite = (stats.result == BattleState.Victory) ? victoryStamp : defeatStamp;
+        if (resultImage != null)
+            resultImage.sprite = (stats.result == BattleState.Victory) ? victoryStamp : defeatStamp;
 
         if (timeText != null)
         {
@@ -93,7 +94,7 @@ public class EndBattleUI : MonoBehaviour
         // Go back to MainMenu or Replay 
         //Hide();
 
-        SFXManager.Defeat();
+        SFXManager.ButtonClick();
 
         SceneManager.LoadScene(noButtonSceneFlow);
     }

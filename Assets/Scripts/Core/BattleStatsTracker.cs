@@ -13,13 +13,13 @@ public class BattleStatsTracker : MonoBehaviour
     {
         battleStartTime = Time.time;
         playerTurnCount = 0;
-        turnMenuUI.UpdateTurnText(playerTurnCount, 10);
+        turnMenuUI?.UpdateTurnText(playerTurnCount, 10);
     }
 
     public void RegisterPlayerTurnStarted()
     {
         playerTurnCount++;
-        turnMenuUI.UpdateTurnText(playerTurnCount, 10);
+        turnMenuUI?.UpdateTurnText(playerTurnCount, 10);
     }
 
     public BattleEndStats BuildEndStats(BattleState result, Faction playerFaction)

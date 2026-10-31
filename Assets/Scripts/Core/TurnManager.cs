@@ -24,20 +24,37 @@ public class TurnManager : MonoBehaviour
     public Faction EnemyFaction { get; private set; }
     public Faction CurrentFaction { get; private set; }
     public BattleState CurrentBattleState { get; private set; } = BattleState.None;
+    public bool IsBattleOver => battleEnded
+        || CurrentBattleState == BattleState.Victory
+        || CurrentBattleState == BattleState.Defeat;
 
     private bool battleEnded;
+    private bool battleInitialized;
     private Coroutine endBattleRoutine;
 
     private void Start()
     {
-        InitializeBattle();
+        if (!InitializeBattle())
+        {
+            return;
+        }
+
         StartPlayerTurn();
     }
-    private void InitializeBattle()
+    private bool InitializeBattle()
     {
-        if (board == null) {
+        battleInitialized = false;
+
+        if (board == null)
+        {
             Debug.LogError("TurnManager requires a TilemapBoardAdapter reference");
-            return;
+            return false;
+        }
+
+        if (!board.IsReady)
+        {
+            Debug.LogError("TurnManager cannot initialize battle because the tactical board is not ready.");
+            return false;
         }
 
         PlayerFaction = new Faction(FactionType.Player);
@@ -47,17 +64,49 @@ public class TurnManager : MonoBehaviour
         RegisterSceneUnits(enemyUnits, EnemyFaction);
 
         battleStatsTracker?.BeginBattle();
+        battleInitialized = true;
 
         Debug.Log("Battle initialized");
         //Debug.Log($"Player Units: {PlayerFaction.UnitManager.GetLivingUnits().Count()}");
         //Debug.Log($"Enemy Units: {EnemyFaction.UnitManager.GetLivingUnits().Count()}");
+        return true;
     }
 
     private void RegisterSceneUnits(List<CombatUnit> sceneUnits, Faction faction)
     {
+        if (board == null || !board.IsReady)
+        {
+            Debug.LogError("Cannot register scene units without a ready tactical board.");
+            return;
+        }
+
+        if (sceneUnits == null || faction == null)
+        {
+            Debug.LogError("Cannot register scene units without a unit list and faction.");
+            return;
+        }
+
         foreach (CombatUnit unit in sceneUnits)
         {
-            if (unit == null){ continue; }
+            if (unit == null)
+            {
+                Debug.LogWarning($"Skipping null unit in the {faction.Type} scene roster.");
+                continue;
+            }
+
+            if (unit.Stats == null)
+            {
+                Debug.LogError($"Skipping unit '{unit.name}' because it has no UnitStats configuration.");
+                continue;
+            }
+
+            if (unit.OwnerFaction != null
+                || PlayerFaction?.UnitManager.Units.Contains(unit) == true
+                || EnemyFaction?.UnitManager.Units.Contains(unit) == true)
+            {
+                Debug.LogError($"Skipping unit '{unit.name}' because it is already assigned to a faction or roster.");
+                continue;
+            }
 
             GridCoord sceneCoord = board.ConvertWorldToGrid(unit.transform.position);
 
@@ -73,13 +122,19 @@ public class TurnManager : MonoBehaviour
                 continue;
             }
 
+            if (!board.IsWalkable(sceneCoord))
+            {
+                Debug.LogError($"Unit '{unit.name}' was placed on an occupied cell {sceneCoord}.");
+                continue;
+            }
+
             bool placed = board.TryPlaceUnit(unit, sceneCoord);
             if (!placed)
             {
                 Debug.LogError($"Failed to place unit '{unit.name}' at inferred cell {sceneCoord}. " +$"Cell may already be occupied.");
+                continue;
             }
 
-            // Register Unit only if placement succeed 
             unit.Initialize(faction, sceneCoord);
             faction.RegisterUnit(unit);
 
@@ -95,7 +150,13 @@ public class TurnManager : MonoBehaviour
 
     public void StartPlayerTurn()
     {
-        if (CheckBattleEnd()) { return; }
+        if (IsBattleOver || !battleInitialized || PlayerFaction == null || EnemyFaction == null)
+        {
+            Debug.LogWarning("Cannot start the player turn because battle initialization did not complete.");
+            return;
+        }
+
+        if (IsBattleOver || !battleInitialized || EnemyFaction == null || CheckBattleEnd()) { return; }
 
         battleStatsTracker?.RegisterPlayerTurnStarted();
 
@@ -142,6 +203,9 @@ public class TurnManager : MonoBehaviour
         if (battleBanner != null)
             yield return new WaitForSeconds(battleBanner.TotalDuration);
 
+        if (IsBattleOver || CurrentFaction != EnemyFaction)
+            yield break;
+
         // Enemy AI actions starts here
         CurrentFaction.BeginTurn();
         CurrentBattleState = BattleState.EnemyTurn;
@@ -160,7 +224,7 @@ public class TurnManager : MonoBehaviour
 
     public void EndCurrentTurn()
     {
-        if (CurrentBattleState == BattleState.Victory || CurrentBattleState == BattleState.Defeat) {
+        if (IsBattleOver) {
             return;
         }
 
@@ -174,12 +238,12 @@ public class TurnManager : MonoBehaviour
 
     public bool IsPlayerTurn()
     {
-        return CurrentFaction == PlayerFaction;
+        return !IsBattleOver && CurrentFaction == PlayerFaction;
     }
 
     public bool IsEnemyTurn()
     {
-        return CurrentFaction == EnemyFaction;
+        return !IsBattleOver && CurrentFaction == EnemyFaction;
     }
 
     // ------------------------------
@@ -188,6 +252,11 @@ public class TurnManager : MonoBehaviour
 
     private bool CheckBattleEnd()
     {
+        if (!battleInitialized || PlayerFaction == null || EnemyFaction == null)
+        {
+            return true;
+        }
+
         if (battleEnded)
         {
             return true;
@@ -197,7 +266,7 @@ public class TurnManager : MonoBehaviour
         bool enemyAlive = EnemyFaction.HasLivingUnits();
 
         if (!playerAlive) {
-            SFXManager.Victory();
+            SFXManager.Defeat();
             EndBattle(BattleState.Defeat, BattleBannerType.Defeat);
             //battleBanner?.Show(BattleBannerType.Defeat);
             //CurrentBattleState = BattleState.Defeat;
@@ -206,7 +275,7 @@ public class TurnManager : MonoBehaviour
         }
 
         if (!enemyAlive) {
-            SFXManager.Defeat();
+            SFXManager.Victory();
             EndBattle(BattleState.Victory, BattleBannerType.Victory);
             //battleBanner?.Show(BattleBannerType.Victory);
             //CurrentBattleState = BattleState.Victory;
@@ -219,6 +288,9 @@ public class TurnManager : MonoBehaviour
 
     private void EndBattle(BattleState result, BattleBannerType bannerType)
     {
+        if (battleEnded)
+            return;
+
         battleEnded = true;
         CurrentBattleState = result;
 
@@ -239,10 +311,11 @@ public class TurnManager : MonoBehaviour
     {
         if (battleBanner != null)
         {
-            yield return new WaitForSeconds(battleBanner.TotalDuration);
+            yield return new WaitForSeconds(battleBanner.GetDuration(bannerType));
         }
 
-        SFXManager.Victory();
+        if (battleStatsTracker == null)
+            yield break;
 
         BattleEndStats stats = battleStatsTracker.BuildEndStats(result, PlayerFaction);
         endBattleUI?.Show(stats);
@@ -258,15 +331,24 @@ public class TurnManager : MonoBehaviour
         if (unit == null)
             return;
 
-        board.RemoveUnit(unit);
+        bool wasRegistered = unit.OwnerFaction?.UnitManager?.Units.Contains(unit) == true;
+        if (!wasRegistered && !unit.gameObject.activeSelf)
+            return;
+
+        board?.RemoveUnit(unit);
 
         if (unit.OwnerFaction != null)
         {
             unit.OwnerFaction.UnitManager.Remove(unit);
         }
 
-        unit.gameObject.SetActive(false);
-        Destroy(unit.gameObject);
+        if (unit.gameObject != null)
+        {
+            unit.gameObject.SetActive(false);
+            Destroy(unit.gameObject);
+        }
+
+        RefreshBattleEndState();
     }
 
     // -----------------------------------------

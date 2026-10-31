@@ -35,7 +35,7 @@ public class EnemyTurnController : MonoBehaviour
 
     public void BeginEnemyTurn()
     {
-        if (IsRunning)
+        if (IsRunning || turnManager == null || turnManager.IsBattleOver || !turnManager.IsEnemyTurn())
         {
             return;
         }
@@ -55,6 +55,12 @@ public class EnemyTurnController : MonoBehaviour
 
         yield return new WaitForSeconds(turnStartDelay);
 
+        if (turnManager.IsBattleOver || !turnManager.IsEnemyTurn())
+        {
+            IsRunning = false;
+            yield break;
+        }
+
         List<CombatUnit> enemies = turnManager.EnemyFaction.UnitManager.GetLivingUnits().ToList();
 
         foreach (CombatUnit enemy in enemies)
@@ -66,7 +72,7 @@ public class EnemyTurnController : MonoBehaviour
 
             yield return ResolveEnemyUnit(enemy);
 
-            if (turnManager.RefreshBattleEndState())
+            if (turnManager.IsBattleOver || turnManager.RefreshBattleEndState())
             {
                 board.ClearHighlights();
                 board.ClearPath();
@@ -77,22 +83,26 @@ public class EnemyTurnController : MonoBehaviour
             yield return new WaitForSeconds(unitDelay);
         }
 
-        enemyCard.Hide();
-        playerCard.Hide();
+        enemyCard?.Hide();
+        playerCard?.Hide();
 
         board.ClearHighlights();
         board.ClearPath();
 
         IsRunning = false;
 
-        turnManager.EndCurrentTurn();
+        if (!turnManager.IsBattleOver)
+            turnManager.EndCurrentTurn();
     }
 
     private IEnumerator ResolveEnemyUnit(CombatUnit enemy)
     {
+        if (turnManager.IsBattleOver || enemy == null || !enemy.IsAlive)
+            yield break;
+
         Debug.Log($"Enemy AI resolving unit: {enemy.name}");
 
-        enemyCard.Show(enemy);
+        enemyCard?.Show(enemy);
 
         bool isAreaEnemy = enemy.Stats != null && enemy.Stats.UnitType == UnitType.InsectArtillery;
 
@@ -103,15 +113,15 @@ public class EnemyTurnController : MonoBehaviour
         {
             yield return TryAreaAttack(enemy);
 
-            enemyCard.Refresh();
-            playerCard.Refresh();
+            enemyCard?.Refresh();
+            playerCard?.Refresh();
             yield break;
         }
 
         if (enemy.CanMove)
         {
             yield return TryMoveTowardPlayer(enemy);
-            enemyCard.Refresh();
+            enemyCard?.Refresh();
             //playerCard.Refresh();
 
             if (turnManager.RefreshBattleEndState())
@@ -136,8 +146,8 @@ public class EnemyTurnController : MonoBehaviour
                 yield return TryMeleeAttack(enemy);
             }
 
-            enemyCard.Refresh();
-            playerCard.Refresh();
+            enemyCard?.Refresh();
+            playerCard?.Refresh();
         }
     }
 
@@ -155,6 +165,12 @@ public class EnemyTurnController : MonoBehaviour
         board.ShowSelected(enemy.GridPosition);
 
         yield return new WaitForSeconds(previewDelay);
+
+        if (turnManager.IsBattleOver || enemy == null || !enemy.IsAlive)
+        {
+            board.ClearHighlights();
+            yield break;
+        }
 
         List<GridCoord> path = FindBestPathTowardAnyPlayer(enemy, reachableCells);
 
@@ -291,6 +307,12 @@ public class EnemyTurnController : MonoBehaviour
 
         yield return new WaitForSeconds(previewDelay);
 
+        if (turnManager.IsBattleOver || enemy == null || !enemy.IsAlive)
+        {
+            board.ClearHighlights();
+            yield break;
+        }
+
         CombatUnit target = FindBestMeleeTarget(enemy, attackCells);
 
         if (target == null)
@@ -308,7 +330,7 @@ public class EnemyTurnController : MonoBehaviour
         //}
 
         Debug.Log("Show player card for : " + target.ToString());
-        playerCard.Show(target);
+        playerCard?.Show(target);
 
         enemy.FaceTowards(target.GridPosition);
         enemy.PlayAttack();
@@ -319,23 +341,34 @@ public class EnemyTurnController : MonoBehaviour
 
         yield return new WaitForSeconds(attackDelay);
 
+        if (turnManager.IsBattleOver || enemy == null || !enemy.IsAlive || target == null || !target.IsAlive)
+        {
+            if (enemy != null && enemy.IsAlive && !turnManager.IsBattleOver)
+                enemy.MarkAttacked();
+            enemy?.PlayIdle();
+            board.ClearHighlights();
+            board.ClearPath();
+            yield break;
+        }
+
         int damage = enemy.Stats.GetDamageForCommand(CommandMode.MeleeAttack);
 
         Debug.Log($"{enemy.name} melee attacks {target.name} for {damage} damage.");
 
         bool targetDied = target.TakeDamage(damage);
 
-        playerCard.Refresh();
-        enemyCard.Refresh();
-
-        enemy.MarkAttacked();
-
         if (targetDied)
         {
             turnManager.RemoveUnitFromBattle(target);
         }
 
-        enemy.PlayIdle();
+        if (!turnManager.IsBattleOver && enemy != null && enemy.IsAlive)
+        {
+            enemyCard?.Refresh();
+            playerCard?.Refresh();
+            enemy.MarkAttacked();
+            enemy.PlayIdle();
+        }
 
         board.ClearHighlights();
         board.ClearPath();
@@ -401,6 +434,12 @@ public class EnemyTurnController : MonoBehaviour
 
         yield return new WaitForSeconds(previewDelay);
 
+        if (turnManager.IsBattleOver || enemy == null || !enemy.IsAlive)
+        {
+            board.ClearHighlights();
+            yield break;
+        }
+
         List<CombatUnit> targets = FindAreaAttackTargets(enemy, attackCells);
 
         if (targets.Count == 0)
@@ -414,7 +453,7 @@ public class EnemyTurnController : MonoBehaviour
 
         if (focusTarget != null)
         {
-            playerCard.Show(focusTarget);
+            playerCard?.Show(focusTarget);
             enemy.FaceTowards(focusTarget.GridPosition);
         }
 
@@ -429,10 +468,20 @@ public class EnemyTurnController : MonoBehaviour
 
         yield return FireAreaProjectilesAndApplyDamage(enemy, orderedCells, damage);
 
+        if (turnManager.IsBattleOver)
+        {
+            board.ClearHighlights();
+            board.ClearPath();
+            yield break;
+        }
+
+        if (enemy == null || !enemy.IsAlive)
+            yield break;
+
         enemy.MarkAttacked();
 
-        enemyCard.Refresh();
-        playerCard.Refresh();
+        enemyCard?.Refresh();
+        playerCard?.Refresh();
 
         enemy.PlayIdle();
 
@@ -497,6 +546,9 @@ public class EnemyTurnController : MonoBehaviour
 
         foreach (GridCoord cell in cells)
         {
+            if (turnManager.IsBattleOver || attacker == null || !attacker.IsAlive)
+                break;
+
             Coroutine projectileRoutine = StartCoroutine(FireSingleAreaProjectile(attacker, cell, damage));
 
             activeProjectiles.Add(projectileRoutine);
@@ -504,6 +556,9 @@ public class EnemyTurnController : MonoBehaviour
             if (areaProjectileCellStagger > 0f)
             {
                 yield return new WaitForSeconds(areaProjectileCellStagger);
+
+                if (turnManager.IsBattleOver)
+                    break;
             }
         }
 
@@ -522,6 +577,10 @@ public class EnemyTurnController : MonoBehaviour
         if (areaProjectilePrefab == null)
         {
             yield return new WaitForSeconds(0.05f);
+
+            if (turnManager.IsBattleOver)
+                yield break;
+
             ApplyAreaDamageAtCell(attacker, targetCell, damage);
             yield break;
         }
@@ -541,11 +600,17 @@ public class EnemyTurnController : MonoBehaviour
 
         yield return projectileMover.FlyAndHit(startWorldPosition,targetWorldPosition);
 
+        if (turnManager.IsBattleOver)
+            yield break;
+
         ApplyAreaDamageAtCell(attacker, targetCell, damage);
     }
 
     private void ApplyAreaDamageAtCell(CombatUnit attacker, GridCoord targetCell, int damage)
     {
+        if (turnManager.IsBattleOver || attacker == null || !attacker.IsAlive)
+            return;
+
         CombatUnit unitAtCell = board.GetUnitAt(targetCell);
 
         if (unitAtCell == null)
@@ -563,17 +628,19 @@ public class EnemyTurnController : MonoBehaviour
             return;
         }
 
-        playerCard.Show(unitAtCell);
+        playerCard?.Show(unitAtCell);
 
         bool died = unitAtCell.TakeDamage(damage);
-
-        playerCard.Refresh();
 
         if (died)
         {
             turnManager.RemoveUnitFromBattle(unitAtCell);
         }
 
-        turnManager.RefreshBattleEndState();
+        if (!turnManager.IsBattleOver)
+        {
+            playerCard?.Refresh();
+            turnManager.RefreshBattleEndState();
+        }
     }
 }
