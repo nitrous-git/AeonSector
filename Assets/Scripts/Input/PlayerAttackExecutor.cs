@@ -67,10 +67,12 @@ internal sealed class PlayerAttackExecutor
         if (state.SelectedUnit.OwnerFaction != turnManager.PlayerFaction
             || state.SelectedUnit.Stats == null
             || !state.SelectedUnit.CanAttack
+            || !PlayerCommandState.IsAttackMode(state.Mode)
+            || !state.SelectedUnit.Stats.Supports(state.Mode)
             || !board.IsInside(targetCoord))
             return false;
 
-        if (!state.ReachableCells.Contains(targetCoord))
+        if (!new AttackRangeService().GetAttackRangeCells(board, state.SelectedUnit, state.Mode).Contains(targetCoord))
         {
             SFXManager.InvalidAction();
             Debug.Log("Clicked cell is outside attack range.");
@@ -114,6 +116,8 @@ internal sealed class PlayerAttackExecutor
         if (state.SelectedUnit.OwnerFaction != turnManager.PlayerFaction
             || state.SelectedUnit.Stats == null
             || !state.SelectedUnit.CanAttack
+            || !PlayerCommandState.IsAttackMode(state.Mode)
+            || !state.SelectedUnit.Stats.Supports(state.Mode)
             || !target.IsAlive
             || target.OwnerFaction == state.SelectedUnit.OwnerFaction)
             return;
@@ -136,6 +140,7 @@ internal sealed class PlayerAttackExecutor
             || attacker.Stats == null
             || !attacker.IsAlive
             || !attacker.CanAttack
+            || !attacker.Stats.Supports(state.Mode)
             || !target.IsAlive
             || target.OwnerFaction == attacker.OwnerFaction)
         {
@@ -172,7 +177,7 @@ internal sealed class PlayerAttackExecutor
             yield break;
         }
       
-        ApplyDamage(target, damage);
+        if (attacker.Stats.Supports(state.Mode)) ApplyDamage(target, damage);
 
         FinishAttackResolution(attacker);
     }
@@ -298,7 +303,7 @@ internal sealed class PlayerAttackExecutor
 
     private void ApplyRangedDamage(RangedAttackContext context)
     {
-        if (context == null || context.damageApplied)
+        if (context == null || context.damageApplied || context.attacker == null || !context.attacker.IsAlive || !context.attacker.Stats.Supports(CommandMode.RangedAttack))
             return;
 
         context.damageApplied = true;
@@ -317,10 +322,7 @@ internal sealed class PlayerAttackExecutor
         if (target == null || !target.IsAlive || turnManager == null || turnManager.IsBattleOver)
             return;
 
-        if (target.TakeDamage(damage))
-        {
-            turnManager.RemoveUnitFromBattle(target);
-        }
+        BattleDamage.Apply(turnManager, target, damage);
 
         ui.RefreshAfterDamage(target);
         turnManager.RefreshBattleEndState();

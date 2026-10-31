@@ -15,6 +15,9 @@ MonoBehaviour:
   UnitName: Insect Drone
   UnitType: 2
   UnitIcon: {fileID: -323900, guid: bd66b61c62228ea4cb1dae5645e9053f, type: 3}
+  SupportedAttacks: 1
+  EnemyRole: 1
+  RangedProjectilePrefab: {fileID: 0}
   MaxHP: 8
   MoveRange: 3
   MeleeAttackDamage: 3
@@ -25,3 +28,6 @@ MonoBehaviour:
   RangedMaxAttackRange: 5
   DisplayMaxHP: 120
   DisplayMaxEN: 60
+  AreaAttackDamage: 2
+  AreaAttackMinRange: 2
+  AreaAttackMaxRange: 5

@@ -20,6 +20,8 @@ public class EnemyTurnController : MonoBehaviour
     [SerializeField] private UnitCardUI enemyCard;
     [SerializeField] private UnitCardUI playerCard;
 
+    [SerializeField] private GameObject rangedProjectilePrefab;
+
     [Header("Area Attack FX")]
     [SerializeField] private GameObject areaProjectilePrefab;
     [SerializeField] private Vector3 areaProjectileFallOffset = new Vector3(0.0f, 8.0f, 0f);
@@ -28,8 +30,10 @@ public class EnemyTurnController : MonoBehaviour
     [SerializeField] private float areaAttackPostDelay = 0.2f;
 
     private readonly ReachableTileService reachableTileService = new();
-    private readonly AStarPathService pathService = new();
+
     private readonly AttackRangeService attackRangeService = new();
+
+    private EnemyTacticalPlanner Planner => new EnemyTacticalPlanner(board, turnManager);
 
     public bool IsRunning { get; private set; }
 
@@ -104,7 +108,20 @@ public class EnemyTurnController : MonoBehaviour
 
         enemyCard?.Show(enemy);
 
-        bool isAreaEnemy = enemy.Stats != null && enemy.Stats.UnitType == UnitType.InsectArtillery;
+        if (enemy.Stats == null) yield break;
+        CommandMode attack = EnemyTacticalPlanner.CommandFor(enemy.Stats.EnemyRole);
+        if (!enemy.Stats.Supports(attack))
+        {
+            Debug.LogWarning($"{enemy.name}: missing/incompatible enemy role configuration.");
+            yield break;
+        }
+        bool isAreaEnemy = attack == CommandMode.AreaAttack;
+        if (attack == CommandMode.RangedAttack && enemy.CanAttack &&
+            Planner.FindBestMeleeTarget(enemy, attackRangeService.GetAttackRangeCells(board, enemy, attack)) != null)
+        {
+            yield return TryRangedAttack(enemy);
+            yield break;
+        }
 
         SFXManager.UnitSelect();
 
@@ -141,10 +158,8 @@ public class EnemyTurnController : MonoBehaviour
             {
                 yield return TryAreaAttack(enemy);
             }
-            else
-            {
-                yield return TryMeleeAttack(enemy);
-            }
+            else if (attack == CommandMode.RangedAttack) yield return TryRangedAttack(enemy);
+            else yield return TryMeleeAttack(enemy);
 
             enemyCard?.Refresh();
             playerCard?.Refresh();
@@ -172,7 +187,7 @@ public class EnemyTurnController : MonoBehaviour
             yield break;
         }
 
-        List<GridCoord> path = FindBestPathTowardAnyPlayer(enemy, reachableCells);
+        List<GridCoord> path = new EnemyTacticalPlanner(board, turnManager).FindPath(enemy, reachableCells);
 
         if (path == null || path.Count <= 1)
         {
@@ -188,6 +203,7 @@ public class EnemyTurnController : MonoBehaviour
 
         yield return new WaitForSeconds(previewDelay);
 
+        if (turnManager.IsBattleOver || !turnManager.IsEnemyTurn() || enemy == null || !enemy.CanMove) yield break;
         GridCoord destination = path[path.Count - 1];
 
         bool moved = board.TryMoveUnit(enemy, destination);
@@ -216,88 +232,13 @@ public class EnemyTurnController : MonoBehaviour
         board.ClearPath();
     }
 
-    private List<GridCoord> FindBestPathTowardAnyPlayer(CombatUnit enemy, HashSet<GridCoord> reachableCells)
-    {
-        List<CombatUnit> players = turnManager.PlayerFaction.UnitManager.GetLivingUnits().ToList();
-
-        if (players.Count == 0)
-        {
-            return null;
-        }
-
-        GridCoord start = enemy.GridPosition;
-
-        List<GridCoord> bestPath = null;
-        int bestDistanceToPlayer = int.MaxValue;
-        int bestPathLength = int.MaxValue;
-
-        foreach (GridCoord candidate in reachableCells)
-        {
-            bool isCurrentCell = candidate.x == start.x && candidate.y == start.y;
-
-            int distanceToClosestPlayer = GetDistanceToClosestPlayer(candidate, players);
-
-            // If already adjacent, do not move away.
-            if (isCurrentCell && distanceToClosestPlayer <= 1)
-            {
-                return new List<GridCoord> { start };
-            }
-
-            if (isCurrentCell)
-            {
-                continue;
-            }
-
-            List<GridCoord> path = pathService.FindPath(board, start, candidate);
-
-            if (path == null || path.Count <= 1)
-            {
-                continue;
-            }
-
-            bool betterDistance = distanceToClosestPlayer < bestDistanceToPlayer;
-
-            bool sameDistanceButShorterPath = distanceToClosestPlayer == bestDistanceToPlayer && path.Count < bestPathLength;
-
-            if (betterDistance || sameDistanceButShorterPath)
-            {
-                bestDistanceToPlayer = distanceToClosestPlayer;
-                bestPathLength = path.Count;
-                bestPath = path;
-            }
-        }
-
-        return bestPath;
-    }
-
-    private int GetDistanceToClosestPlayer(GridCoord from, List<CombatUnit> players)
-    {
-        int best = int.MaxValue;
-
-        foreach (CombatUnit player in players)
-        {
-            if (player == null || !player.IsAlive)
-            {
-                continue;
-            }
-
-            int distance = GridUtils.ManhattanDistance(from, player.GridPosition);
-
-            if (distance < best)
-            {
-                best = distance;
-            }
-        }
-
-        return best;
-    }
-
     // --------------------------------------------------
     // Attack
     // --------------------------------------------------
 
     private IEnumerator TryMeleeAttack(CombatUnit enemy)
     {
+        if (!CanExecute(enemy, CommandMode.MeleeAttack)) yield break;
         HashSet<GridCoord> attackCells = attackRangeService.GetAttackRangeCells(board, enemy, CommandMode.MeleeAttack);
 
         board.ClearHighlights();
@@ -313,7 +254,7 @@ public class EnemyTurnController : MonoBehaviour
             yield break;
         }
 
-        CombatUnit target = FindBestMeleeTarget(enemy, attackCells);
+        CombatUnit target = Planner.FindBestMeleeTarget(enemy, attackCells);
 
         if (target == null)
         {
@@ -355,12 +296,7 @@ public class EnemyTurnController : MonoBehaviour
 
         Debug.Log($"{enemy.name} melee attacks {target.name} for {damage} damage.");
 
-        bool targetDied = target.TakeDamage(damage);
-
-        if (targetDied)
-        {
-            turnManager.RemoveUnitFromBattle(target);
-        }
+        if (CanExecute(enemy, CommandMode.MeleeAttack)) ApplyEnemyDamage(enemy, target, damage);
 
         if (!turnManager.IsBattleOver && enemy != null && enemy.IsAlive)
         {
@@ -376,39 +312,7 @@ public class EnemyTurnController : MonoBehaviour
         turnManager.RefreshBattleEndState();
     }
 
-    private CombatUnit FindBestMeleeTarget(CombatUnit enemy, HashSet<GridCoord> attackCells)
-    {
-        CombatUnit bestTarget = null;
-        int lowestHP = int.MaxValue;
 
-        foreach (GridCoord cell in attackCells)
-        {
-            CombatUnit unitAtCell = board.GetUnitAt(cell);
-
-            if (unitAtCell == null)
-            {
-                continue;
-            }
-
-            if (!unitAtCell.IsAlive)
-            {
-                continue;
-            }
-
-            if (unitAtCell.OwnerFaction == enemy.OwnerFaction)
-            {
-                continue;
-            }
-
-            if (unitAtCell.CurrentHP < lowestHP)
-            {
-                lowestHP = unitAtCell.CurrentHP;
-                bestTarget = unitAtCell;
-            }
-        }
-
-        return bestTarget;
-    }
 
     // --------------------------------------------------
     // Area Attack FX Helpers
@@ -418,13 +322,14 @@ public class EnemyTurnController : MonoBehaviour
     {
         HashSet<GridCoord> attackCells = attackRangeService.GetAttackRangeCells(board, enemy, CommandMode.AreaAttack);
 
-        List<CombatUnit> targets = FindAreaAttackTargets(enemy, attackCells);
+        List<CombatUnit> targets = Planner.FindAreaAttackTargets(enemy, attackCells);
 
         return targets.Count > 0;
     }
 
     private IEnumerator TryAreaAttack(CombatUnit enemy)
     {
+        if (!CanExecute(enemy, CommandMode.AreaAttack)) yield break;
         HashSet<GridCoord> attackCells = attackRangeService.GetAttackRangeCells(board, enemy, CommandMode.AreaAttack);
 
         board.ClearHighlights();
@@ -440,7 +345,7 @@ public class EnemyTurnController : MonoBehaviour
             yield break;
         }
 
-        List<CombatUnit> targets = FindAreaAttackTargets(enemy, attackCells);
+        List<CombatUnit> targets = Planner.FindAreaAttackTargets(enemy, attackCells);
 
         if (targets.Count == 0)
         {
@@ -449,7 +354,7 @@ public class EnemyTurnController : MonoBehaviour
             yield break;
         }
 
-        CombatUnit focusTarget = FindLowestHpTarget(targets);
+        CombatUnit focusTarget = Planner.FindLowestHpTarget(targets);
 
         if (focusTarget != null)
         {
@@ -493,51 +398,9 @@ public class EnemyTurnController : MonoBehaviour
         yield return new WaitForSeconds(areaAttackPostDelay);
     }
 
-    private List<CombatUnit> FindAreaAttackTargets(CombatUnit attacker, HashSet<GridCoord> attackCells)
-    {
-        List<CombatUnit> targets = new List<CombatUnit>();
 
-        foreach (GridCoord cell in attackCells)
-        {
-            CombatUnit unitAtCell = board.GetUnitAt(cell);
 
-            if (unitAtCell == null)
-            {
-                continue;
-            }
 
-            if (!unitAtCell.IsAlive)
-            {
-                continue;
-            }
-
-            if (unitAtCell.OwnerFaction == attacker.OwnerFaction)
-            {
-                continue;
-            }
-
-            targets.Add(unitAtCell);
-        }
-
-        return targets;
-    }
-
-    private CombatUnit FindLowestHpTarget(List<CombatUnit> targets)
-    {
-        CombatUnit bestTarget = null;
-        int bestHp = int.MaxValue;
-
-        foreach (CombatUnit target in targets)
-        {
-            if (target.CurrentHP < bestHp)
-            {
-                bestHp = target.CurrentHP;
-                bestTarget = target;
-            }
-        }
-
-        return bestTarget;
-    }
 
     // projectile rain logic
     private IEnumerator FireAreaProjectilesAndApplyDamage(CombatUnit attacker, IEnumerable<GridCoord> cells, int damage)
@@ -630,17 +493,59 @@ public class EnemyTurnController : MonoBehaviour
 
         playerCard?.Show(unitAtCell);
 
-        bool died = unitAtCell.TakeDamage(damage);
-
-        if (died)
-        {
-            turnManager.RemoveUnitFromBattle(unitAtCell);
-        }
+        if (CanExecute(attacker, CommandMode.AreaAttack)) ApplyEnemyDamage(attacker, unitAtCell, damage);
 
         if (!turnManager.IsBattleOver)
         {
             playerCard?.Refresh();
             turnManager.RefreshBattleEndState();
         }
+    }
+
+    private bool CanExecute(CombatUnit unit, CommandMode mode)
+        => turnManager != null && !turnManager.IsBattleOver && turnManager.IsEnemyTurn()
+        && unit != null && unit.CanAttack && unit.Stats != null && unit.Stats.Supports(mode);
+
+    private void ApplyEnemyDamage(CombatUnit attacker, CombatUnit target, int damage)
+    {
+        if (attacker == null || !attacker.IsAlive || target == null || !target.IsAlive
+            || target.OwnerFaction == attacker.OwnerFaction || turnManager.IsBattleOver) return;
+        BattleDamage.Apply(turnManager, target, damage);
+        turnManager.RefreshBattleEndState();
+    }
+
+    private IEnumerator TryRangedAttack(CombatUnit enemy)
+    {
+        if (!CanExecute(enemy, CommandMode.RangedAttack)) yield break;
+        var cells = attackRangeService.GetAttackRangeCells(board, enemy, CommandMode.RangedAttack);
+        board.ShowAttackCells(cells);
+        yield return new WaitForSeconds(previewDelay);
+        if (!CanExecute(enemy, CommandMode.RangedAttack)) yield break;
+        // Requery after anticipation; do not shoot through a newly occupied/blocking cell.
+        var target = Planner.FindBestMeleeTarget(enemy, attackRangeService.GetAttackRangeCells(board, enemy, CommandMode.RangedAttack));
+        if (target == null) { board.ClearHighlights(); yield break; }
+        enemy.FaceTowards(target.GridPosition);
+        enemy.PlayAttack(); // Enemy animation; never waits for player-only clip events.
+        playerCard?.Show(target);
+        yield return new WaitForSeconds(attackDelay);
+        if (!CanExecute(enemy, CommandMode.RangedAttack)) yield break;
+        if (target != null && target.IsAlive && attackRangeService.GetAttackRangeCells(board, enemy, CommandMode.RangedAttack).Contains(target.GridPosition))
+        {
+            var projectilePrefab = enemy.Stats.RangedProjectilePrefab != null ? enemy.Stats.RangedProjectilePrefab : rangedProjectilePrefab;
+            if (projectilePrefab != null)
+            {
+                Vector3 start = board.ConvertGridToWorld(enemy.GridPosition) + Vector3.up * 0.8f;
+                Vector3 hit = board.ConvertGridToWorld(target.GridPosition) + Vector3.up * 0.15f;
+                var projectile = Instantiate(projectilePrefab, start, Quaternion.identity);
+                var mover = projectile.GetComponent<ProjectileMover>();
+                if (mover != null) yield return mover.FlyAndHit(start, hit);
+                else Destroy(projectile);
+            }
+            if (CanExecute(enemy, CommandMode.RangedAttack))
+                ApplyEnemyDamage(enemy, target, enemy.Stats.GetDamageForCommand(CommandMode.RangedAttack));
+        }
+        if (enemy != null && enemy.IsAlive && !turnManager.IsBattleOver) { enemy.MarkAttacked(); enemy.PlayIdle(); }
+        playerCard?.Refresh(); enemyCard?.Refresh();
+        board.ClearHighlights(); board.ClearPath();
     }
 }

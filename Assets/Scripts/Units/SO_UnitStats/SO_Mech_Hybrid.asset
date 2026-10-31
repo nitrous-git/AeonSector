@@ -15,6 +15,9 @@ MonoBehaviour:
   UnitName: XR-1O5 Aegis
   UnitType: 1
   UnitIcon: {fileID: 21300000, guid: b906c1f68e929ac47a22c6afdbaf8ad3, type: 3}
+  SupportedAttacks: 3
+  EnemyRole: 0
+  RangedProjectilePrefab: {fileID: 0}
   MaxHP: 12
   MoveRange: 3
   MeleeAttackDamage: 8
@@ -25,3 +28,6 @@ MonoBehaviour:
   RangedMaxAttackRange: 4
   DisplayMaxHP: 180
   DisplayMaxEN: 80
+  AreaAttackDamage: 2
+  AreaAttackMinRange: 2
+  AreaAttackMaxRange: 5

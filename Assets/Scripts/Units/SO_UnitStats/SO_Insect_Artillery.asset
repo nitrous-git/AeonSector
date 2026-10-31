@@ -15,6 +15,9 @@ MonoBehaviour:
   UnitName: FL Artillery
   UnitType: 3
   UnitIcon: {fileID: -77127230, guid: 09c37b75bc16f3e48a953971dfe5c39f, type: 3}
+  SupportedAttacks: 4
+  EnemyRole: 3
+  RangedProjectilePrefab: {fileID: 0}
   MaxHP: 8
   MoveRange: 0
   MeleeAttackDamage: 3

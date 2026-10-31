@@ -65,7 +65,7 @@ internal sealed class PlayerCommandState
             || !IsValidSelection(SelectedUnit))
             return;
         if (mode == CommandMode.Move ? !SelectedUnit.CanMove
-            : !IsAttackMode(mode) || !SelectedUnit.CanAttack)
+            : !IsAttackMode(mode) || !SelectedUnit.CanAttack || !SelectedUnit.Stats.Supports(mode))
             return;
 
         SFXManager.ButtonClick();

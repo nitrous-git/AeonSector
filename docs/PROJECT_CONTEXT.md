@@ -33,7 +33,7 @@ Aeon//Sector is an isometric **2D, grid-based, turn-based tactical mecha game**,
 | Movement executor | `Assets/Scripts/Input/PlayerMovementExecutor.cs` | Route validation, destination reservation, movement animation and completion |
 | Attack executor | `Assets/Scripts/Input/PlayerAttackExecutor.cs` | Melee/ranged attack resolution, projectile/animation callbacks, damage-once guards |
 | Battle UI coordinator | `Assets/Scripts/Input/PlayerBattleUI.cs` | Cards, menu refresh, selection/path/attack overlays; presentation only |
-| Enemy AI | `Assets/Scripts/AI/EnemyTurnController.cs` | Enemy action sequencing and current melee/artillery logic; P1.0B extension point |
+| Enemy AI | `Assets/Scripts/AI/EnemyTurnController.cs` | Configured assault/skirmisher/bombardment execution, with separate tactical planner |
 | Unit animation | `Assets/Scripts/Units/UnitMover.cs`, `UnitVisualAnimator.cs` | Movement, facing, attacks and existing animation-event forwarding |
 | Menus/results | `Assets/Scripts/UI/` | Main menu, action menu, unit cards, turn banner, results |
 | Effects/audio | `Assets/Scripts/Projectiles/`, `Assets/Scripts/Music_SFX/`, other relevant asset folders | Projectiles, combat feedback and SFX |
@@ -72,15 +72,29 @@ There is **no implemented hangar/squad picker, campaign mission definition, pers
 
 ## 4. Next extension points and current constraints
 
-### Unit definitions and combat capabilities — P1.0B
+### Unit definitions and combat capabilities � implemented P1.0B
 
-`UnitStats` currently contains identity (`UnitName`, `UnitType`, `UnitIcon`), base HP/move range, melee/ranged/area attack damage/ranges and card display data. It does **not** encode a unit's supported commands or reusable attack/ability profiles.
+`UnitStats.SupportedAttacks` is an explicit `AttackCapabilities` flags field (Melee, Ranged, Area); None is safe and grants no attacks. Existing damage/range fields remain authoritative. `Supports(CommandMode)` rejects unsupported or invalid damage/range configuration, with Editor warnings for invalid definitions. Capabilities are independent of `UnitType`. Command state, action-menu buttons, range queries and the player attack executor all enforce permission. The executor rechecks permission before damage. Existing ranged animation callbacks/context and separate movement/attack allowances remain intact. Area is currently an enemy command; no new player area button or ability framework is added.
 
-`PlayerCommandState` / `PlayerAttackExecutor` need a configuration source for legal commands, ranges and execution choices; **do not** expose unsupported attacks simply because a unit has an unused attack allowance. Backward-compatibility defaults must preserve existing playable units until migrated deliberately.
+Migrated assets under `Assets/Scripts/Units/SO_UnitStats/`: Hybrid = melee+ranged, Melee = melee, Range = ranged, Insect_Melee = melee/Assault, Insect_Artillery = area/Bombardment. Numeric balance and GUIDs are preserved. Legacy Melee/Range prefabs now have a `UnitVisualAnimator` bridge using their existing controller (which contains the expected directional melee/ranged states); icons/card display values remain unfinished. `BattleDamage` provides the shared HP/death gateway; `CombatUnit` still owns runtime HP/action state and `TurnManager` owns removal/results.
 
-### Enemy tactical role selection — P1.0B
+### Enemy tactical roles � implemented P1.0B
 
-`EnemyTurnController` currently branches on `UnitType.InsectArtillery` to choose area AI; others use melee behavior. Define combat-role/AI profiles independently of identity so a new ranged skirmisher, defensive or support enemy can be configured without growing type-specific conditionals. Preserve existing movement, attack timing and enemy-turn completion semantics.
+`UnitStats.EnemyRole` selects None, Assault, Skirmisher or Bombardment independently of identity. None/incompatible roles safely skip with a useful runtime warning. The plain `EnemyTacticalPlanner` chooses paths and targets deterministically; it never changes occupancy or damage. `EnemyTurnController` sequences previews, movement and attacks. Assault approaches and uses melee; Bombardment preserves area-first opportunities, targeting and staggered projectiles; Skirmisher prefers reachable cardinal firing solutions over adjacency, respecting terrain/occupancy blockers, and uses an independent projectile sequence rather than player animation events. Hypothetical range queries ignore only the moving attacker's vacated cell. Stable cell ordering breaks ties.
+
+`SO_Insect_Skirmisher.asset` and `Assets/Prefab/EnemyInsect/Enemy_InsectSkirmisher.prefab` are a compatibility example using existing insect visuals/base numbers and a configured projectile; no scene roster was changed. `UnitStats.RangedProjectilePrefab` configures its projectile presentation. New enemy roles must support their required attack; missing projectile presentation still resolves a legal attack safely.
+
+Author an enemy by creating UnitStats, configuring flags/ranges/role, assigning it to a compatible CombatUnit prefab, and wiring animation/mover/projectile references. Place it on valid ground and register it in the existing scene roster. Do not add UnitType branches.
+
+### Playable catalog and authoring
+
+`PlayableMechCatalog` stores serializable archetype entries with a stable unique ID, shared UnitStats and matching CombatUnit prefab. `SO_UnitStats/PlayableMechs.asset` lists hybrid, assault and marksman using the three existing mech prefabs. A future Hangar enumerates this catalog; runtime/persistent owned-mech state must be separate. Catalog validation warns on duplicate/missing IDs and mismatched references.
+
+To add a playable archetype: author UnitStats with explicit supported attacks, assign those stats to a compatible prefab, add its unique ID/stats/prefab entry to the catalog, and validate commands and animation events. This does not make legacy art/presentation production-ready. Future effective-stat/progression calculation belongs between shared base definitions and runtime combat reads; never mutate shared assets when leveling individuals. Presentation tiers must not determine attack legality.
+
+Future deployment must validate starting cells through the authoritative board, instantiate selected catalog prefabs and populate the TurnManager scene roster **before its Start initialization**. Let existing initialization perform board placement/registration exactly once; do not pre-register occupancy or introduce a competing mission/roster authority. Deployment, XP and saving are not implemented here.
+
+Focused validation: Unity compile and Console checks; controlled Scene01 Play Mode probe verified all three mech command permissions, independent executor rejection without action cost, catalog contracts, and one assault/area/ranged enemy attack each with exact damage and allowance consumption, without unexpected turn handoff. Ranged placement planner was queried; full autonomous positioning/movement, physical input, death/results and all-scenes regression remain owner tests. Temporary smoke setup repositioned units only in Play Mode; no scene changes were saved.
 
 ### Dynamic squad selection and missions — future P2
 
@@ -106,7 +120,7 @@ New isometric tiles, structures, mountains, debris and blocking props must agree
 | Phase | Status | Outcome |
 | --- | --- | --- |
 | P1.0A — Player controller refactor | **Implemented in source**; owner acceptance may remain | Input, selection, movement, attacks and UI have distinct ownership |
-| **P1.0B — Extensible unit/capability/AI architecture** | **Next implementation checkpoint** | Independent unit identity, supported actions and AI roles; preserve legacy units |
+| **P1.0B — Extensible unit/capability/AI architecture** | **Implemented; owner gameplay acceptance remains** | Independent unit identity, supported actions and AI roles; preserve legacy units |
 | P1.1 — Expanded playable mechs and enemies | Planned | New original unit archetypes with complete assets, attack logic, enemy behavior and owner-playable encounter; build toward 3 mech options |
 | P1.2 — Tactical UX / combat presentation | Planned | Command clarity, targeting, functional UI, original sprites, shaders and VFX |
 | P2.0 — Intro and hangar | Planned | Short illustrated intro, actual selectable squad, mission deployment |

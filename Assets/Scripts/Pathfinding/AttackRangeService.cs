@@ -14,19 +14,28 @@ public class AttackRangeService
     {
         HashSet<GridCoord> empty = new();
 
-        if (board == null || attacker == null || attacker.Stats == null)
+        if (board == null || attacker == null || attacker.Stats == null || !attacker.Stats.Supports(commandMode))
             return empty;
 
+        return GetAttackRangeCellsFrom(board, attacker.Stats, attacker.GridPosition, commandMode);
+    }
+
+    // Pure hypothetical query for planning: the moving attacker vacates its old cell.
+    public HashSet<GridCoord> GetAttackRangeCellsFrom(TilemapBoardAdapter board, UnitStats stats,
+        GridCoord origin, CommandMode commandMode, CombatUnit ignoredUnit = null)
+    {
+        HashSet<GridCoord> empty = new();
+        if (board == null || !board.IsReady || stats == null || !stats.Supports(commandMode)) return empty;
         switch (commandMode)
         {
             case CommandMode.MeleeAttack:
-                return GetDiamondRangeCells(board, attacker.GridPosition, attacker.Stats.MeleeMinAttackRange, attacker.Stats.MeleeMaxAttackRange);
+                return GetDiamondRangeCells(board, origin, stats.MeleeMinAttackRange, stats.MeleeMaxAttackRange);
 
             case CommandMode.RangedAttack:
-                return GetCardinalLineRangeCells(board, attacker.GridPosition, attacker.Stats.RangedMinAttackRange, attacker.Stats.RangedMaxAttackRange);
+                return GetCardinalLineRangeCells(board, origin, stats.RangedMinAttackRange, stats.RangedMaxAttackRange, ignoredUnit);
 
             case CommandMode.AreaAttack:
-                return GetBFSAreaRangeCells(board, attacker.GridPosition, attacker.Stats.AreaAttackMinRange, attacker.Stats.AreaAttackMaxRange);
+                return GetBFSAreaRangeCells(board, origin, stats.AreaAttackMinRange, stats.AreaAttackMaxRange);
 
             default:
                 return empty;
@@ -72,7 +81,7 @@ public class AttackRangeService
         TilemapBoardAdapter board,
         GridCoord origin,
         int minRange,
-        int maxRange)
+        int maxRange, CombatUnit ignoredUnit = null)
     {
         HashSet<GridCoord> cells = new();
 
@@ -109,7 +118,7 @@ public class AttackRangeService
                 // Any unit blocks further projectile travel.
                 // Enemy can be targeted.
                 // Friendly blocks the line.
-                if (unitAtCell != null)
+                if (unitAtCell != null && unitAtCell != ignoredUnit)
                     break;
             }
         }

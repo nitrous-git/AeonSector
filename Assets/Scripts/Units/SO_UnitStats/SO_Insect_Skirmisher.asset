@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f84488da0e6fc7e439cbdb32ab2f929d, type: 3}
+  m_Name: SO_Insect_Skirmisher
+  m_EditorClassIdentifier: 
+  UnitName: Insect Skirmisher (compatibility)
+  UnitType: 2
+  UnitIcon: {fileID: -323900, guid: bd66b61c62228ea4cb1dae5645e9053f, type: 3}
+  SupportedAttacks: 2
+  EnemyRole: 2
+  RangedProjectilePrefab: {fileID: 7916894974454691004, guid: f0e7a924cacaa924fa007ceac6bb28ff, type: 3}
+  MaxHP: 8
+  MoveRange: 3
+  MeleeAttackDamage: 3
+  MeleeMinAttackRange: 1
+  MeleeMaxAttackRange: 1
+  RangedAttackDamage: 2
+  RangedMinAttackRange: 2
+  RangedMaxAttackRange: 5
+  DisplayMaxHP: 120
+  DisplayMaxEN: 60
+  AreaAttackDamage: 2
+  AreaAttackMinRange: 2
+  AreaAttackMaxRange: 5

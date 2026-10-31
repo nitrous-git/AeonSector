@@ -14,8 +14,8 @@ public class ActionMenuUI : MonoBehaviour
         bool hasUnit = selectedUnit != null;
 
         moveButton.interactable = hasUnit && selectedUnit.CanMove;
-        rangedButton.interactable = hasUnit && selectedUnit.CanAttack;
-        meleeButton.interactable = hasUnit && selectedUnit.CanAttack;
+        rangedButton.interactable = hasUnit && selectedUnit.CanAttack && selectedUnit.Stats != null && selectedUnit.Stats.Supports(CommandMode.RangedAttack);
+        meleeButton.interactable = hasUnit && selectedUnit.CanAttack && selectedUnit.Stats != null && selectedUnit.Stats.Supports(CommandMode.MeleeAttack);
         endTurnButton.interactable = hasUnit;
     }
 

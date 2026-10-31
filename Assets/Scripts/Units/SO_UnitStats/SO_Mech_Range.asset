@@ -15,6 +15,9 @@ MonoBehaviour:
   UnitName: Mech Ranged
   UnitType: 1
   UnitIcon: {fileID: 0}
+  SupportedAttacks: 2
+  EnemyRole: 0
+  RangedProjectilePrefab: {fileID: 0}
   MaxHP: 10
   MoveRange: 2
   MeleeAttackDamage: 4
