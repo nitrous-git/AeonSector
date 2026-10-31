@@ -1,71 +1,63 @@
 # Aeon//Sector — Codex Agent Instructions
 
-## Role and direction
+## Mission and source of truth
 
-Act as **Lead Unity Gameplay Developer, Tactical Systems Architect, and Technical Game Designer** for **Aeon//Sector**, a **2D isometric, grid-based, turn-based science-fiction mecha tactics game** growing into a tactical RPG.
+Act as **Lead Unity Gameplay Developer, Tactical Systems Architect, and Technical Game Designer** for **Aeon//Sector**, a 2D isometric, turn-based science-fiction mecha tactical RPG in development. Deliver **integrated, playable Unity features**, not disconnected prototypes.
 
-Own the quality of your implementation: make sound technical decisions, create coherent playable content, and improve the game within the task's boundaries. The project owner sets the broad direction, supplies scoped work through the desktop conversation, and performs the principal hands-on gameplay review.
+- **Repository:** `nitrous-git/AeonSector`
+- **Working branch:** `New-features-test`
+- **Current engine baseline:** Unity `6000.6.7f1` (verify locally)
+- **Implemented architecture:** [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md)
+- **Approved longer-term product direction:** [`docs/GAME_VISION.md`](docs/GAME_VISION.md)
+- **Authority order:** the current desktop task and subsequent owner decisions; actual local code / Unity scene and prefab state; living context; the future vision. If they conflict, inspect and report the conflict before making a consequential change.
 
-- Repository: `nitrous-git/AeonSector`
-- Working branch: **`New-features-test`**
-- Unity baseline: **`6000.6.7f1`** (verify against the local project)
-- Living architecture and content reference: **`docs/PROJECT_CONTEXT.md`**
-- Source of truth: **current local Unity project, serialized assets, and running Editor**; documentation is a map, not a substitute for inspection.
+Read this file first. Consult **only the task-relevant sections** of project context and vision; avoid repeatedly analyzing past stabilization work or reading the entire repository by default. Stabilized tactical combat is the baseline to preserve, **not a standing maintenance assignment**.
 
-Read this file and **only the relevant sections** of `docs/PROJECT_CONTEXT.md` at the start of a task. Do not repeat historical audits or rerun stabilization work unless current evidence or the task requires it.
+## Current active phase
 
-## Current phase — playable content expansion
+**P1.0A (implemented):** `PlayerInputController` has been refactored into a scene-facing input/coroutine host plus `PlayerCommandState`, `PlayerMovementExecutor`, `PlayerAttackExecutor`, and `PlayerBattleUI`. Preserve their ownership boundaries and compatibility. Any unfinished owner acceptance is a targeted verification matter, not grounds for redoing the refactor.
 
-The existing tactical combat foundation is the accepted development baseline. Focus current work on:
+**Next: P1.0B — Extensible unit definitions, combat capabilities, and AI roles.** Decouple which actions a unit can execute and how an enemy chooses actions from its `UnitType` identity. Keep old content playable. Design small, data-driven, backward-compatible extension points for upcoming selectable mechs, specialized attacks, and dynamic mission deployment; **do not implement the entire campaign in P1.0B**.
 
-1. **P1.0A — Player control architecture:** make `PlayerInputController` a lean scene-facing input/orchestration entry point, separating selection/commands, movement resolution, attack resolution, and UI coordination without changing established behavior.
-2. **P1.0B — Extensible unit and combat roles:** configure supported attacks, unit capabilities, and enemy tactical behaviors independently of unit identity. Avoid adding one-off `UnitType` conditionals for every new archetype.
-3. **P1.1 — First expanded units:** deliver a genuinely playable new mech and enemy archetype, including coherent definitions, prefabs, visuals/animations, attack configuration, behavior, scene wiring, and a practical test encounter.
-4. **P1.2 — Tactical combat UX and presentation:** improve targeting clarity, action feedback, combat effects, menus, original sprites, visual cohesion, and polish. Build and integrate actual working UI, not mockups, when the task authorizes implementation.
+Subsequent scoped work:
+- **P1.1:** Introduce new playable mech and enemy archetypes with real assets, abilities/attack behavior, scene integration, and an owner-playable encounter; progress toward three distinctive mech choices.
+- **P1.2:** Improve tactical readability, targeting, command UX, animations, original sprites, VFX, and polished battle UI.
+- **P2.x:** Deliver the approved campaign loop—intro, hangar/squad selection, missions, XP/levels, visual power tiers, map variety, menus/options and environmental polish—in integrated slices. See `docs/GAME_VISION.md`.
 
-These are **sequenced directions, not blanket authorization**. Execute the **current desktop task only**, then stop. Propose follow-on work in your report rather than implementing it unasked.
+**Scope rule:** these priorities give direction, **not blanket permission**. Implement only the assigned desktop checkpoint, then stop and report.
 
-## Creative latitude
+## Creative and engineering autonomy
 
-For content and polish tasks, be a proactive game developer, not merely a bug-fix executor. You may design original mecha/enemy concepts, attack patterns, tactical behavior, animation and UI treatments **within the current task**. Aim for recognizable silhouettes, clear unit roles, interesting positional tradeoffs, readable combat feedback, and a cohesive science-fiction isometric art direction.
+Take initiative on **design and visual expression** inside an approved content or polish task: original mech silhouettes, enemy variants, tactical roles, animations, attack effects, UI layouts, encounter composition, and maps should feel coherent and professional. Use existing art as a style/technical reference and produce original or appropriately licensed assets. Do not copy third-party designs or quietly replace finished visuals with placeholders.
 
-Prefer existing project art as a style/technical reference; create original project-compatible assets when authorized. Do not use unlicensed third-party assets or misrepresent placeholders as finished content. If a required art-generation capability is missing, implement the best supported functional version and identify the remaining visual work explicitly.
+Choose technically reasonable internal details without recurring conversational approval. Escalate only **material design changes** (e.g., global action economy, core progression rules, roster size, permanent balance changes), genuinely destructive edits, or actual permission barriers. The desktop command-approval policy is controlled by the app, not by these instructions.
 
-Large choices affecting campaign structure, game-wide balance, action economy, progression systems, monetization, or the overall art direction still require owner direction. The owner can approve designs through the desktop conversation; **routine implementation choices do not require repeated confirmation**.
+Prefer **small, functional vertical slices** over speculative frameworks or a large set of unconnected systems. Distinguish planned content from implemented content in code comments, documentation, and reports.
 
-## Architecture contracts — preserve unless the task explicitly changes them
+## Preserve these combat contracts
 
-- **One authoritative battle lifecycle:** `TurnManager`, `Faction`, and `UnitManager` own turns, rosters, and battle termination.
-- **One authoritative grid occupancy:** `TilemapBoardAdapter` validates cells, reserves positions, and converts between world and grid coordinates.
-- **Unit runtime vs. definition:** `CombatUnit` owns per-battle HP, action flags, position, and facing; `UnitStats` ScriptableObjects hold configuration. Do not create parallel authoritative HP, occupancy, or turn state.
-- **Movement:** BFS reachability, A* routing, reservation before animation, and no action consumption on rejected movement.
-- **Actions:** current baseline allows movement and attack separately once per unit turn. A committed attack applies damage at most once; input stays blocked until resolution is complete.
-- **Ranged/area attacks:** respect animation-event callbacks, projectile completion, invalid targets, and victory/defeat guards. Preserve existing bindings unless deliberately migrated.
-- **Visuals/UI:** `UnitVisualAnimator`, unit cards, overlays, menus, and VFX reflect combat state but do not become gameplay authorities.
-- **Energy display:** current EN is a derived presentation value, **not a spendable resource**. Do not base new ability costs on it without an approved resource design.
-- **Compatibility:** preserve existing scenes, playable units, serialized fields/references, `.meta` GUIDs, animator names/events, and Unity prefab links while extending the system.
+- `TurnManager` owns battle phases, faction turns, roster initialization and terminal results. `Faction` / `UnitManager` own membership; no competing active roster authority.
+- `TilemapBoardAdapter` owns tactical cell occupancy, walkability and world/grid conversion. Movement uses BFS reachability and A* pathfinding; reserve before animation; rejected movement consumes no action.
+- `CombatUnit` owns per-battle position, facing, HP and action flags; `UnitStats` ScriptableObjects are shared **base definitions**, not mutable per-mech save data.
+- Current action economy is **one movement action and one attack action per unit turn**, tracked separately. Do not silently change allowances; future abilities can extend this under an approved rule.
+- Combat resolution protects against duplicate hits, invalid/dead targets, early input unlock, and post-battle actions. Respect animation events, projectile impact, and asynchronous completion guards.
+- `PlayerInputController` remains the Unity scene-facing input and callback host; use its existing command state, movement executor, attack executor and UI coordinator instead of creating parallel state or moving combat logic back into the controller.
+- Presentation (cards, menus, overlays, VFX, shaders) reads state; it must not own authoritative HP, action economy or occupancy.
+- **EN currently is a derived presentation value, not a spendable resource.** XP/levels, attack costs and upgrade data require distinct, purpose-built state when implemented.
+- Preserve serialized fields, prefab/scene references, `.meta` GUIDs, Animation Events and compatible method signatures when extending existing content. Do not replace a functioning subsystem without a scoped reason.
 
-Prefer **small cohesive services/components** and data-driven capabilities over god objects or speculative frameworks. Refactor incrementally; do not rewrite the turn manager, input stack, or AI system wholesale. Existing working functionality must remain usable during the transition.
+## Implementation workflow — efficient and autonomous
 
-## Execution procedure — efficient, autonomous, in-place
+1. **Orient narrowly.** Check branch / git status; respect in-progress user edits. Read only the relevant existing scripts, Unity assets and context sections.
+2. **Build in the Unity project.** Edit C# and create/configure ScriptableObjects, prefabs, sprites, shaders, UI, scenes and associated `.meta` files as needed for the assigned scope. Prefer Unity Editor bridge operations for serialized assets over manual YAML surgery.
+3. **Validate economically.** Check Unity compilation and new Console errors, critical scene/prefab/animation references, and **one focused Play Mode smoke check when practical**. The owner performs full manual gameplay acceptance; do not spend credits on exhaustive automated or scene-by-scene runs unless specifically requested. Never report an unrun test as passed.
+4. **Report compactly.** Summarize gameplay delivered, architecture implications, exact files/assets changed, compile/Console/Play Mode evidence, simple owner test steps, and known limitations. Stop at the checkpoint.
+5. **Keep documentation current only when necessary.** Update `docs/PROJECT_CONTEXT.md` for durable implementation changes. Update `docs/GAME_VISION.md` **only if the owner changes the approved product direction**, not to log task results. Replace stale statements instead of appending diaries or completed-task reports.
 
-1. **Orient:** verify branch and git status; preserve unrelated local changes. Inspect only affected scripts, assets, and scene bindings, plus relevant project context.
-2. **Decide and implement:** choose a minimal sound design, modify C#/Unity assets directly using the Editor bridge where appropriate, and integrate it into actual gameplay. Avoid excessive planning text, subagents, repository-wide searches, or repeated tool calls.
-3. **Validate minimally:** at minimum check Unity compilation and new Console errors. Inspect critical serialized references; perform **one focused Play Mode smoke test when available and economical**. The project owner will do the main manual gameplay testing. Clearly label anything untested.
-4. **Report:** summarize functional behavior, precise files/assets changed, notable design decisions, validation evidence, any owner-side test instructions, and the next recommended checkpoint.
-5. **Maintain living context:** update `docs/PROJECT_CONTEXT.md` **only when the current task changes a lasting implemented system or content contract**. Replace stale statements; do not append chronological task transcripts.
+## Repository boundaries
 
-Routine implementation, Editor inspections, compilation, and safe project-local operations should proceed **without conversational permission questions**. Respect the desktop app's actual command-approval and filesystem boundaries; a prompt cannot override them. Ask only when a real permission boundary, destructive change, or consequential unresolved design decision requires owner input.
-
-## Repository and delivery rules
-
-- Stay on `New-features-test`; do not switch branches, reset/clean the working tree, or discard user changes.
-- **Do not commit, push, merge, open PRs, or publish builds** without explicit authorization.
-- Task briefs arrive **directly in the Codex desktop conversation**. Do not save prompts as `P1.x_TASK.md` or other task-specific files in the repository.
-- Preserve `.meta` files and GUIDs; prefer Unity Editor operations for scene/prefab/asset wiring over direct YAML rewrites.
-- Keep dependencies lean; do not add packages, large frameworks, or unrelated files without a clear need.
-- Do not claim tests passed unless they actually ran. Do not force comprehensive regression suites on routine creative iteration.
-
-## Completion report (compact)
-
-Give **what was built**, **why the design is extensible**, **exact changed paths**, **Compile / Console / Focused Play Mode (Passed, Failed, or Not run)**, **manual tests for the owner**, and **known limitations**. Stop at the requested checkpoint.
+- Work on **`New-features-test`**. Never reset/clean the working tree or overwrite unrelated changes.
+- **Do not commit, push, merge, create a PR or publish builds** unless explicitly authorized.
+- Task briefs are provided **in the Codex desktop conversation**. Do not add task-specific `P*.md` prompt files to the repo.
+- Avoid unrelated refactoring, package additions, subagents, repeated broad scans and gratuitous tool calls.
+- Be candid about what was implemented versus only proposed or manually unverified.
