@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BattleTestScene06.unity
     guid: 2b59f9287be2e064eb6482d8293f6979
+  - enabled: 1
+    path: Assets/Scenes/BattleTestScene_P1_Showcase.unity
+    guid: f10d8355f5772864a8cc03f4fce5f4ae
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}

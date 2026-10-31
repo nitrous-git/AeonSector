@@ -23,7 +23,7 @@ public class CombatUnit : MonoBehaviour
     public bool CanAttack => IsAlive && !HasAttacked;
     public bool IsTurnExhausted => !CanMove && !CanAttack;
 
-    private Slider healthBar;
+    [SerializeField] private Slider healthBar;
     private bool deathProcessed;
 
     private void Awake()
@@ -33,12 +33,11 @@ public class CombatUnit : MonoBehaviour
             visualAnimator = GetComponentInChildren<UnitVisualAnimator>();
         }
 
-        if (transform.childCount > 1)
-            healthBar = transform.GetChild(1).GetComponentInChildren<Slider>();
+        if (healthBar == null)
+            healthBar = GetComponentInChildren<Slider>(true);
+        if (healthBar == null)
+            Debug.LogWarning($"CombatUnit '{name}' has no health Slider assigned or in its children.", this);
 
-        Debug.Log("Health Bar is : " + healthBar);
-        if (healthBar != null && stats != null)
-            healthBar.maxValue = stats.MaxHP;
     }
 
     public void Initialize(Faction ownerFaction, GridCoord startCoord)
@@ -54,6 +53,12 @@ public class CombatUnit : MonoBehaviour
         }
 
         CurrentHP = stats.MaxHP;
+        if (healthBar != null)
+        {
+            healthBar.minValue = 0;
+            healthBar.maxValue = stats.MaxHP;
+            healthBar.value = CurrentHP;
+        }
         HasMoved = false;
         HasAttacked = false;
         deathProcessed = false;

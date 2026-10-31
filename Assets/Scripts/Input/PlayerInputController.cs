@@ -69,6 +69,10 @@ public class PlayerInputController : MonoBehaviour
 
         commandState.ValidateSelection();
         HandleCommandHotkeys();
+        // UI controls must never also issue a world command on the same click.
+        bool overUI = UnityEngine.EventSystems.EventSystem.current != null
+            && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        if (overUI) return;
         battleUI.PreviewHover(commandState, GetMouseWorldPosition());
 
         if (Input.GetMouseButtonDown(0))

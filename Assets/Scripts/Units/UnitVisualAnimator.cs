@@ -45,7 +45,9 @@ public class UnitVisualAnimator : MonoBehaviour
         if (animator == null)
             return;
 
-        animator.Play(IsBackFacing(facing) ? "Attack_BackNE" : "Attack_FrontSW");
+        string attackState = IsBackFacing(facing) ? "Attack_BackNE" : "Attack_FrontSW";
+        if (animator.HasState(0, Animator.StringToHash(attackState))) animator.Play(attackState);
+        else PlayIdle(facing); // Static artillery presentation has idle clips only.
     }
 
     public void PlayAttack(UnitFacing facing, CommandMode commandMode)
@@ -71,13 +73,15 @@ public class UnitVisualAnimator : MonoBehaviour
 
     public void AnimEvent_FireRangedProjectile()
     {
-        if (playerInputController != null && ownerUnit != null)
+        if (playerInputController != null && ownerUnit != null
+            && ownerUnit.OwnerFaction != null && ownerUnit.OwnerFaction.Type == FactionType.Player)
             playerInputController.AnimEvent_FireRangedProjectile(ownerUnit);
     }
 
     public void AnimEvent_RangedAttackFinished()
     {
-        if (playerInputController != null && ownerUnit != null)
+        if (playerInputController != null && ownerUnit != null
+            && ownerUnit.OwnerFaction != null && ownerUnit.OwnerFaction.Type == FactionType.Player)
             playerInputController.AnimEvent_RangedAttackFinished(ownerUnit);
     }
 

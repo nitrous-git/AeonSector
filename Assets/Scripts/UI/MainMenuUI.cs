@@ -19,10 +19,18 @@ public class MainMenuUI : MonoBehaviour
         SceneManager.LoadScene(battleSceneName);
     }
 
+    [SerializeField] private GameObject optionsPanel;
+
     public void Options()
     {
-        Debug.Log("Options clicked. Options menu not implemented yet.");
+        if (optionsPanel == null) return;
+        optionsPanel.SetActive(true);
+        var slider = optionsPanel.GetComponentInChildren<UnityEngine.UI.Slider>(true);
+        if (slider != null) slider.SetValueWithoutNotify(AudioListener.volume);
     }
+
+    public void CloseOptions() => optionsPanel?.SetActive(false);
+    public void SetVolume(float volume) => AudioListener.volume = Mathf.Clamp01(volume);
 
     public void Exit()
     {
