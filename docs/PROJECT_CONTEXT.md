@@ -1,132 +1,115 @@
-# Aeon//Sector — Project Context & Technical Baseline
+# Aeon//Sector — Living Project Context
 
-**Audit date:** 2026-10-31  
-**Repository:** https://github.com/nitrous-git/AeonSector  
-**Working branch:** `New-features-test`  
-**Baseline commit:** `3f2551af0e883fdcd24581fd20eb15e42e722e88`  
-**Verified Unity version:** `6000.6.7f1`
+**Project:** 2D isometric, turn-based mecha tactical RPG in development  
+**Repository:** `nitrous-git/AeonSector` · **Working branch:** `New-features-test`  
+**Local engine baseline:** Unity `6000.6.7f1`  
+**Context refresh:** 2026-10-31, reviewed against commit `d5954079d77d59d5c38dd0a2e627c2d49f5181c6`
 
-> This is a read-only GitHub source/serialized-asset audit. Gameplay and scene behavior have not been verified in Play Mode during this audit. The Codex agent should validate source findings through the actual Unity Editor before treating them as reproduced defects.
+This document describes the **current working foundation and active expansion direction**. Earlier stabilization tasks are incorporated into the baseline, not an ongoing audit checklist. Confirm any detail affected by the current task in the actual Unity checkout/Editor. Read only the relevant sections.
 
-## Game identity and scope
+## 1. Game identity and creative direction
 
-Aeon//Sector is currently a **2D isometric, grid-based, turn-based tactical combat prototype**, with futuristic mecha player units and insectoid opposition. It is intended to grow into a more complete tactical mecha RPG. It is **not** currently a real-time strategy game and **does not yet have** a complete persistent RPG progression layer.
+Aeon//Sector is a **turn-based, grid-based, 2D isometric science-fiction tactical game** featuring playable mecha and insectoid enemies. We are evolving the combat prototype toward a cohesive tactical RPG with distinct unit roles, tactical tradeoffs, satisfying encounters, strong visual feedback, and eventually richer missions and customization.
 
-Design principles for future work: readable battlefield state, explicit action cost, interesting positional decisions, distinctive unit roles, responsive combat feedback, coherent visual identity, and maintainable/data-driven content. Cover, terrain modifiers, loadouts, salvage, pilot progression, mission objectives and campaign persistence are potential future mechanics, not already-implemented features.
+Design priorities:
+- **Clarity:** players understand selected units, attack reach, blocked paths, action availability, and damage outcomes.
+- **Unit identity:** each mech or enemy has a coherent role, capabilities, silhouette, behavior, and counterplay.
+- **Tactical decisions:** movement, positioning, range, and target choice matter.
+- **Presentation:** readable original sprites, animations, VFX, sound, polished menus, and a unified isometric aesthetic.
+- **Production:** new units should be authorable primarily from configuration and prefabs, without modifying core controllers for every archetype.
 
-## Technical environment
+The creative agent may propose and implement original content **within its assigned phase**. Cover, pilot progression, salvage, modular loadouts, equipment, terrain effects, campaign systems, and special abilities are possible future directions, **not all existing functionality**.
 
-- Unity `6000.6.7f1`, URP `17.6.0`, 2D Renderer, Tilemaps, Cinemachine `6.6.0`, uGUI `2.6.0`, TextMesh Pro.
-- Legacy `UnityEngine.Input` mouse/keyboard calls are in active gameplay scripts; do not migrate input wholesale during stabilization.
-- Unity Test Framework dependency present (`1.8.0`). No project-owned gameplay tests were identified in the audited source tree.
-- Unity Editor bridge was previously integration-tested using `Assets/AgentTests/AgentIntegrationTest.unity` and a test cube/prefab/material. The previous integration test did not enter Play Mode. These isolated test assets should not be promoted into the game or deleted without direction.
-- Git LFS rules are configured for image/audio/model binaries; maintain `.meta` assets and GUID stability.
+## 2. Technology and project structure
 
-## Runtime architecture
+- Unity `6000.6.7f1`, URP `17.6.0`, 2D Renderer, Tilemaps, Cinemachine `6.6.0`, uGUI and TextMesh Pro.
+- Current gameplay uses legacy `UnityEngine.Input` for mouse/keyboard. A wholesale input-system migration is not part of P1.0A.
+- Unity Test Framework `1.8.0` is available; no project-owned gameplay test suite was present at the last source review.
+- Unity bridge supports direct Editor/source inspection and asset modifications. The project owner performs principal gameplay acceptance testing.
+- Preserve the project's existing assets, scene references, and `.meta` GUIDs. Original new visuals should fit the current 2D isometric pipeline.
 
-| Area | Primary files | Existing responsibility |
+### Existing runtime ownership
+
+| Area | Current implementation | Contract |
 | --- | --- | --- |
-| Battle flow | `Assets/Scripts/Core/TurnManager.cs`, `BattleState.cs` | Initialize factions, register units, alternate turns, handle victory/defeat |
-| Factions | `Assets/Scripts/Factions/Faction.cs`, `UnitManager.cs` | Unit collections, living-unit queries, turn action resets |
-| Unit state | `Assets/Scripts/Units/CombatUnit.cs` | Runtime HP, `HasMoved`, `HasAttacked`, `GridPosition`, facing, damage |
-| Unit definitions | `Assets/Scripts/Units/UnitStats.cs`, `SO_UnitStats/` | ScriptableObject stats: HP, move range, melee/ranged/area attacks, UI values |
-| Grid | `Assets/Scripts/Grid/TilemapBoardAdapter.cs`, `GridCoord.cs` | Tilemap-derived walkability, occupancy, world/grid mapping, tactical overlays |
-| Paths | `Assets/Scripts/Pathfinding/` | BFS reachable tiles, orthogonal A* pathfinding, attack-range generation |
-| Player flow | `Assets/Scripts/Input/PlayerInputController.cs`, `CommandMode.cs` | Unit selection, commands, movement, melee/ranged attack sequencing |
-| Enemy flow | `Assets/Scripts/AI/EnemyTurnController.cs` | Turn coroutine, movement toward players, melee or artillery targeting |
-| Motion/visuals | `Assets/Scripts/Units/UnitMover.cs`, `UnitVisualAnimator.cs` | Path animation and four-direction isometric visual mapping |
-| UI | `Assets/Scripts/UI/` | Unit cards, action buttons, turn banners, battle end, menu |
-| Effects/audio | `Assets/Scripts/Projectiles/ProjectileMover.cs`, `Assets/Scripts/Music_SFX/`, `Assets/Scripts/Camera/` | Projectile animations, SFX/music, camera impulses |
+| Battle/turns | `Assets/Scripts/Core/TurnManager.cs`, `BattleState.cs` | Faction turns, battle initialization, result state and end screen |
+| Rosters | `Assets/Scripts/Factions/Faction.cs`, `UnitManager.cs` | Faction membership and living units |
+| Runtime unit | `Assets/Scripts/Units/CombatUnit.cs` | HP, current cell, facing, moved/attacked flags, death |
+| Unit definition | `Assets/Scripts/Units/UnitStats.cs`, `SO_UnitStats/` | ScriptableObject identity, core stats, attacks and card presentation data |
+| Tactical board | `Assets/Scripts/Grid/TilemapBoardAdapter.cs` | Walkability, occupancy, world/grid conversion, overlays |
+| Navigation/range | `Assets/Scripts/Pathfinding/` | BFS reachability, A* routing, attack cells |
+| Player interaction | `Assets/Scripts/Input/PlayerInputController.cs`, `CommandMode.cs` | Input, selection, command modes, move/attack orchestration; **P1.0A refactor target** |
+| Enemy behavior | `Assets/Scripts/AI/EnemyTurnController.cs` | AI turn sequencing, advance/melee/artillery; **P1.0B extension target** |
+| Unit animation | `Assets/Scripts/Units/UnitMover.cs`, `UnitVisualAnimator.cs` | Path animation, directional sprites, attack animation callbacks |
+| UI | `Assets/Scripts/UI/` | Unit cards, action menu, turn/result display, main menu |
+| Audio/effects | `Assets/Scripts/Music_SFX/`, `Assets/Scripts/Projectiles/`, `Assets/Scripts/Camera/` | Battle SFX, projectile and camera feedback |
 
-### Gameplay state contracts
+### Current combat invariants
 
-- **Movement:** Reachable tiles are calculated with BFS; paths with A*; board occupancy is authoritative. A successful move reserves its destination using `TryMoveUnit` and then animates the visual transform through `UnitMover`. Rejected moves must not mutate logical position or consume the move.
-- **Turn allowance:** `CombatUnit.BeginTurn()` resets `HasMoved` and `HasAttacked`. Movement and attack are separate per-turn allowances, not a pooled action-point system.
-- **Attack range:** melee uses Manhattan/diamond cells, ranged uses cardinal-line scans blocked by terrain/units, enemy artillery uses a BFS area range. Verify semantics and impact behavior before extending to new abilities.
-- **Damage:** `CombatUnit.TakeDamage(int)` reduces runtime HP, updates the bar, triggers death state; `TurnManager.RemoveUnitFromBattle` removes grid occupancy and faction membership before destroying the GameObject.
-- **Energy UI:** `GetEnergyPercent` combines 70% HP fraction, 15% ability to move and 15% ability to attack. This is a **derived presentation score, not a spendable energy pool**. Do not use it as ability resource capacity without explicit redesign.
-- **Facing:** `UnitFacing` has four isometric directions; `UnitVisualAnimator` chooses front/back animations and mirrors sprites.
+- A valid unit enters the battle roster only after successful board placement. The board's occupancy grid is authoritative.
+- Movement uses BFS reachability plus A* pathfinding. Reserve the destination before animating; an invalid/rejected move does not consume the move action.
+- `CombatUnit.BeginTurn()` resets **one move allowance and one attack allowance**, not a shared AP budget.
+- Player melee, ranged, and enemy area attacks exist; enemy melee and artillery behaviors exist.
+- Ranged resolution tracks firing, projectile completion, one-time damage, and animation completion. A missing animation-event fallback exists; normal attack sequencing must not reintroduce duplicate damage or early input unlock.
+- Death removes a unit from occupancy and its faction roster. Victory/defeat are terminal states: no further turn handoff or post-battle damage should occur.
+- Result SFX routing and repeated banner-duration mutation were corrected. Turn UI shows current turn without imposing a fictitious ten-turn mission cap.
+- **EN is a derived UI score**, weighted from health and remaining move/attack allowances. It is **not** fuel, ammo, mana, or a spendable energy pool. DisplayMaxHP and DisplayMaxEN in `UnitStats` are presentation numbers.
 
-## Scene and content inventory
+These are current design/implementation contracts. They do **not** imply that every path has comprehensive automated regression coverage.
 
-**Build Settings enabled scenes (order):**
-1. `Assets/Scenes/MainMenu.unity`
-2. `Assets/Scenes/BattleTestScene01.unity`
-3. `Assets/Scenes/BattleTestScene04.unity`
-4. `Assets/Scenes/BattleTestScene06.unity`
+## 3. Current scenes and content
 
-Other existing scenes include `BattleTestScene.unity`, `BattleTestScene05.unity`, `DebugScene.unity`, and the isolated `Assets/AgentTests/AgentIntegrationTest.unity`.
+**Enabled scenes:**
 
-Serialized `TurnManager` scene lists show:
-- BattleTestScene01: 1 player unit, 3 enemies.
-- BattleTestScene04: 2 player units, 6 enemies.
-- BattleTestScene06: 2 player units, 6 enemies.
-
-`MainMenu` sets `battleSceneName` to `BattleTestScene01`. BattleTestScene04's end-battle next-scene override points to `BattleTestScene06`; BattleTestScene06's next-scene override points to itself. Treat further campaign routing as an approved design decision, not a guess.
-
-Relevant prefab families: `Assets/Prefab/PlayerMech/` (hybrid, melee, range), `Assets/Prefab/EnemyInsect/` (insect, bee, artillery), `Assets/Prefab/Projectiles/`, `Assets/Prefab/SwordSlashes/`, `Assets/Prefab/UI/`. Existing animation controllers, sprite sheets, sound effects, music, tile sets and UI fonts are available for reuse.
-
-## Audit findings / stabilization backlog
-
-These are **source-observed risks**, to be runtime-verified and fixed in narrow phases:
-
-**P0.1 — Board registration and rejected movement (stabilized 2026-10-31)**
-- `TurnManager.RegisterSceneUnits` now requires a ready board, valid unit stats, an in-bounds/base-walkable/unoccupied cell, and successful `TryPlaceUnit` before initialization or faction registration. Duplicate faction/roster membership is rejected.
-- `PlayerInputController.CommitMove`/`ResolveUnitMove` now revalidate reachability and A* path data, require an idle `UnitMover`, reserve occupancy before animation, and clear/restore state on rejection or incomplete animation. Failed reservations do not mark the unit moved.
-
-**P0.2 — Attack sequencing and battle-end behavior**
-- Player ranged attacks now use a one-shot resolution context: repeated fire callbacks are ignored, damage is applied after the projectile routine resolves, and animation/projectile completion are both required before input is restored. A bounded fallback covers missing animation callbacks and missing projectile dependencies.
-- `UnitVisualAnimator` resolves the scene `PlayerInputController` when its prefab reference is unset, which is required for the existing ranged animation events to reach gameplay code.
-- Melee, artillery and unit removal paths guard invalid/dead targets, remove dead units from board occupancy and faction rosters once, and stop applying pending projectile damage after battle termination.
-- `TurnManager` exposes an idempotent battle-ended state; victory/defeat transitions and delayed enemy-turn startup reject post-battle turn changes.
-- `TurnManager.CheckBattleEnd` invokes victory sound on defeat and defeat sound on victory; `ShowEndBattleUIAfterBanner` also plays victory sound unconditionally.
-- The sound-routing mismatch remains outside this checkpoint; P0.2 validation focused on combat state and resolution ordering.
-
-**P0.3 — Unit definitions and scene robustness**
-- `SO_Mech_Melee.asset` and `SO_Mech_Range.asset` still serialize older `AttackDamage`/`MinAttackRange`/`MaxAttackRange` fields instead of the current `Melee*`/`Ranged*` schema. Confirm whether they are active before editing; migrate safely with tests and no stat loss.
-- `CombatUnit.Awake` retrieves a health bar from a hard-coded child index; prefer an explicit serialized reference or safe component discovery with validation.
-- `BattleBannerUI.Show` doubles its hold duration whenever a victory/defeat banner is shown, mutating shared timing state.
-- `BattleStatsTracker` displays a hardcoded 10-turn maximum, which may not represent a real mission limit.
-- `MainMenuUI.Options` is currently a placeholder.
-- Verify existing scene and prefab wiring, especially animation event references, `EndBattleUI` transitions, static managers and null-sensitive references.
-
-## Development progression (proposed, subject to owner approval)
-
-| Phase | Intent | Definition of done |
+| Scene | Current role | Initial serialized units |
 | --- | --- | --- |
-| P0 | Stabilize existing combat, scenes, data and tests | No regressions in the current playable loop; meaningful automated/smoke checks |
-| P1 | Combat feedback and interaction polish | Clear target/attack previews, responsive UI and satisfying game feel |
-| P2 | More tactical depth | Validated unit roles, new mechanics and stronger configurable enemy behaviors |
-| P3 | Missions and encounter content | Reusable objectives, varied maps, staged missions, encounter configuration |
-| P4 | Mecha RPG layer | Approved progression, loadouts, equipment and between-mission gameplay |
+| `Assets/Scenes/MainMenu.unity` | Entry and Play | — |
+| `Assets/Scenes/BattleTestScene01.unity` | First encounter | 1 player / 3 enemies |
+| `Assets/Scenes/BattleTestScene04.unity` | Follow-on encounter | 2 player / 6 enemies |
+| `Assets/Scenes/BattleTestScene06.unity` | Later encounter | 2 player / 6 enemies |
 
-Do not treat this roadmap as permission to implement all features at once. Scope each agent task, obtain approvals for major design decisions, and update this file after verified implementation.
+Other experimental scenes exist; do not delete or repurpose them without an assigned task.
 
-## Task delivery convention
+**Current serialized navigation:** MainMenu → 01 → 04 → 06. Result-screen No actions return to MainMenu. Scene06 Yes currently reloads Scene06; that may serve as replay, but the final-battle UX is not yet defined. The same Yes/No result controls can appear on victory and defeat, so distinguish *retry*, *next mission*, and *return* intentionally when improving menus. Full button-driven route testing was not confirmed at the last review.
 
-Individual Codex implementation briefs are delivered in the **ChatGPT desktop conversation**, not stored as task Markdown files in the repository. `AGENTS.md` is the permanent agent policy and this document is long-lived technical context. Only record verified, lasting facts and checkpoint outcomes here; avoid accumulating full task prompts.
+**Existing asset families:** `Assets/Prefab/PlayerMech/`, `Assets/Prefab/EnemyInsect/`, projectile/slash prefabs, unit animations, isometric tilemaps, SFX, and UI resources. Reuse compatible assets, but create coherent original new content when authorized.
 
-## Development checkpoint tracking
+**Current unit definitions:**
+- Playable hybrid mech uses active combat data and melee/ranged attacks.
+- Insect melee and insect artillery enemies exist.
+- Legacy `SO_Mech_Melee.asset` and `SO_Mech_Range.asset` were migrated to the current stats schema; both have MaxHP 10 / MoveRange 2, with original primary attack damage/ranges retained.
+- Those migrated assets **still have no icon and zero card display HP/EN values**. Complete their presentation configuration before featuring those archetypes as finished playable content.
 
-### P0.3 implementation and content readiness (2026-10-31)
+## 4. Unit authoring — current workflow and expansion goal
 
-- Result audio routing is corrected in TurnManager; result-screen display no longer replays victory audio. Return navigation uses button-click audio. Audible verification remains Not tested.
-- Banner durations use an immutable per-banner hold multiplier. A live Play Mode repeated-victory probe returned 4.7 seconds before and after repeated Show calls, with the turn duration unchanged at 2.9 seconds. Result-screen waiting uses the relevant banner duration.
-- Turn display now shows the actual current turn without a fictitious/clamped 10-turn maximum. This does not impose or remove a gameplay turn limit.
-- Unity confirmed MainMenu, BattleTestScene01, BattleTestScene04 and BattleTestScene06 are enabled. Serialized routing is MainMenu→01→04→06; battle No buttons route to MainMenu. Scene06 Yes routes to itself. The buttons use Yes/No graphics; intentional replay versus accidental progression remains ambiguous and was retained pending owner direction. Actual button-driven scene loading remains Not tested in P0.3.
-- Legacy melee/ranged assets were migrated through Unity: both retain HP 10 and move 2; melee primary damage/range is 3/1–1, ranged primary damage/range is 3/1–4. Unspecified secondary stats retain existing schema defaults. Their prefab references remain intact; no direct scene references to these stats GUIDs were found. Hybrid and enemy stats were unchanged.
-- P0.3 compilation passed and final Console reported zero errors/warnings. Full combat regression and automated tests were not rerun; prior P0.1/P0.2 observations remain historical evidence, not P0.3 passes. Stabilization acceptance is therefore still pending.
+**Existing workflow:** create/configure a `UnitStats` asset; assign it to a compatible `CombatUnit` prefab; ensure the `UnitMover`, directional visual animator, hit points UI, and any projectile/animation-event references are valid; place the prefab on a walkable scene cell; add it once to the correct `TurnManager` roster; test selection, movement, attack, death and result state.
 
-### Adding unit content
+**Current limitations to evolve, not historical bugs to re-audit:**
+- `UnitType` currently combines classification with behavior. In particular, `EnemyTurnController` checks `UnitType.InsectArtillery` to select area AI; other enemy types use melee behavior. New ranged/hybrid enemies require configurable tactical behavior rather than another hardcoded enum branch.
+- Player attack commands are gated by `CanAttack`, not by a per-unit list of equipped/supported attacks. Defining a “melee mech” does not automatically restrict its ranged command.
+- Specialized abilities, modular weapon/loadout assets, and a reusable unit-roster selection screen do not yet exist.
+- `PlayerInputController` was ~950 lines at the last review and mixes input, selection, movement, attack resolution, and UI. Its responsibilities need clean extraction before abilities multiply.
+- `CombatUnit` still finds its health bar by a hierarchy child index, which is fragile for new prefabs; prefer a safer serialized/component reference as part of a relevant unit-content task.
+- Normal ranged attacks were exercised successfully, but the current five-second fallback does not recover an indefinitely stalled projectile coroutine, because completion still awaits the projectile-resolved flag. Handle this if redesigning attack resolution.
 
-1. Create a UnitStats asset; configure identity/icon, HP/move and the supported attack damage/ranges. Display HP/EN must be configured deliberately; they are presentation values, not resources.
-2. Duplicate a compatible prefab, assign its stats, CombatUnit, UnitMover, visual animator and health slider. Preserve animator state names and front/back directional clips; ranged clips require the existing callback receiver. Test both facing families.
-3. Place it on a free walkable cell and add it once to the appropriate TurnManager scene roster. Initialization reserves occupancy before faction registration.
-4. Verify selection, card/bar, movement, attack and death in Play Mode. Existing player melee/ranged logic is shared across definitions.
+**Target unit-authoring model:** independent **unit identity/stat definition**, **combat capabilities/attack configuration**, **tactical AI behavior profile**, **runtime battle state**, and **prefab/visual presentation**. The exact classes/data assets should be chosen incrementally after inspecting the actual source; avoid building a generic RPG framework before the first new units prove the design.
 
-Content expansion limitations for P1: UnitType currently mixes identity with behavior selection; EnemyTurnController specifically treats InsectArtillery as area AI and all other enemies as melee. New ranged/hybrid enemy AI needs an explicit behavior-selection extension. Weapon/loadout assets and specialized abilities do not exist. Player attack availability is not a capability system: merely naming a unit melee/ranged does not disable its other command. Do not infer new balance or capabilities from enum names. Health-bar discovery still depends on prefab hierarchy, so validate it when authoring new prefabs.
+## 5. Active roadmap
 
-- **2026-10-31 GitHub source audit:** complete; no Editor Play Mode validation in this audit.
-- **Unity bridge:** previous isolated scene/prefab/material integration test reported successful source and Editor mutations and compilation; Play Mode not tested.
-- **2026-10-31 P0.1 stabilization:** compiled cleanly and smoke-tested in Play Mode on BattleTestScene01 (1 player/3 enemies), BattleTestScene04 (2/6), and BattleTestScene06 (2/6). Registration samples matched board occupancy; valid movement, blocked movement, enemy turn handoff, melee resolution, and victory transition were exercised. No project-owned automated tests were available.
-- **2026-10-31 P0.2 stabilization:** Unity compiled with zero Console errors. Live AnimationClip inspection confirmed three existing ranged fire events plus one finish event per ranged clip; the hybrid prefab had an unset `UnitVisualAnimator.playerInputController`. Play Mode probes verified one ranged damage application with control restored after resolution, enemy melee damage, artillery projectile staggering/cleanup, and idempotent victory/defeat turn guards in BattleTestScene01/04/06. Automated regression tests remain unavailable.
+| Checkpoint | Purpose | Practical completion condition |
+| --- | --- | --- |
+| **P1.0A — Player controller refactor** | Extract cohesive selection, movement, attack and UI responsibilities from `PlayerInputController` | Existing mouse/keyboard behavior and combat bindings still work; clear extension points for capabilities |
+| **P1.0B — Unit capabilities and AI roles** | Data-driven supported attacks and enemy behavior independent of `UnitType` identity | Existing units retain behavior; new archetypes can be configured without central hardcoded switches |
+| **P1.1 — First expanded units** | One creative new playable mech and one new enemy archetype, fully integrated | Actual prefabs/data/visuals/animations/AI/scene encounter; playable owner acceptance |
+| **P1.2 — Tactical UX and visual polish** | Better selection/targeting cues, previews, action availability, VFX, sprites and menus | Clearer more attractive playable combat, functional polished UI |
+| **Later — Mission and RPG depth** | Additional unit sets, mission objectives, hangar/squad selection, equipment, progression | Scoped separately after the first P1 vertical slices succeed |
+
+P1.1/P1.2 deliberately allow the development agent to propose original concepts and art direction within the established style. Use **small integrated vertical slices** instead of building extensive abstract infrastructure with no playable result. Major changes to game-wide rules or campaign direction remain owner decisions.
+
+## 6. Workflow and verification expectations
+
+- The owner sends each scoped implementation brief **in the Codex desktop conversation**; never add task-prompt Markdown files to the repository.
+- Work on `New-features-test` in-place with the Unity bridge. Do not commit/push unless asked.
+- **Minimum agent validation:** Unity compile, Console check, critical asset/reference sanity check, and a short focused Play Mode smoke test when economical/available. The **owner manually plays and accepts the features**; no exhaustive regression campaign is expected on every iteration.
+- Report limitations and untested behavior instead of claiming coverage. Existing Unity Test Framework support can be used for high-value focused checks, but an extensive automated test harness is not a P1 prerequisite.
+- Keep this document a **current technical reference**. When features change, revise the relevant sections, remove outdated limitations, and update the roadmap status. Do **not** append dated stabilization logs, full task prompts, or stale issue lists.
