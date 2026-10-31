@@ -38,11 +38,30 @@ The creative agent may propose and implement original content **within its assig
 | Unit definition | `Assets/Scripts/Units/UnitStats.cs`, `SO_UnitStats/` | ScriptableObject identity, core stats, attacks and card presentation data |
 | Tactical board | `Assets/Scripts/Grid/TilemapBoardAdapter.cs` | Walkability, occupancy, world/grid conversion, overlays |
 | Navigation/range | `Assets/Scripts/Pathfinding/` | BFS reachability, A* routing, attack cells |
-| Player interaction | `Assets/Scripts/Input/PlayerInputController.cs`, `CommandMode.cs` | Input, selection, command modes, move/attack orchestration; **P1.0A refactor target** |
+| Player interaction | `Assets/Scripts/Input/PlayerInputController.cs`, `CommandMode.cs` | Scene-facing input and compatible public callbacks; delegates to plain C# state/execution/UI services |
 | Enemy behavior | `Assets/Scripts/AI/EnemyTurnController.cs` | AI turn sequencing, advance/melee/artillery; **P1.0B extension target** |
 | Unit animation | `Assets/Scripts/Units/UnitMover.cs`, `UnitVisualAnimator.cs` | Path animation, directional sprites, attack animation callbacks |
 | UI | `Assets/Scripts/UI/` | Unit cards, action menu, turn/result display, main menu |
 | Audio/effects | `Assets/Scripts/Music_SFX/`, `Assets/Scripts/Projectiles/`, `Assets/Scripts/Camera/` | Battle SFX, projectile and camera feedback |
+
+### Player control architecture (P1.0A)
+
+`PlayerInputController` remains the scene-facing MonoBehaviour and coroutine host. It reads legacy mouse/keyboard input and delegates command requests; its serialized board, turn manager, camera, menu, cards, projectile/slash prefabs, offsets and layer mask remain on the existing component.
+
+Four plain C# collaborators under `Assets/Scripts/Input/` are constructed in `Awake`; no new scene components or manual wiring are required:
+
+| Class | Responsibility and interactions |
+| --- | --- |
+| `PlayerCommandState` | Authoritative selected player unit, active command, reachable command cells and resolution lock. Validates living/owned/board-registered selection; handles selection, cancellation, command availability/range generation and end-turn requests. |
+| `PlayerMovementExecutor` | Revalidates reachability, A* route and mover availability; reserves through `TilemapBoardAdapter` before `UnitMover` animation; consumes movement only on successful arrival and restores selection/UI after success or rejection. |
+| `PlayerAttackExecutor` | Validates targets and owns melee/projectile sequencing, damage, attack completion and battle-end guards. Holds the one-shot ranged context; requires both projectile and animation completion before releasing input. |
+| `PlayerBattleUI` | Coordinates selected highlights, command/path previews, player/enemy cards and action-menu refresh. Reads command state and never commits actions or owns occupancy/HP. |
+
+The input controller retains `SelectMoveCommand`, `SelectMeleeAttackCommand`, `SelectRangedAttackCommand`, `EndSelectedUnitTurn`, `AnimEvent_FireRangedProjectile(CombatUnit)` and `AnimEvent_RangedAttackFinished(CombatUnit)`. `UnitVisualAnimator` continues forwarding the existing clip events. UI and keyboard commands use the same resolution lock. The public `selectedUnit` name is now a read/write property delegating selection to command state; `FormerlySerializedAs("selectedUnit")` preserves loading of the old serialized selection seed, which is transferred and cleared in `Awake`. There is no second live selection field.
+
+Existing movement/attack ranges, damage, allowances and visual delays remain unchanged. Future supported-command/capability configuration belongs in command availability/range selection and the attack executor, without adding combat sequencing to input handling. No capability/weapon data model is implemented yet.
+
+Verified in Unity `6000.6.7f1`: compilation succeeded with zero Console errors. A focused bridge-driven Play Mode smoke in BattleTestScene01 exercised selection, rejected movement without action consumption, board reservation/arrival, and blocking commands/selection/end turn during movement. Eight controller references, six public callbacks, no missing scripts in the open scene, and both ranged clips' event bindings were inspected. Ranged damage, melee, battle termination and physical mouse/keyboard interaction still require owner gameplay validation; no enemy was in range during this smoke. Other scenes were not played.
 
 ### Current combat invariants
 
@@ -88,9 +107,8 @@ Other experimental scenes exist; do not delete or repurpose them without an assi
 - `UnitType` currently combines classification with behavior. In particular, `EnemyTurnController` checks `UnitType.InsectArtillery` to select area AI; other enemy types use melee behavior. New ranged/hybrid enemies require configurable tactical behavior rather than another hardcoded enum branch.
 - Player attack commands are gated by `CanAttack`, not by a per-unit list of equipped/supported attacks. Defining a “melee mech” does not automatically restrict its ranged command.
 - Specialized abilities, modular weapon/loadout assets, and a reusable unit-roster selection screen do not yet exist.
-- `PlayerInputController` was ~950 lines at the last review and mixes input, selection, movement, attack resolution, and UI. Its responsibilities need clean extraction before abilities multiply.
 - `CombatUnit` still finds its health bar by a hierarchy child index, which is fragile for new prefabs; prefer a safer serialized/component reference as part of a relevant unit-content task.
-- Normal ranged attacks were exercised successfully, but the current five-second fallback does not recover an indefinitely stalled projectile coroutine, because completion still awaits the projectile-resolved flag. Handle this if redesigning attack resolution.
+- `PlayerAttackExecutor` preserves the existing 0.25-second fire-event fallback and five-second animation-finish fallback. It does not recover an indefinitely stalled projectile coroutine, because completion still awaits the projectile-resolved flag; this existing limitation was not changed or exercised by the architectural extraction.
 
 **Target unit-authoring model:** independent **unit identity/stat definition**, **combat capabilities/attack configuration**, **tactical AI behavior profile**, **runtime battle state**, and **prefab/visual presentation**. The exact classes/data assets should be chosen incrementally after inspecting the actual source; avoid building a generic RPG framework before the first new units prove the design.
 
@@ -98,7 +116,7 @@ Other experimental scenes exist; do not delete or repurpose them without an assi
 
 | Checkpoint | Purpose | Practical completion condition |
 | --- | --- | --- |
-| **P1.0A — Player controller refactor** | Extract cohesive selection, movement, attack and UI responsibilities from `PlayerInputController` | Existing mouse/keyboard behavior and combat bindings still work; clear extension points for capabilities |
+| **P1.0A — Player controller refactor** | Implemented: input delegates to command state, movement/attack executors and battle UI coordinator | Compile/reference checks and focused movement smoke passed; owner combat/input acceptance remains |
 | **P1.0B — Unit capabilities and AI roles** | Data-driven supported attacks and enemy behavior independent of `UnitType` identity | Existing units retain behavior; new archetypes can be configured without central hardcoded switches |
 | **P1.1 — First expanded units** | One creative new playable mech and one new enemy archetype, fully integrated | Actual prefabs/data/visuals/animations/AI/scene encounter; playable owner acceptance |
 | **P1.2 — Tactical UX and visual polish** | Better selection/targeting cues, previews, action availability, VFX, sprites and menus | Clearer more attractive playable combat, functional polished UI |

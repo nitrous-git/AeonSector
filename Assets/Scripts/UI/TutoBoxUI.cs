@@ -14,5 +14,5 @@ public class TutoBoxUI : MonoBehaviour
         Debug.Log("CloseTutoBox");
         this.gameObject.SetActive(false);
     }
-
+    
 }
