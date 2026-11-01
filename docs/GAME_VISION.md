@@ -1,127 +1,163 @@
 # Aeon//Sector — Approved Game Vision
 
-**Status:** Product direction approved by the project owner, 2026-10-31  
-**Scope:** Desired future player experience and development priorities—not a list of features already implemented  
-**Technical implementation truth:** [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md)
+**Owner-approved direction updated:** 2026-10-31  
+**Purpose:** The intended finished player experience, priorities and visual standard—not a claim that future systems are implemented  
+**Current implementation truth:** [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md)  
+**Agent execution rules:** [`../AGENTS.md`](../AGENTS.md)
 
-## 1. Game promise
+## 1. Product promise
 
-Build **a polished, approachable 2D isometric, turn-based mecha tactical RPG** where a player forms a small squad of distinctive mechs, survives missions against increasingly varied enemies, grows in combat power, and can **see that growth** in shaders, sprites, attack effects and battlefield spectacle.
+Create a **cohesive, polished 2D isometric turn-based mecha tactical RPG** where players assemble a small squad of unique combat mechs, deploy into increasingly demanding missions, earn rewards, upgrade their machines and weaponry, and **see and feel their growth** through substantially more powerful attacks and richer presentation.
 
-The initial goal is a **cohesive, highly playable compact campaign**, not a sprawling content library. Prefer a few rich missions, memorable enemy types and complete menus over many unfinished features.
+The target is a compact, complete, replayable campaign experience rather than a huge collection of partial features. A few excellent missions, fully functioning menus, distinctive characters and upgrades, and expressive combat should beat a sprawling but unfinished game.
 
-Maintain a recognizable sci-fi / industrial / mechanical visual identity. Existing assets are the stylistic starting point, not the ceiling for polish. New content should be original, visually coherent and readable on an isometric grid.
+The established original mech, red hostile mechanical-insect faction and existing elevated-isometric pixel/raster aesthetic are the **stylistic baseline**. Future art should be dramatically better in finish while still recognizably belonging to the same game. Prioritize functional gameplay, clear tactical communication, polish and an identity of its own.
 
-## 2. The intended player journey
+## 2. Target player journey
 
-1. **Start / intro.** Main menu launches a short, generic opening cutscene: a few illustrated sci-fi panels, narrative text, cinematic fades/transitions and appropriate audio. Keep it concise, skippable and replayable.
-2. **Hangar / squad preparation.** Before a battle, the player sees the available mech roster, compares roles, attacks, stats and levels, selects a small squad from **two or three distinct mech choices initially**, and optionally applies earned upgrades.
-3. **Mission briefing and deployment.** Show encounter context, enemy threat or difficulty information; load the selected mechs into valid deployment cells. Present the objective clearly.
-4. **Tactical battle.** Move and attack with a selected squad on a 2D isometric map against **multiple enemies per encounter**. Enemy archetypes have different roles, sprites and behaviors; map layouts, blocking obstacles and visual cues produce tactical choices.
-5. **Results and progression.** Present win/loss, earned XP or other rewards, and mech level gains. Persist owned mechs and progress across missions. Return to hangar to prepare for the next mission.
-6. **Continue campaign.** New missions introduce different enemy mixes, difficulty, environments and opportunities for advancement, making the player's squad feel increasingly capable.
+1. **Main menu and intro:** open the game, view a short illustrated/text atmospheric sci-fi intro (skippable and replayable), begin or continue a campaign.
+2. **Hangar and squad builder:** browse the initial **three playable mech archetypes** (Hybrid, Assault, Marksman), inspect their real roles, current levels/stats/attacks and choose the mission squad before every battle. Allow later roster growth without designing a new menu.
+3. **Armory / Upgrade Bay:** inspect current resources, earned upgrades and purchasable stronger attacks; preview each option's **real mechanical effect and distinct visual tier**, confirm a purchase and see the mech's revised loadout or ability level.
+4. **Mission briefing:** understand the mission objective, threat composition and environmental theme, confirm squad/loadout, then deploy the selected mechs onto valid board starting positions.
+5. **Battle:** play an isometric turn-based tactical encounter with engaging enemy AI, meaningful terrain and blocking, carefully telegraphed attacks, strongly readable command feedback and impactful combat VFX.
+6. **Results and growth:** see win/loss, earned XP and currency, level-ups/unlocks, and a meaningful next action: retry, hangar, next mission, or main menu. Save progress.
+7. **Next mission:** fight new mixes of enemies in more complex authored environments, with improvements in both challenge and your squad's presentation.
 
-**Core flow:** Intro → Hangar / Select & Upgrade → Mission → Results / XP → Hangar → Next Mission.
+**Core loop:** Intro → Hangar / Build Squad → Armory / Upgrade → Briefing → Deploy → Battle → Results / Rewards → Hangar → Next Mission.
 
-The existing current combat action economy is **one movement action + one attack action per unit turn**. The product direction does not silently change that rule; future abilities or extra actions require an intentional gameplay decision.
+The currently implemented core rule is **one move and one attack per mech per turn**, independently consumable. Do not silently replace this economy with action points. Future skill systems may extend it only by an intentional gameplay decision.
 
-## 3. Playable mech roster
+## 3. Mechs, roles and squad construction
 
-Target an initial roster of **three distinct, finished mecha archetypes**, with a selection step before battles. The current project contains one established integrated playable hybrid mech and other legacy melee/ranged assets that can be revived and polished.
+### Initial playable archetypes
 
-Suggested starting roles (**concepts, not binding names or finalized stats**):
-
-| Archetype | Mechanical identity | Visual identity / tradeoff |
+| Mech | Gameplay identity | Visual identity |
 | --- | --- | --- |
-| **Hybrid** | Balanced melee and ranged access | Versatile, middle-ground silhouette, reliable core mech |
-| **Assault** | Strong close combat, durability, positioning | Heavier frame, impactful blade/slash effects, lower reach |
-| **Artillery / Marksman** | High ranged pressure and spacing | Distinct launcher / cannon effects, more vulnerable up close |
+| **Hybrid** | Balanced melee/ranged flexibility | Versatile, restrained energy equipment; general-purpose chassis |
+| **Assault** | Durable, close-quarters melee specialist | Wide armor, imposing blade arcs, weighty impacts |
+| **Marksman** | Precision long-range fighter | Ivory/blue chassis, slender rifle, sharp focused blue/cyan energy |
 
-Unit selection must reflect **real supported commands**. A mech without ranged capability should not have a functional ranged attack simply because its stats schema has ranged fields. Separate identity, shared base stats, capability/attack definitions, runtime condition and visuals.
+The initial selection pool contains these three playable mech archetypes. **The exact maximum deployable squad size, duplicates policy, reserve slots and loadout rules remain to be designed**, rather than assumed from the number of available choices. The Hangar must honestly show move/attack capabilities, stats, progression, equipment and ability variants.
 
-Future extensions may include specialized weapons, multiple ability types, loadouts, and support/scout roles. Do not introduce all of these before the first roster is playable.
+The player should be able to build a squad **before each mission**, not merely see a fixed roster hardcoded into the scene. Different mechs should invite interesting composition choices and strategic tradeoffs.
 
-## 4. Mech levels and power fantasy
+The Scorpion/Skirmisher and other insectoid enemies are distinct, red/crimson-dominant hostile faction units, not additional playable squad options by default.
 
-**Levels should matter numerically and visually.** Earn XP through missions; level gains improve effective stats or unlock meaningful upgrades while giving more impressive combat presentation.
+## 4. Hangar, Armory and Mission UI
 
-Examples of scalable visuals:
-- **Early levels:** restrained core glow, basic projectiles, blades, impacts and idle energy details.
-- **Intermediate levels:** richer weapon trails, improved projectile sprites/particles, brighter blade shaders, more expressive hits and energy accents.
-- **Advanced levels:** distinctive attack effects, occasional sprite variants, layered impact VFX and visibly stronger mech presentation.
+Establish a **shared interface language in P1.2C** so P2 menus do not feel disconnected from the in-battle HUD.
 
-These are **presentation tiers, not fixed level thresholds**. The developer should propose practical milestones after the progression model exists.
+### Hangar / Squad Assembly (P2.0)
 
-Engineering principles:
-- Store XP, level and unlocked upgrades **per owned mech**, persist across battles and game restarts.
-- Keep shared ScriptableObjects as immutable design-time defaults; compute effective runtime combat values from base + progression.
-- Prefer reusable shader/material parameters, VFX definitions and sprite sets; avoid duplicating an entire character prefab for every level.
-- Visual effects must remain performant and must not obscure tile occupancy, range previews, targets or health.
-- Progression should feel earned and balanced; do not invent permanent stat curves without a scoped design/acceptance step.
+A visually impressive, functional pre-battle workspace showing the actual owned mechs. Present selectable character visuals, clear team slots, mech name/class, level, current HP/combat parameters, attack capabilities, upgrade status and brief role summaries. Clearly distinguish **available**, **selected**, **locked**, and **not-deployable** states. Accept/revert the draft squad and persist the committed selection appropriately.
 
-## 5. Enemies and tactical encounters
+### Armory / Upgrade Bay (P2.1)
 
-Move beyond reusing the same insect enemies by introducing original enemy archetypes with **different AI combat roles, sprites, attack animations and death effects**.
+One or more functional menus for comparing, buying and equipping/improving weapons/abilities and associated upgrade levels. Show cost, prerequisites, current resources, resulting combat delta, and **a genuine preview of the chosen VFX tier**. Never display a purchase as successful unless its state is saved and the upgrade will actually apply in combat. Avoid adding dozens of cosmetic-only buttons.
 
-Initial target: a few clearly differentiated threats such as melee pursuers, ranged skirmishers and artillery/area attackers; later add tougher variants, defensive enemies and unusual encounters. Enemy behavior should be configurable independently of a specific `UnitType` enum value.
+### Mission Briefing (P2.0)
 
-Missions should vary by enemy composition, spawn positions, difficulty and map geometry. A harder level is not simply more HP; it may involve better enemy positioning, mixed roles and more constrained approaches.
+A distinct, appealing briefing panel with mission description, map/environment preview, visible objectives, enemy threat cues, chosen squad and deploy confirmation. Reuse shared visual components but avoid making everything one overloaded screen.
 
-Combat FX direction: clear anticipation, readable target zones, high-quality projectile/blade effects, strong hit reactions, convincing death feedback and controlled screen/camera response. Spectacle should support tactical understanding.
+### Results / Level-up (P2.1/P2.3)
 
-## 6. Battlefields, tiles and environmental polish
+Make outcomes, rewards and progression understandable. Provide actual navigation to hangar, retry or next mission; current demo result buttons should not dictate finished UX.
 
-Expand the current battle test maps into **authored, attractive tactical environments** with improved isometric tiles, terrain transitions, environmental props and obstacles such as mountains, debris, wrecks and structures.
+**UI principles:** original readable typography, clear hierarchy, deliberate visual density, responsive pointer/focus feedback, legible stat changes, coherent audio/transitions, functional controls rather than placeholders, and practical keyboard/mouse support first. Menus should be polished at realistic desktop resolutions and preserve consistent colors and icons.
 
-- Differentiate **blocking tiles** from decoration in the authoritative walkability model.
-- Ensure blocked cells cannot be reserved or traversed; path previews and A* must match the visuals.
-- Keep spawn points, reachable areas and enemy routes intentional; test that missions remain solvable.
-- Use isometric sprite sorting, shadows/lighting, atmospheric elements and URP 2D post-processing to build depth and mood.
-- Apply post-processing with restraint so unit silhouettes, target overlays and grid interactions remain readable.
+## 5. Progression and purchasable attack upgrades
 
-Line-of-sight, cover systems, destructible terrain and terrain bonuses are **possible later tactical additions**, not requirements that currently exist.
+Progression must have **real mechanical value and a visible power fantasy**. Earn XP/currency through missions, persist ownership across launches, level individual mechs, and buy or unlock progressively stronger attacks. Exact currencies, economy values, level formulas, costs, upgrade trees and unlock thresholds are **future design decisions**, not preapproved numbers.
 
-## 7. Menus and user experience
+Future upgrades can improve damage, range, attack type, cooldown/resource cost if a real resource system is approved, area coverage, special effects, or alternate combat moves. Do not infer expanded damage cells solely from a larger visual explosion; targeting/damage shapes must be explicitly implemented and communicated.
 
-Make the entire loop feel like one game, with a coherent interface language instead of isolated test screens.
+### Dedicated visual power-tier phase — P2.1B
 
-**Desired screens:** main menu; intro/skip; hangar and mech details; squad selection; mission briefing; battle HUD; pause; results/rewards/level-up; options/settings. Implement each screen **functionally** when scheduled—avoid buttons that only log placeholders.
+**A stronger attack must look substantially stronger.** Build a later, intentional VFX content-production pass, not just a small shader brightness slider:
 
-UX principles:
-- Communicate available move/attack/ability options; disable or explain unavailable commands.
-- Show range, valid targets, terrain obstruction, movement path and selected unit state clearly.
-- Make hover/click/selection feedback consistent and responsive.
-- Keep typography, panel layout, icons, transitions and sound cohesive.
-- Include working controls for relevant audio, graphics/post-processing and gameplay preferences when options are built; save settings appropriately.
-- Support the current mouse/keyboard workflow first; broader gamepad/accessibility work can be scheduled separately.
+- **Starter tier:** clean basic energy bolts, restrained slash, reliable hit sparks.
+- **Advanced tier:** weapon-charge pulses, richer blade trails, brighter focused projectiles, electric filaments and fuller impact effects.
+- **Elite tier:** striking multi-layer discharge, lightning/electrical arcs, large fireball/plasma visuals where appropriate, impactful area attacks, shockwaves, controlled lighting and impressive destruction feedback.
 
-## 8. Production sequence and milestones
+This three-tier example is an **art-direction metaphor, not fixed levels or a guaranteed upgrade count**. Different attack families may warrant different staging. All upgraded visuals must still match the approved art style and remain tactical/readable.
 
-| Phase | Intent | User-visible acceptance |
+Example families:
+
+| Family | Upgrade potential | Presentation progression |
 | --- | --- | --- |
-| **P1.0A — Input refactor** | Established foundation | Existing controls continue to work; no duplicate command state |
-| **P1.0B — Unit / capability / AI architecture** | The next focused systems task | New unit roles and enemy behaviors are configurable, with backward compatibility |
-| **P1.1 — Expanded unit content** | Prove the architecture with real content | Original playable mech and enemy integrated, then complete initial 3-mech roster |
-| **P1.2 — Tactical UX and visual pass** | Improve moment-to-moment game feel | Clear targeting, strong attack/death VFX, cleaner cards/menus, appealing sprites |
-| **P2.0 — Intro + hangar + deployment** | Connect pre-battle experience | Skippable intro, selected squad actually spawns in battle |
-| **P2.1 — XP + levels + visual tiers** | Mech growth between missions | Combat power changes, saved progress, visibly improved attacks |
-| **P2.2 — Missions + environments** | Expand encounter variety | Connected levels, enemy mixes, authored blocking terrain, original map props |
-| **P2.3 — Polish and complete demo** | Cohesive campaign experience | Working options, transitions, UI, audio, post-processing and reliable end-to-end loop |
+| Assault blade | Stronger melee, possible special cleave if designed | Sharper trails → energized arcs → dramatic plasma impact |
+| Marksman rail shot | Precision/range/damage or specialized piercing behavior if designed | Clear bolt → electric charge → intense blue-white lance |
+| Hybrid weapons | Balanced abilities / branches | Refined pulse → richer charged strike → distinctive hybrid burst |
+| Future area attacks | Legitimate AoE profiles with documented cells/damage | Compact burst → plasma/fireball charge → layered shockwave/area discharge |
+| Hostile attack variants | Escalating threat identity without faction confusion | Crimson/orange-red charge, stinger discharge, explosion signatures |
 
-**First meaningful vertical-slice target:** a brief intro; three distinct mech choices; functional pre-battle squad selection; several connected encounters with differentiated enemies; basic persisted XP/level progression; a visually noticeable upgrade; readable polished HUD/results and functional options. Three missions is a useful initial target, **not a fixed content cap**.
+The upgrade/ability system should associate a **shared base attack definition**, owned unlock/rank and effective gameplay rules with a **selectable VFX/audio/presentation profile**. Avoid making a copy of the entire mech prefab for each upgrade level. Treat equipment or weapon selection and permanent progression as separate state concepts where needed.
 
-Phase labels describe **work to schedule**, not blanket permission to implement everything. Each desktop task should own one integrated checkpoint and stop for owner playtesting.
+Data contracts:
+- `UnitStats` design assets are shared, immutable defaults at runtime.
+- Persist XP, level, currency ownership, purchased upgrades, equipped/active choices and campaign position independently.
+- Compute effective runtime stats and attack behavior from base definitions plus owned progress.
+- Support replayable missions and saving/loading without duplication or free upgrades.
+- Keep visual tier a presentation concern that follows actual equipped gameplay level—not a source of damage authority.
 
-## 9. Creative freedom and constraints
+## 6. Combat feel and tactical UX
 
-The implementation agent should have meaningful creative agency for **original mecha, enemy silhouettes, attack patterns, effects, menus and battlefields**. Propose coherent concepts and ship assets that are technically compatible with Unity's 2D isometric stack.
+**P1.2A** established the first reusable combat-feedback vocabulary. Continue refining it rather than replacing it without cause.
 
-Non-negotiable production constraints:
-- Preserve functioning combat and existing scenes until intentional migration.
-- Make new content real and playable, not just configuration scaffolding or disconnected mockups.
-- Use copyright-safe, original/licensed visual assets; no assumed access to external image generation or proprietary asset packs.
-- Prefer clear, reusable architecture where it enables concrete content; do not overbuild a speculative RPG framework.
-- Owner handles principal manual validation; agent does focused compilation / Console checks and targeted smoke testing.
-- Keep the future vision separate from technical implementation truth and from individual task prompts.
+**P1.2B — next:** clear selected-unit identity, reachable movement and chosen route, attack range and legal target tiles, invalid/blocked indicators, enemy hover and intent cues where supported, spent/available command states, and coherent grid overlays. Never suggest a shot is valid when the underlying system will reject it.
 
-This vision should change **only on owner approval**. Implementation status and discovered technical constraints belong in `PROJECT_CONTEXT.md`.
+**P1.2C — after:** cohesive battle HUD, readable unit cards, purposeful action menu, clear button states, tactical turn indicators, polished transitions, scalable layout and consistent visual feedback, forming the UI foundation for the Hangar/Armory.
+
+Spectacle principles: anticipation → action → clear contact → damage/death confirmation → recovery. Effect intensity should communicate significance. Avoid overly long animation locks, huge obscuring flashes or excessive camera shake; players must be able to read tiles, selected units and tactical consequences.
+
+## 7. Environment, maps and art-production phase — P2.2
+
+A later **major environment-production phase** should build **new, more complex, substantially more professional battle levels**—not merely recolor the current test grid.
+
+Expected ingredients:
+
+- Several **authored combat layouts** with distinct silhouettes and recognizable environmental themes: e.g., damaged industrial complex, derelict research base, rugged canyon, reactor facility or siege approach; select a manageable few for the initial campaign.
+- **Original, game-style-matched tile palettes**, terrain transitions and layered background scenery with consistent isometric perspective, scale, lighting and materials.
+- Purposeful **blocking cells**: cliffs, mountains, wreckage, walls, machinery, heavy debris and structures. Decoration and actual collision/path legality must agree.
+- Meaningful enemy placements and roles; routes, choke points, approach options and gameplay objectives that make each mission interesting.
+- Authored foreground/background props, shadows and sorting/occlusion; readable unit silhouettes and health/target overlays.
+- Ambient particle/VFX layers (dust, embers, fog, reactor particles), expressive shaders/materials, URP 2D lighting and **restrained post-processing** to give professional atmosphere.
+- Performance budget, overdraw control and practical camera framing. The player must always know where they can move and attack.
+
+**Do not make cover, line-of-sight, destructible terrain or height rules implicit** merely because a visual prop suggests them. Such mechanics require explicit scoped design and tactical-system integration. Blocking must be enforced through the existing authoritative board, BFS/A* paths and valid spawn/deployment logic.
+
+Each newly built map should demonstrate intentional battle composition and be playable with the current tactical rules before adding more content. Treat art generation and import/Unity integration as separate quality gates when that improves consistency.
+
+## 8. Enemies, missions and campaign scale
+
+Start with several varied, polished encounters featuring melee pursuers, red Scorpion ranged skirmishers and area-artillery threats; then add original enemy archetypes with genuinely different attack behaviors, role-based AI, animations and red hostile visual identity. Escalate difficulty through encounter geometry and enemy roles, not merely HP inflation.
+
+A compact campaign of approximately three distinct playable missions is a useful first end-to-end target—not an upper limit. Each mission should have a real objective, appropriate enemy/terrain composition, fair route/deployment and a clear result. Save and transition rules must be consistent across encounters.
+
+## 9. Phased production roadmap
+
+| Checkpoint | Status at 2026-10-31 | User-visible goal |
+| --- | --- | --- |
+| P0 / P1.0A–B — combat foundation and extensibility | Implemented | Stable combat, separated player command ownership, supported attacks and enemy AI roles |
+| P1.1A–C — roster and art | Implemented; prior owner playtests for showcase | Three distinct playable mechs, expanded enemies, original production sprites/animations |
+| P1.2A — Combat Feel & VFX | Implemented in source; full owner acceptance pending | Impactful weapon effects, damage numbers, reactions, camera/destruction feedback |
+| **P1.2B — Tactical Readability** | **Next planned** | Obvious selected unit, movement path, legal target, actionable commands and hover feedback |
+| **P1.2C — HUD & UX Polish** | **Planned next** | Cohesive production-level battle interface and presentation style |
+| P2.0 — Intro, Hangar, squad, briefing | Future | Choose a squad from the initial three mech types and deploy to a mission |
+| P2.1 — Progression, Armory, upgrades | Future | Persist XP/currency and buy stronger, effective attacks between missions |
+| **P2.1B — Advanced upgraded-attack VFX** | **Future, dedicated high-impact art phase** | Upgrades yield spectacular differentiated projectiles, energy/fire/lightning/AoE effects |
+| **P2.2 — Battlefield/environment production** | **Future, dedicated major visual phase** | Distinct complex battle maps, blocking terrain, new tiles/props/backgrounds, shaders/lighting |
+| P2.3 — Campaign integration and final polish | Future | Reliable end-to-end missions, saved progression, results, options and polished demo |
+
+The sequence preserves current momentum: **finish tactical readability and battle UX first**, then use that UI foundation for the squad builder and Armory. Avoid implementing all future phases in a single task; scope a concrete, playable, visually reviewable checkpoint each time.
+
+## 10. Production standards and authority
+
+- The **owner** decides major design tradeoffs, core balance progression and accepted visuals; the agent may choose local details within an approved phase and must deliver directly usable assets/code.
+- Prefer technically real and copyright-safe original/licensed art, not disconnected concept pictures misrepresented as production sprite sheets.
+- Reuse current P1.2A effect infrastructure for later attack tiers unless a documented architectural reason requires evolution.
+- No quality pass should break existing battle mechanics, scene paths, enemy turns or input gating.
+- The owner will do primary manual gameplay acceptance; the agent conducts focused compile/Console/Play Mode checks and reports actual evidence.
+- **Do not equate vision with implementation**: this document defines desired future outcomes; see `PROJECT_CONTEXT.md` for what exists today.
+
+**Vision maintenance:** change this approved direction only on an explicit owner decision, and leave task results in the living implementation context rather than accumulating a historical diary here.
