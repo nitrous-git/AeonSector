@@ -207,6 +207,10 @@ MonoBehaviour:
   visualRoot: {fileID: 8967004127437146077}
   playerInputController: {fileID: 0}
   ownerUnit: {fileID: 5004739886190183632}
+  rangedReleaseDelay: -1
+  rangedAnimationDuration: -1
+  projectileOriginFrontSW: {fileID: 0}
+  projectileOriginBackNE: {fileID: 0}
 --- !u!1 &2950882280194460096
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,6 +336,7 @@ GameObject:
   - component: {fileID: 2611780955224381027}
   - component: {fileID: 7208724171717454113}
   - component: {fileID: 3705626972711873078}
+  - component: {fileID: 2909936555043933887}
   m_Layer: 6
   m_Name: Mech_Hybrid
   m_TagString: Untagged
@@ -505,6 +510,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!114 &2909936555043933887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4684506508768862223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2e77746585100e4ebb50cb37221f057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitHitFeedback
+  profile: {fileID: 11400000, guid: 7d6db66ac93949549a4541f32034fad6, type: 2}
+  body: {fileID: 311346431074614372}
+  flashMaterial: {fileID: 2100000, guid: d15d4cbcb39175a40aa790236bf46213, type: 2}
 --- !u!1 &5937959490023791405
 GameObject:
   m_ObjectHideFlags: 0

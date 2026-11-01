@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8759361086448579894
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 159515828896342325}
+  - component: {fileID: 1793231584137206960}
+  m_Layer: 0
+  m_Name: CombatPresentation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &159515828896342325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8759361086448579894}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1793231584137206960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8759361086448579894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7312963cd1b518c46bda05fae64691c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatPresentation
+  charge: {fileID: 6443679921867263418, guid: 619b34c3efd1b0e40b96c6a3ede00ef2, type: 3}
+  muzzle: {fileID: 4271814155119255570, guid: ee7d5686778c76c4cb171c6d091b2f40, type: 3}
+  slash: {fileID: 3711399584355344766, guid: fd216f366fbf54442a821524b608c952, type: 3}
+  impact: {fileID: 8519258215415853445, guid: 8c1dd46fd4b7e504a8a98292d815bf15, type: 3}
+  blast: {fileID: 4699815769772335012, guid: 0a86b3088bf1500429d831bbb09c5853, type: 3}
+  destruction: {fileID: 758372467619411133, guid: 8f3d642cdc9659d4db80969bad54ed78, type: 3}
+  warning: {fileID: 7268939434538734731, guid: 3e645c0e5695fb44eae4a33f0b45604c, type: 3}
+  damageNumber: {fileID: 2597710110053473787, guid: f802536d0f4875746a064aeb7db64025, type: 3}
+  fallbackProfile: {fileID: 11400000, guid: 7d6db66ac93949549a4541f32034fad6, type: 2}
+  shakeMultiplier: 1

@@ -11,6 +11,7 @@ public class ProjectileMover : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator animator;
     [SerializeField] private float hitAnimationDuration = 0.40f;
+    [SerializeField] private bool hideOnContact;
 
     private void Awake()
     {
@@ -20,7 +21,7 @@ public class ProjectileMover : MonoBehaviour
         }
     }
 
-    public IEnumerator FlyAndHit(Vector3 startWorldPosition, Vector3 targetWorldPosition)
+    public IEnumerator FlyAndHit(Vector3 startWorldPosition, Vector3 targetWorldPosition, System.Action onContact = null)
     {
         transform.position = startWorldPosition;
 
@@ -38,18 +39,22 @@ public class ProjectileMover : MonoBehaviour
             animator.Play("Missile_Fly");
         }
 
-        while ((transform.position - targetWorldPosition).sqrMagnitude > 0.5f)
+        while ((transform.position - targetWorldPosition).sqrMagnitude > 0.0025f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetWorldPosition, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetWorldPosition, Mathf.Max(0.1f, moveSpeed) * Time.deltaTime);
             yield return null;
         }
 
         transform.position = targetWorldPosition;
 
+        // Resolve once on arrival, not after the visual recovery. Callers retain their guards/locks.
+        onContact?.Invoke();
+        if (hideOnContact)
+            foreach (var sprite in GetComponentsInChildren<SpriteRenderer>()) sprite.enabled = false;
+
         if (animator != null)
         {
             animator.Play("Missile_Hit");
-            CameraShakeImpulse.PlayMediumHit();
         }
 
         if (hitAnimationDuration > 0f)

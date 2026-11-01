@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8413327430465916352}
   - component: {fileID: 1867375595896894892}
   - component: {fileID: 1099025873718280863}
+  - component: {fileID: 5764758095262151067}
   m_Layer: 0
   m_Name: Enemy_InsectSkirmisher
   m_TagString: Untagged
@@ -126,6 +127,21 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.3}
   m_Size: {x: 0.45, y: 0.65}
   m_Direction: 0
+--- !u!114 &5764758095262151067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892534107209442605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2e77746585100e4ebb50cb37221f057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitHitFeedback
+  profile: {fileID: 11400000, guid: f2c001e2aa6093f43ba800510e9f9fcf, type: 2}
+  body: {fileID: 2516842108141575681}
+  flashMaterial: {fileID: 2100000, guid: d15d4cbcb39175a40aa790236bf46213, type: 2}
 --- !u!1 &2778694256715797171
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caeaed65f1ae15439062985dcda201f, type: 3}
+  m_Name: Artillery
+  m_EditorClassIdentifier: Assembly-CSharp::CombatVfxProfile
+  energy: {r: 1, g: 0.42, b: 0.12, a: 1}
+  edge: {r: 0.27, g: 0.035, b: 0.025, a: 1}
+  impactScale: 1.25
+  impactShake: 0.14
+  shakeDuration: 0.2
+  meleeContact: 0.7
+  meleeRecovery: 0.8
+  projectile: {fileID: 1257392861891341857, guid: f16fbd2d187c9f744a6d386d969e5a0c, type: 3}

@@ -276,11 +276,10 @@ public class EnemyTurnController : MonoBehaviour
         enemy.FaceTowards(target.GridPosition);
         enemy.PlayAttack();
 
-        CameraShakeImpulse.PlayHeavyHit();
-
-        SFXManager.EnemyMelee();
-
-        yield return new WaitForSeconds(attackDelay);
+        var meleeProfile = CombatPresentation.Instance != null ? CombatPresentation.Profile(enemy) : null;
+        float contactDelay = meleeProfile != null ? meleeProfile.meleeContact : attackDelay;
+        CombatPresentation.Begin(enemy, CommandMode.MeleeAttack, contactDelay);
+        yield return new WaitForSeconds(contactDelay);
 
         if (turnManager.IsBattleOver || enemy == null || !enemy.IsAlive || target == null || !target.IsAlive)
         {
@@ -296,7 +295,13 @@ public class EnemyTurnController : MonoBehaviour
 
         Debug.Log($"{enemy.name} melee attacks {target.name} for {damage} damage.");
 
-        if (CanExecute(enemy, CommandMode.MeleeAttack)) ApplyEnemyDamage(enemy, target, damage);
+        if (CanExecute(enemy, CommandMode.MeleeAttack))
+        {
+            CombatPresentation.MeleeContact(enemy, target);
+            SFXManager.EnemyMelee();
+            ApplyEnemyDamage(enemy, target, damage, CommandMode.MeleeAttack);
+        }
+        if (meleeProfile != null) yield return new WaitForSeconds(meleeProfile.meleeRecovery);
 
         if (!turnManager.IsBattleOver && enemy != null && enemy.IsAlive)
         {
@@ -365,6 +370,9 @@ public class EnemyTurnController : MonoBehaviour
         enemy.PlayAttack();
 
         int damage = enemy.Stats.GetDamageForCommand(CommandMode.AreaAttack);
+        CombatPresentation.Begin(enemy, CommandMode.AreaAttack, 0.22f);
+        if (CombatPresentation.Instance != null) yield return new WaitForSeconds(0.22f);
+        CombatPresentation.Launch(enemy, CombatPresentation.HitPosition(enemy), CombatPresentation.HitPosition(enemy) + Vector3.up);
 
         List<GridCoord> orderedCells = attackCells
             .OrderByDescending(cell => cell.y)
@@ -436,8 +444,10 @@ public class EnemyTurnController : MonoBehaviour
         Vector3 targetWorldPosition = board.ConvertGridToWorld(targetCell) + areaProjectileHitOffset;
 
         Vector3 startWorldPosition = targetWorldPosition + areaProjectileFallOffset;
+        CombatPresentation.AreaWarning(attacker, targetWorldPosition, 0.7f);
+        GameObject presentationProjectile = CombatPresentation.Projectile(attacker, areaProjectilePrefab);
 
-        if (areaProjectilePrefab == null)
+        if (presentationProjectile == null)
         {
             yield return new WaitForSeconds(0.05f);
 
@@ -448,7 +458,7 @@ public class EnemyTurnController : MonoBehaviour
             yield break;
         }
 
-        GameObject projectileObject = Instantiate(areaProjectilePrefab, startWorldPosition, Quaternion.identity);
+        GameObject projectileObject = Instantiate(presentationProjectile, startWorldPosition, Quaternion.identity);
 
         ProjectileMover projectileMover = projectileObject.GetComponent<ProjectileMover>();
 
@@ -461,12 +471,8 @@ public class EnemyTurnController : MonoBehaviour
             yield break;
         }
 
-        yield return projectileMover.FlyAndHit(startWorldPosition,targetWorldPosition);
-
-        if (turnManager.IsBattleOver)
-            yield break;
-
-        ApplyAreaDamageAtCell(attacker, targetCell, damage);
+        yield return projectileMover.FlyAndHit(startWorldPosition, targetWorldPosition,
+            () => ApplyAreaDamageAtCell(attacker, targetCell, damage));
     }
 
     private void ApplyAreaDamageAtCell(CombatUnit attacker, GridCoord targetCell, int damage)
@@ -474,6 +480,7 @@ public class EnemyTurnController : MonoBehaviour
         if (turnManager.IsBattleOver || attacker == null || !attacker.IsAlive)
             return;
 
+        CombatPresentation.AreaImpact(attacker, board.ConvertGridToWorld(targetCell) + areaProjectileHitOffset);
         CombatUnit unitAtCell = board.GetUnitAt(targetCell);
 
         if (unitAtCell == null)
@@ -493,7 +500,7 @@ public class EnemyTurnController : MonoBehaviour
 
         playerCard?.Show(unitAtCell);
 
-        if (CanExecute(attacker, CommandMode.AreaAttack)) ApplyEnemyDamage(attacker, unitAtCell, damage);
+        if (CanExecute(attacker, CommandMode.AreaAttack)) ApplyEnemyDamage(attacker, unitAtCell, damage, CommandMode.AreaAttack);
 
         if (!turnManager.IsBattleOver)
         {
@@ -506,11 +513,11 @@ public class EnemyTurnController : MonoBehaviour
         => turnManager != null && !turnManager.IsBattleOver && turnManager.IsEnemyTurn()
         && unit != null && unit.CanAttack && unit.Stats != null && unit.Stats.Supports(mode);
 
-    private void ApplyEnemyDamage(CombatUnit attacker, CombatUnit target, int damage)
+    private void ApplyEnemyDamage(CombatUnit attacker, CombatUnit target, int damage, CommandMode mode)
     {
         if (attacker == null || !attacker.IsAlive || target == null || !target.IsAlive
             || target.OwnerFaction == attacker.OwnerFaction || turnManager.IsBattleOver) return;
-        BattleDamage.Apply(turnManager, target, damage);
+        BattleDamage.Apply(turnManager, target, damage, attacker, mode);
         turnManager.RefreshBattleEndState();
     }
 
@@ -527,23 +534,34 @@ public class EnemyTurnController : MonoBehaviour
         enemy.FaceTowards(target.GridPosition);
         enemy.PlayAttack(); // Enemy animation; never waits for player-only clip events.
         float animationStarted = Time.time;
+        CombatPresentation.Begin(enemy, CommandMode.RangedAttack, enemy.GetRangedReleaseDelay(attackDelay));
         playerCard?.Show(target);
         yield return new WaitForSeconds(enemy.GetRangedReleaseDelay(attackDelay));
         if (!CanExecute(enemy, CommandMode.RangedAttack)) yield break;
         if (target != null && target.IsAlive && attackRangeService.GetAttackRangeCells(board, enemy, CommandMode.RangedAttack).Contains(target.GridPosition))
         {
-            var projectilePrefab = enemy.Stats.RangedProjectilePrefab != null ? enemy.Stats.RangedProjectilePrefab : rangedProjectilePrefab;
+            var projectilePrefab = CombatPresentation.Projectile(enemy,
+                enemy.Stats.RangedProjectilePrefab != null ? enemy.Stats.RangedProjectilePrefab : rangedProjectilePrefab);
+            bool damageApplied = false;
+            System.Action contact = () =>
+            {
+                if (damageApplied || !CanExecute(enemy, CommandMode.RangedAttack)) return;
+                damageApplied = true;
+                SFXManager.ProjectileImpact();
+                ApplyEnemyDamage(enemy, target, enemy.Stats.GetDamageForCommand(CommandMode.RangedAttack), CommandMode.RangedAttack);
+            };
             if (projectilePrefab != null)
             {
                 Vector3 start = enemy.GetProjectileOrigin(board.ConvertGridToWorld(enemy.GridPosition) + Vector3.up * 0.8f);
                 Vector3 hit = board.ConvertGridToWorld(target.GridPosition) + Vector3.up * 0.15f;
+                if (CombatPresentation.Instance != null) hit = CombatPresentation.HitPosition(target);
+                CombatPresentation.Launch(enemy, start, hit);
                 var projectile = Instantiate(projectilePrefab, start, Quaternion.identity);
                 var mover = projectile.GetComponent<ProjectileMover>();
-                if (mover != null) yield return mover.FlyAndHit(start, hit);
+                if (mover != null) yield return mover.FlyAndHit(start, hit, contact);
                 else Destroy(projectile);
             }
-            if (CanExecute(enemy, CommandMode.RangedAttack))
-                ApplyEnemyDamage(enemy, target, enemy.Stats.GetDamageForCommand(CommandMode.RangedAttack));
+            contact(); // Missing presentation fallback, guarded against a second hit.
         }
         if (enemy != null && enemy.IsAlive && !turnManager.IsBattleOver)
         {

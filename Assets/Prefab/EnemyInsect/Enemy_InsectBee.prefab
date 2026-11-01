@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6192114448921829228}
   - component: {fileID: 8413327430465916352}
   - component: {fileID: 8348341261149584561}
+  - component: {fileID: 7109298094417549250}
   m_Layer: 6
   m_Name: Enemy_InsectBee
   m_TagString: Untagged
@@ -178,6 +179,21 @@ CapsuleCollider2D:
   m_Offset: {x: -0.025369048, y: -0.033825576}
   m_Size: {x: 0.6183889, y: 0.66174567}
   m_Direction: 0
+--- !u!114 &7109298094417549250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892534107209442605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2e77746585100e4ebb50cb37221f057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitHitFeedback
+  profile: {fileID: 11400000, guid: 888a1ac960e624a479a3fe59e67421bc, type: 2}
+  body: {fileID: 2516842108141575681}
+  flashMaterial: {fileID: 2100000, guid: d15d4cbcb39175a40aa790236bf46213, type: 2}
 --- !u!1 &3966181290813781906
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,6 +414,10 @@ MonoBehaviour:
   visualRoot: {fileID: 6905820041638712338}
   playerInputController: {fileID: 0}
   ownerUnit: {fileID: 6192114448921829228}
+  rangedReleaseDelay: -1
+  rangedAnimationDuration: -1
+  projectileOriginFrontSW: {fileID: 0}
+  projectileOriginBackNE: {fileID: 0}
 --- !u!1 &5414099051276339835
 GameObject:
   m_ObjectHideFlags: 0

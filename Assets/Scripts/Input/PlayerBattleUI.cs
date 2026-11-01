@@ -65,6 +65,7 @@ internal sealed class PlayerBattleUI
     {
         playerCard?.Refresh();
         if (target != null && target.IsAlive) ShowEnemy(target);
+        else enemyCard?.Hide();
     }
 
     public void ShowCommandPreview(PlayerCommandState state)

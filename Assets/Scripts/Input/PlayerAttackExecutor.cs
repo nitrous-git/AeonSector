@@ -161,6 +161,7 @@ internal sealed class PlayerAttackExecutor
             rangedAttackContext = new RangedAttackContext(attacker, target, damage);
             attacker.FaceFromTo(attacker.GridPosition, target.GridPosition);
             attacker.PlayAttack(state.Mode);
+            CombatPresentation.Begin(attacker, state.Mode, attacker.GetRangedReleaseDelay(0.2f));
             yield return ResolveRangedAttackTimeout(rangedAttackContext);
             yield break;
         }
@@ -179,7 +180,17 @@ internal sealed class PlayerAttackExecutor
             yield break;
         }
       
-        if (attacker.Stats.Supports(state.Mode)) ApplyDamage(target, damage);
+        if (attacker.Stats.Supports(state.Mode))
+        {
+            CombatPresentation.MeleeContact(attacker, target);
+            SFXManager.PlayerMelee();
+            ApplyDamage(target, damage, attacker, state.Mode);
+        }
+
+        // Keep input locked through the remainder of the existing attack clip.
+        var meleeProfile = CombatPresentation.Instance != null ? CombatPresentation.Profile(attacker) : null;
+        if (meleeProfile != null && meleeProfile.meleeRecovery > 0f)
+            yield return new WaitForSeconds(meleeProfile.meleeRecovery);
 
         FinishAttackResolution(attacker);
     }
@@ -215,7 +226,8 @@ internal sealed class PlayerAttackExecutor
             yield break;
         }
 
-        if (projectilePrefab == null)
+        GameObject presentationProjectile = CombatPresentation.Projectile(attacker, projectilePrefab);
+        if (presentationProjectile == null)
         {
             Debug.LogWarning("No projectile prefab assigned.");
             ApplyRangedDamage(context);
@@ -226,8 +238,10 @@ internal sealed class PlayerAttackExecutor
 
         Vector3 startWorld = attacker.GetProjectileOrigin(board.ConvertGridToWorld(attacker.GridPosition) + projectileSpawnOffset);
         Vector3 targetWorld = board.ConvertGridToWorld(target.GridPosition) + projectileHitOffset;
+        if (CombatPresentation.Instance != null) targetWorld = CombatPresentation.HitPosition(target);
 
-        GameObject projectileObject = Object.Instantiate(projectilePrefab, startWorld, Quaternion.identity);
+        CombatPresentation.Launch(attacker, startWorld, targetWorld);
+        GameObject projectileObject = Object.Instantiate(presentationProjectile, startWorld, Quaternion.identity);
         context.projectileObject = projectileObject;
 
         ProjectileMover projectileMover = projectileObject.GetComponent<ProjectileMover>();
@@ -244,7 +258,7 @@ internal sealed class PlayerAttackExecutor
             yield break;
         }
 
-        yield return projectileMover.FlyAndHit(startWorld, targetWorld);
+        yield return projectileMover.FlyAndHit(startWorld, targetWorld, () => ApplyRangedDamage(context));
 
         if (rangedAttackContext != context)
             yield break;
@@ -330,15 +344,15 @@ internal sealed class PlayerAttackExecutor
 
         SFXManager.ProjectileImpact();
 
-        ApplyDamage(target, context.damage);
+        ApplyDamage(target, context.damage, context.attacker, CommandMode.RangedAttack);
     }
 
-    private void ApplyDamage(CombatUnit target, int damage)
+    private void ApplyDamage(CombatUnit target, int damage, CombatUnit attacker, CommandMode mode)
     {
         if (target == null || !target.IsAlive || turnManager == null || turnManager.IsBattleOver)
             return;
 
-        BattleDamage.Apply(turnManager, target, damage);
+        BattleDamage.Apply(turnManager, target, damage, attacker, mode);
 
         ui.RefreshAfterDamage(target);
         turnManager.RefreshBattleEndState();
@@ -359,6 +373,13 @@ internal sealed class PlayerAttackExecutor
 
     private IEnumerator ResolveMeleeAttackVisual(CombatUnit attacker, CombatUnit target)
     {
+        var profile = CombatPresentation.Instance != null ? CombatPresentation.Profile(attacker) : null;
+        if (profile != null)
+        {
+            CombatPresentation.Begin(attacker, CommandMode.MeleeAttack, profile.meleeContact);
+            yield return new WaitForSeconds(profile.meleeContact);
+            yield break;
+        }
         GameObject slashObject = null;
         if (swordSlashPrefab != null && board != null && board.IsReady)
         {
@@ -366,10 +387,6 @@ internal sealed class PlayerAttackExecutor
             slashObject = Object.Instantiate(swordSlashPrefab, spawnWorld, Quaternion.identity);
             slashObject.GetComponent<Animator>()?.Play("SwordSlash");
         }
-
-        CameraShakeImpulse.PlayLongMediumHit();
-
-        SFXManager.PlayerMelee();
 
         yield return new WaitForSeconds(1.20f);
         if (slashObject != null)
